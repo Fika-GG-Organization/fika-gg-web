@@ -1,75 +1,64 @@
-# React + TypeScript + Vite
+# Fika GG web
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Place any banner here]()
 
-Currently, two official plugins are available:
+This repository houses the web client application for ***FIKA GG***, an online gaming hub focused on connecting gamers together. 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Table of Contents
 
-## React Compiler
+- [Background](#Background)
+	- [See also](#See_also)
+- [Development](#Development)
+	- [Dependencies](#Dependencies)
+	- [CLI](#CLI)
+- [Contributing](#Contributing)
+- [License](#License)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Background
 
-## Expanding the ESLint configuration
+***FIKA GG*** is an calendar-based gaming hub where GAMERS can connect with fellow GAMERS for participating or planning online gaming events. 
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Our main target demographic are Swedish students and young adults with an interest in gaming.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### See also
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- [fika-gg-api](https://github.com/Fika-GG-Organization/fika-gg-api): The server infrastructure (api, aspire, database).
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Development
 
-```
+File structure
+ 
+- `src/app/` routing, providers, auth
+- `src/pages/` web pages
+- `src/features/` similar to backend, grouped by features
+- `src/shared/` reusable utilities
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+### Dependencies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+The repository uses the following 3rd party dependencies.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- [react](https://www.npmjs.com/package/react)
+- [Vite](https://www.npmjs.com/package/vite)
+- [ESlint](https://www.npmjs.com/package/eslint)
+- [@mui/icons-material](https://www.npmjs.com/package/@mui/icons-material)
+- [@mui/material](https://www.npmjs.com/package/@mui/material)
+- [react-router](https://www.npmjs.com/package/react-router)
+- [axios](https://www.npmjs.com/package/axios)
 
-```
+### CLI
+
+DevOps info here
+
+## Contributing
+
+Visit [Github Issues](https://github.com/orgs/Fika-GG-Organization/projects/1) for tasks to do.
+
+Do note that only persons from [Fika GG Organization](https://github.com/Fika-GG-Organization) are allowed to contribute to this repository.
+
+### Collaborators
+
+<a href="https://github.com/iskall94"><img width="50px" alt="iskall94" src="https://github.com/iskall94.png"/></a> <a href="https://github.com/GitUser4179"><img width="50px" alt="GitUser4179" src="https://github.com/GitUser4179.png"/></a> <a href="https://github.com/krixtin"><img width="50px" alt="krixtin" src="https://github.com/krixtin.png"/></a> <a href="https://github.com/GaKa00"><img width="50px" alt="GaKa00" src="https://github.com/GaKa00.png"/></a> <a href="https://github.com/blubeatbee"><img width="50px" alt="blubeatbee" src="https://github.com/blubeatbee.png"/></a> <a href="https://github.com/FrusTrick"><img width="50px" alt="FrusTrick" src="https://github.com/FrusTrick.png"/></a>
+
+## License
+
+[GNU General Public License v3.0](./LICENSE) &copy; Fika GG, 2026
