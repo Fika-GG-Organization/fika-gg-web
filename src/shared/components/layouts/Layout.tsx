@@ -6,10 +6,11 @@ import Footer from "./Footer";
 export default function Layout() {
   return (
 		<Box sx={{
-				display: "flex", flexDirection: "column", minHeight: "100vh" }}
+			display: "flex", flexDirection: "column", minHeight: "100vh" 
+		}}
 		>
 			<Navbar />
-			<Box sx={{ flexgrow: 1 }}>
+			<Box sx={{ flexGrow: 1 }}>
 				<Outlet />
 			</Box>
 			<Footer />
