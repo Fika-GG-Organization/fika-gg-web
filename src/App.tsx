@@ -1,11 +1,14 @@
 import AppRouter from './app/routes/AppRouter'
 import { AuthProvider } from './app/auth/AuthProvider'
+import { AppProvider } from './app/theme/ThemeProvider'
 
 function App() {
   return (
-    <AuthProvider>
-      <AppRouter />
-    </AuthProvider>
+    <AppProvider>
+      <AuthProvider>
+        <AppRouter />
+      </AuthProvider>
+    </AppProvider>
   )
 }
 
