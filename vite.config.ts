@@ -4,11 +4,12 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+	resolve: { tsconfigPaths: true },
   server: {
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'https://localhost:7203',
         changeOrigin: true,
         secure: false,
       }
