@@ -6,7 +6,7 @@ export default function ProfileGames() {
   const games = [
     { name: "Chess", gamerTag: "chess123", hoursPlayed: 120 },
     { name: "Monopoly", gamerTag: "monopoly456", hoursPlayed: 80 },
-    { name: "Scrabble",},
+    { name: "Scrabble" },
   ];
 
   return (
@@ -53,14 +53,15 @@ export default function ProfileGames() {
                 display: "flex",
                 flexDirection: "column",
                 "& h4, & p": { m: 0 },
-                mt:2
               }}
             >
               <h4>{game.name}</h4>
-              {game.gamerTag ? <p>{game.gamerTag}</p> : <p> Lägg till gamerTag</p>}
+              {game.gamerTag ? (
+                <p>{game.gamerTag}</p>
+              ) : (
+                <p> Lägg till gamerTag</p>
+              )}
             </Box>
-
-         
           </Box>
         ))}
       </Box>

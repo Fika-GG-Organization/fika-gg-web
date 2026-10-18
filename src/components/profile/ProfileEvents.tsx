@@ -57,6 +57,8 @@ export default function ProfileEvents() {
               alignItems: "center",
               gap: 2,
               p: 2,
+              height: 86,
+              boxSizing: "border-box",
               mt: 2,
               border: "1px solid grey",
               borderRadius: 2,
@@ -74,8 +76,7 @@ export default function ProfileEvents() {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                "& h4, & h5": { m: 0 },
-                mt: 2,
+                "& h4, & h5, & p": { m: 0 },
               }}
             >
               <h4>{event.name}</h4>
