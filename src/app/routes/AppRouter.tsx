@@ -7,6 +7,7 @@ import TempPage from "../../pages/TempPage";
 import ProtectedRoute from "./ProtectedRoute";
 import GamesPage from "../../pages/GamesPage";
 // import NotFoundPage from "../../pages/NotFoundPage";
+import EventCalendarPage from "pages/EventCalendarPage";
 
 const router = createBrowserRouter([
 	{
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
 			},
 			{
 				// Add more routes here
+			},
+			{
+				path: "/calendar",
+				element: <EventCalendarPage />
 			},
 			{
 				element: <ProtectedRoute />,
