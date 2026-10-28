@@ -3,6 +3,14 @@ export {};
 declare global {
 	interface Date {
 		/**
+		 * Compare the year, month and day of {@linkcode date} with today, using local time zone.
+		 *
+		 * Returns true if {@linkcode date} is today; otherwise returns `false`.
+		 * @param date A date value to compare with.
+		 */
+		compareDayWith(date: Date): boolean;
+
+		/**
 		 * Gets every weekdays as Date objects, using local timezone.
 		 * @returns An array with 7 elements, each representing every weekday from Monday to Sunday.
 		 * @remarks How to use: `new Date().getWeekFromDate();`
@@ -17,6 +25,16 @@ declare global {
 		getUTCWeekFromDate(): Date[];
 	}
 }
+
+Date.prototype.compareDayWith = function (date: Date): boolean {
+	return (
+			this.getFullYear() === date.getFullYear() &&
+				this.getMonth() === date.getMonth() &&
+				this.getDate() === date.getDate()
+		) ?
+			true
+		:	false;
+};
 
 // https://stackoverflow.com/a/4156516
 Date.prototype.getWeekFromDate = function (): Date[] {
