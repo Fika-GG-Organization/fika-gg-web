@@ -16,6 +16,9 @@ const StyledBox = styled(Box)(({ theme }) => ({
 	width: "100%",
 }));
 
+/**
+ * Wraps around the calendar display, styling border, and providing scrolling functionality.
+ */
 const DisplayWrapper = ({children, ...props}: BoxProps) => {
 	return (
 		<StyledBox {...props}>

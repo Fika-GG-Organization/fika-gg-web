@@ -21,6 +21,10 @@ const StyledStack = styled(Stack)<{ isToday: boolean }>(({ theme, isToday }) => 
 		isToday ? theme.alpha(theme.palette.primary.light, 0.2) : theme.palette.background.default,
 }));
 
+/**
+ * A column or grid item on the calendar. A DisplayItem represents a day.
+ * @param param0 
+ */
 const DisplayItem = ({ dayName, dayDate, today, theme, ...props }: DisplayItemProps) => {
 	return (
 		<StyledStack {...props} isToday={today}>

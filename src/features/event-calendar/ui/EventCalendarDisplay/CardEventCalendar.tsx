@@ -17,6 +17,10 @@ const StyledCard = styled(Card)(({theme}) => ({
 
 }));
 
+/**
+ * A card that will contain event info on the calendar page.
+ * @param param0 
+ */
 const CardEventCalendar = ({data, ...props}: CardEventCalendarProps) => {
 	return (
 		<Card {...props} key={data.id} variant={"outlined"} raised >

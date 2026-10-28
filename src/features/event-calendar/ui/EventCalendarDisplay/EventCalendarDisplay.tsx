@@ -16,6 +16,9 @@ interface EventCalendarDisplayProps extends BoxProps {
 	theme: Theme;
 }
 
+/**
+ * The calendar display for showing events by date. 
+ */
 const EventCalendarDisplay = ({ children, ...props }: EventCalendarDisplayProps) => {
 	const context = useEventCalendar();
 
