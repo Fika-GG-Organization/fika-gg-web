@@ -64,6 +64,7 @@ const EventCalendar = () => {
 	return (
 		<EventCalendarContext.Provider
 			value={{
+				isLoading: isLoading,
 				data: responseData,
 				dateRange: dateRange,
 				dateSpan: dateSpan,
