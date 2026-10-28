@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
-import type { DateSpan, CalendarView, EventCalendarResponse } from "../models/event-calendar.types";
-import { EventCalendarContext } from "./EventCalendarContext";
+import { type Theme } from "@mui/material";
+import type { DateSpan, CalendarView, EventCalendarResponse } from "../models";
 import { getEventsAsync } from "../api/event-calendarService";
-import DataDisplayWrapper from "./DataDisplayWrapper";
-import FilterGroup from "./FilterGroup";
+import { EventCalendarContext } from "./EventCalendarContext";
 import EventCalendarContainer from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
-import DisplayWeek from "./DisplayWeek";
-import Box from "@mui/material/Box";
+import EventCalendarControls from "./EventCalendarControls";
+import EventCalendarDisplay from "./EventCalendarDisplay";
 
-const EventCalendar = () => {
+interface EventCalendarProps {
+	theme: Theme;
+}
+
+const EventCalendar = (props: EventCalendarProps) => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [calendarView, setCalendarView] = useState<CalendarView>("week");
 
@@ -75,28 +77,10 @@ const EventCalendar = () => {
 			}}
 		>
 			<EventCalendarContainer
-				component={"section"}
 				sx={{ display: "flex", flexDirection: "column", gap: 1 }}
 			>
-				<FilterGroup />
-				<DataDisplayWrapper>
-					{isLoading === true && 
-						<Box sx={{
-							display: "flex", 
-							justifyContent: "center", 
-							alignItems: "center", 
-							width: "100%", 
-							height: "100%"}}
-						>
-							<CircularProgress aria-label="Loading..." />
-						</Box>
-					}
-					{isLoading === false && 
-						(calendarView === "week" && <DisplayWeek></DisplayWeek>) ||
-						(calendarView === "month" && (<b>{"Month view not yet implemented!!!"}</b>)) ||
-						(calendarView === null && <b>{`Type '${calendarView}' has an invalid value.`}</b>)
-					}
-				</DataDisplayWrapper>
+				<EventCalendarControls theme={props.theme} />
+				<EventCalendarDisplay theme={props.theme} />
 			</EventCalendarContainer>
 		</EventCalendarContext.Provider>
 	);
