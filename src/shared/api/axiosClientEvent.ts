@@ -34,8 +34,10 @@ export const apiEventClient = apiClient.create({
  */
 function tryParseToDateFromISO(obj: string): Date | string {
 	if (ISO_STRING_PATTERN.test(obj)) {
+		console.debug("Parse revive to date success.");
 		return new Date(obj);
 	}
+	console.debug("Parse revive to date failed.");
 	return obj;
 }
 
