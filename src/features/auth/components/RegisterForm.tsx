@@ -1,133 +1,103 @@
-import { useState, type SubmitEvent } from "react";
-import { useNavigate, Link as RouterLink } from "react-router-dom";
-import { useAuth } from "../../../app/auth/useAuth";
-import { registerUser, loginUser } from "../api/authApi";
-import axios from "axios";
-import {
-	Card,
-	CardContent,
-	Typography,
-	TextField,
-	Button,
-	Stack,
-	Alert,
-	Link
-} from "@mui/material";
+import { useState, type SubmitEvent } from 'react';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import axios from 'axios';
+import { Alert, Button, Link, Stack, TextField } from '@mui/material';
+import { useAuth } from '@/app/auth/useAuth';
+import { registerUser, loginUser } from '../api/authApi';
+import { registerErrorMessage } from '../authErrors';
+import AuthCard from './AuthCard';
 
 export const RegisterForm = () => {
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const [confirmPassword, setConfirmPassword] = useState("");
-	const [error, setError] = useState("");
-	const [isLoading, setIsLoading] = useState(false);
-	
-	const { login } = useAuth();
-	const navigate = useNavigate();
-    
-	const handleSubmit = async (e: SubmitEvent) => {
-		e.preventDefault();
-		setIsLoading(true);
-		setError("");	
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const { login } = useAuth();
+    const navigate = useNavigate();
 
-		if (password !== confirmPassword) {
-			setError("Passwords do not match.");
-			setIsLoading(false);
-			return;
-		}
+    const handleSubmit = async (e: SubmitEvent) => {
+        e.preventDefault();
+        setError('');
 
-		setIsLoading(true);
+        // check this before bothering the api
+        if (password !== confirmPassword) {
+            setError('Lösenorden matchar inte.');
+            return;
+        }
 
-		try {
-			await registerUser({ email, password });
+        setIsLoading(true);
 
-			const loginData = await loginUser({ email, password });
-			login(loginData.accessToken);
-			// Email temporary to simply confirm you are logged in, will be removed later
-			navigate("/temp", { state: { email } });
+        try {
+            await registerUser({ email, password });
 
-		} catch (err) {
-			if (axios.isAxiosError(err))
-			{
-				setError(err.response?.data?.title || "Registration failed. Please try again.");
-			} else {
-				setError("An unexpected error occured. Please try again.");
-			}
-		} finally {
-			setIsLoading(false);
-		}
-	}
+            // log in straight away so u dont have to type it all again
+            const loginData = await loginUser({ email, password });
+            login(loginData.accessToken);
+            navigate('/temp', { state: { email } });
+        } catch (err) {
+            if (axios.isAxiosError(err)) {
+                setError(registerErrorMessage(err.response?.data));
+            } else {
+                setError('Något gick fel. Testa igen om en stund.');
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-	return (
-		<Card variant="outlined">
-			<CardContent sx={{ p: 3 }}>
-				<Typography
-					variant="h5"
-					component="h2"
-					gutterBottom
-					sx={{ fontWeight: "bold"}}
-				>
-					Register Account
-				</Typography>
-				<form onSubmit={handleSubmit}>
-					<Stack spacing={2}>
-						<TextField
-							label="Email"
-							type="email"
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
-							autoComplete="email"
-							fullWidth
-							required
-							disabled={isLoading}
-						/>
-						<TextField
-							label="Password"
-							type="password"
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
-							autoComplete="new-password"
-							fullWidth
-							required
-							disabled={isLoading}
-						/>
-						<TextField
-							label="Confirm Password"
-							type="password"
-							value={confirmPassword}
-							onChange={(e) => setConfirmPassword(e.target.value)}
-							autoComplete="new-password"
-							fullWidth
-							required
-							disabled={isLoading}
-						/>
-						<Button
-							type="submit"
-							variant="contained"
-							size="large"
-							fullWidth
-							disabled={isLoading}
-						>
-							{isLoading ? "Registering..." : "Register"}
-						</Button>
-					</Stack>
-				</form>
-				
-				{error && (
-					<Alert severity="error" sx={{ mb: 2 }}>
-						{error}
-					</Alert>
-        )}
+    return (
+        <AuthCard
+            title="Skapa ditt konto"
+            footer={
+                <>
+                    Har du redan ett konto?{' '}
+                    <Link component={RouterLink} to="/login" sx={{ fontWeight: 600 }}>
+                        Logga in
+                    </Link>
+                </>
+            }
+        >
+            <form onSubmit={handleSubmit}>
+                <Stack spacing={2}>
+                    {error && <Alert severity="error">{error}</Alert>}
 
-				<Typography 
-					variant="body2" 
-					sx={{ mt: 2, textAlign: "center" }}
-				>
-					Already have an account?{" "}
-					<Link component={RouterLink} to="/login">
-						Log in here
-					</Link>
-				</Typography>
-			</CardContent>
-		</Card>
-	)
-}
+                    <TextField
+                        label="E-post"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        autoComplete="email"
+                        fullWidth
+                        required
+                        disabled={isLoading}
+                    />
+                    <TextField
+                        label="Lösenord"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        autoComplete="new-password"
+                        helperText="Minst 6 tecken, med stor och liten bokstav, en siffra och ett specialtecken."
+                        fullWidth
+                        required
+                        disabled={isLoading}
+                    />
+                    <TextField
+                        label="Skriv lösenordet igen"
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        autoComplete="new-password"
+                        fullWidth
+                        required
+                        disabled={isLoading}
+                    />
+                    <Button type="submit" variant="contained" size="large" fullWidth disabled={isLoading}>
+                        {isLoading ? 'Skapar konto...' : 'Skapa konto'}
+                    </Button>
+                </Stack>
+            </form>
+        </AuthCard>
+    );
+};
