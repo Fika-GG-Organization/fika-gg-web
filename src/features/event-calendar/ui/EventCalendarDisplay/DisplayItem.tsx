@@ -11,23 +11,30 @@ interface DisplayItemProps extends StackProps {
 	theme: Theme;
 }
 
-const StyledStack = styled(Stack)<{ isToday: boolean }>(({ theme, isToday }) => ({
+const StyledStack = styled(Stack)(({ theme }) => ({
 	padding: theme.spacing(1, 1),
 	minWidth: "120px",
 	width: "100%",
 	height: "100%",
-
-	backgroundColor:
-		isToday ? theme.alpha(theme.palette.primary.light, 0.2) : theme.palette.background.default,
 }));
 
 /**
  * A column or grid item on the calendar. A DisplayItem represents a day.
  * @param param0 
  */
-const DisplayItem = ({ dayName, dayDate, today, theme, ...props }: DisplayItemProps) => {
+const DisplayItem = ({ dayName, dayDate, today, todayText, theme, ...props }: DisplayItemProps) => {
 	return (
-		<StyledStack {...props} isToday={today}>
+		<StyledStack 
+			{...props} 
+			sx={{
+				minWidth: "120px",
+				width: "100%",
+				height: "100%",
+				padding: theme.spacing(1, 1),
+				backgroundColor: (today) ? 
+						theme.alpha(theme.palette.primary.light, 0.2) 
+					: theme.palette.background.default}}
+		>
 			<Stack direction={"row"} spacing={{ xs: 0.5, md: 1 }} sx={{ alignItems: "baseline" }}>
 				<Typography
 					sx={{
@@ -37,7 +44,7 @@ const DisplayItem = ({ dayName, dayDate, today, theme, ...props }: DisplayItemPr
 				>
 					{!today ?
 						`${dayName.toUpperCase()}`
-					:	`${dayName.toUpperCase()} • ${props.todayText.toUpperCase()}`}
+					:	`${dayName.toUpperCase()} • ${todayText.toUpperCase()}`}
 				</Typography>
 				<Typography
 					sx={{

@@ -39,6 +39,7 @@ const EventCalendarDisplay = ({ children, ...props }: EventCalendarDisplayProps)
 			{!context.isLoading && (
 				<Display children={context.dateRange.map((d, index) => (
 						<DisplayItem
+							key={d.getDate()}
 							dayDate={d.getDate()}
 							dayName={LABEL_WEEKDAYS[index]}
 							theme={props.theme}
