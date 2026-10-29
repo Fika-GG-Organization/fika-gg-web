@@ -6,6 +6,7 @@ import RegisterPage from "../../pages/RegisterPage";
 import TempPage from "../../pages/TempPage";
 import ProtectedRoute from "./ProtectedRoute";
 import DesignDumpPage from "../../pages/DesignDumpPage";
+import GamesPage from "../../pages/GamesPage";
 // import NotFoundPage from "../../pages/NotFoundPage";
 
 const router = createBrowserRouter([
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
 					{
 						path: "/temp",
 						element: <TempPage />,
+					},
+					{
+						path: "/games",
+						element: <GamesPage />,
 					},
 					{
 						// Add any more logged in routes here
