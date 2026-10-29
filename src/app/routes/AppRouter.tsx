@@ -7,6 +7,7 @@ import TempPage from "../../pages/TempPage";
 import ProtectedRoute from "./ProtectedRoute";
 import UserPage from "@/pages/UserPage";
 import GamesPage from "@/pages/GamesPage";
+import DesignDumpPage from "../../pages/DesignDumpPage";
 
 // import NotFoundPage from "../../pages/NotFoundPage";
 
@@ -31,10 +32,13 @@ const router = createBrowserRouter([
 			{
 				// Add more routes here
 			},
+			// only in dev so it never ends up on the real site
+			...(import.meta.env.DEV ? [{ path: "/design", element: <DesignDumpPage /> }] : []),
 			{
 				element: <ProtectedRoute />,
 				children: 
 				[
+					
 					{
 						path: "/temp",
 						element: <TempPage />,
