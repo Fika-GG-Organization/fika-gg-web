@@ -16,6 +16,8 @@ Each model/DTO are sent as JSON format.
     - [Reset password](#reset-password)
     - [Check if email confirmed](#check-if-email-confirmed)
     - [Change password while logged in](#change-password-while-logged-in)
+- [Game endpoints](#game-endpoints)
+    - [Search games](#search-games)
 - [X endpoints](#x-endpoints)
 
 ## Contribute
@@ -328,5 +330,65 @@ POST `api/auth/manage/info`
 - 404 Not Found
 
     No Body
+
+## Game endpoints
+
+### Search games
+
+Logged in client searches for games via RAWG. Returns max 10 results.
+Queries shorter than 2 characters return an empty list without calling RAWG.
+
+#### Request 
+
+GET `api/games/search`
+
+- Query Parameter
+    - `query` string, required, max 100 characters
+
+#### Response
+
+- 200 OK
+    
+		```json
+		[
+			{
+				"rawgId": 1,
+				"name": "",
+				"coverUrl": null | "",
+			}
+		]
+		```
+
+- 400 Bad Request
+
+    `query` is missing or longer than 100 characters
+
+- 401 Unauthorized
+
+    No Body
+
+## Event endpoints
+
+### Get all events between two dates
+
+Get all dates whose start dates begin between two dates time values.
+
+#### Request
+
+GET `api/events/getAll`
+
+- Query Parameter
+	- `start-date`
+	- `end-date`
+
+#### Response
+
+- 200 OK
+
+	```json
+	{
+		
+	}
+	```
 
 ## X endpoints
