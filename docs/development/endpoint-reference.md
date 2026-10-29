@@ -367,4 +367,28 @@ GET `api/games/search`
 
     No Body
 
+## Event endpoints
+
+### Get all events between two dates
+
+Get all dates whose start dates begin between two dates time values.
+
+#### Request
+
+GET `api/events/getAll`
+
+- Query Parameter
+	- `start-date`
+	- `end-date`
+
+#### Response
+
+- 200 OK
+
+	```json
+	{
+		
+	}
+	```
+
 ## X endpoints
