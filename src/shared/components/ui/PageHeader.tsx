@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, type BoxProps } from '@mui/material';
 
-type PageHeaderProps = {
+type PageHeaderProps = BoxProps & {
     title: string;
     description?: string;
     actions?: ReactNode;
+    centered?: boolean;
 };
 
 /**
@@ -17,19 +18,25 @@ type PageHeaderProps = {
  * <PageHeader title="Upptäck event" description="Kommande spelkvällar du kan joina direkt." />
  * <PageHeader title="Kalender" actions={<CalendarToolbar ... />} />
  */
-export default function PageHeader({ title, description, actions }: PageHeaderProps) {
+export default function PageHeader({ title, description, actions, centered }: PageHeaderProps) {
     return (
         <Box
             sx={{
                 display: 'flex',
                 flexWrap: 'wrap',
                 alignItems: 'flex-end',
-                justifyContent: 'space-between',
+                justifyContent: centered ? 'center' : 'space-between',
                 gap: 2,
                 mb: 3,
             }}
         >
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+            <Box sx={{ 
+                	display: 'flex', 
+					flexDirection: 'column',
+					alignItems: centered ? 'center' : 'flex-start',
+					textAlign: centered ? 'center' : 'left',
+					gap: 0.5 
+				}}>
                 <Typography variant="h1" sx={{ fontSize: { xs: 28, md: 36 }, letterSpacing: '-0.01em' }}>
                     {title}
                 </Typography>

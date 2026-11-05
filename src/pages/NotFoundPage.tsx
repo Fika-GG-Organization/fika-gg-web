@@ -1,4 +1,4 @@
-import { Container, Typography, Button, Box } from "@mui/material";
+import { Container, Button, Box } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import ErrorIcon from "@mui/icons-material/Error";
 import { useAuth } from "app/auth/useAuth";
@@ -17,6 +17,17 @@ export default function NotFoundPage() {
       <PageHeader
         title="404"
         description="The page you are looking for doesn't exist or has been moved."
+        centered={true}
+        actions = {
+          <Button
+        variant="contained"
+        component={RouterLink}
+        to={homePath}
+        size="large"
+      >
+        Back to Homepage
+      </Button>
+        }
       >
       </PageHeader>
       <Button
