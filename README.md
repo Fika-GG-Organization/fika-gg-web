@@ -2,21 +2,23 @@
 
 ![Place any banner here]()
 
-This repository houses the web client application for ***FIKA GG***, an online gaming hub focused on connecting gamers together. 
+[![React Frontend CI](https://github.com/Fika-GG-Organization/fika-gg-web/actions/workflows/node.js.yml/badge.svg?branch=dev)](https://github.com/Fika-GG-Organization/fika-gg-web/actions/workflows/node.js.yml)
+
+This repository houses the web client application for **_FIKA GG_**, an online gaming hub focused on connecting gamers together.
 
 ## Table of Contents
 
-- [Background](#Background)
-	- [See also](#See_also)
-- [Development](#Development)
-	- [Dependencies](#Dependencies)
-	- [CLI](#CLI)
-- [Contributing](#Contributing)
-- [License](#License)
+- [Background](#background)
+    - [See also](#see-also)
+- [Documentations](#documentations)
+- [Dependencies](#dependencies)
+- [Contributing](#contributing)
+    - [Collaborators](#collaborators)
+- [License](#license)
 
 ## Background
 
-***FIKA GG*** is an calendar-based gaming hub where GAMERS can connect with fellow GAMERS for participating or planning online gaming events. 
+**_FIKA GG_** is an calendar-based gaming hub where GAMERS can connect with fellow GAMERS for participating or planning online gaming events.
 
 Our main target demographic are Swedish students and young adults with an interest in gaming.
 
@@ -24,16 +26,11 @@ Our main target demographic are Swedish students and young adults with an intere
 
 - [fika-gg-api](https://github.com/Fika-GG-Organization/fika-gg-api): The server infrastructure (api, aspire, database).
 
-## Development
+## Documentations
 
-File structure
- 
-- `src/app/` routing, providers, auth
-- `src/pages/` web pages
-- `src/features/` similar to backend, grouped by features
-- `src/shared/` reusable utilities
+See [docs](docs/README.md) for tutorials, references, etc.
 
-### Dependencies
+## Dependencies
 
 The repository uses the following 3rd party dependencies.
 
@@ -44,10 +41,6 @@ The repository uses the following 3rd party dependencies.
 - [@mui/material](https://www.npmjs.com/package/@mui/material)
 - [react-router](https://www.npmjs.com/package/react-router)
 - [axios](https://www.npmjs.com/package/axios)
-
-### CLI
-
-DevOps info here
 
 ## Contributing
 
