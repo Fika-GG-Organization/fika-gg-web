@@ -20,24 +20,16 @@ export default function NotFoundPage() {
         centered={true}
         actions = {
           <Button
-        variant="contained"
-        component={RouterLink}
-        to={homePath}
-        size="large"
-      >
-        Back to Homepage
-      </Button>
+            variant="contained"
+            component={RouterLink}
+            to={homePath}
+            size="large"
+          >
+            Back to Homepage
+          </Button>
         }
       >
       </PageHeader>
-      <Button
-        variant="contained"
-        component={RouterLink}
-        to={homePath}
-        size="large"
-      >
-        Back to Homepage
-      </Button>
     </Container>
   );
 }
