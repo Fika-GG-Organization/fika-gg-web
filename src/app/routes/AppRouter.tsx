@@ -9,6 +9,7 @@ import UserPage from "@/pages/UserPage";
 import DesignDumpPage from "../../pages/DesignDumpPage";
 import GamesPage from "../../pages/GamesPage";
 import NotFoundPage from "../../pages/NotFoundPage";
+import EventCalendarPage from "@/pages/EventCalendarPage";
 
 const router = createBrowserRouter([
 	{
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
 			{
 				path: "/register",
 				element: <RegisterPage />,
+			},
+			{
+				path: "/calendar",
+				element: <EventCalendarPage />,
 			},
 			{
 				// Add more routes here
