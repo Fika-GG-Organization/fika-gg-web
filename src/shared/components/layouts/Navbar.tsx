@@ -22,7 +22,7 @@ import ThemeModeSwitch from '@/app/theme/ThemeModeSwitch';
 
 // the links in the middle when ur logged in
 const memberLinks = [
-    { to: '/events', label: 'Upptäck' },
+    { to: '/discover', label: 'Upptäck' },
     { to: '/calendar', label: 'Kalender' },
     { to: '/my-events', label: 'Mina event' },
 ];

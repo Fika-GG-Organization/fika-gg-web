@@ -7,7 +7,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import { useAuth } from '@/app/auth/useAuth';
 
 const tabs = [
-    { to: '/events', label: 'Upptäck', icon: <SearchIcon /> },
+    { to: '/discover', label: 'Upptäck', icon: <SearchIcon /> },
     { to: '/my-events', label: 'Mina event', icon: <EventIcon /> },
     { to: '/events/new', label: 'Skapa', icon: <AddCircleOutlineOutlinedIcon /> },
     { to: '/profile', label: 'Profil', icon: <PersonIcon /> },
