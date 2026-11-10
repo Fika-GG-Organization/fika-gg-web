@@ -7,7 +7,6 @@ export default defineConfig({
 	resolve: { tsconfigPaths: true },
   server: {
     port: Number(process.env.PORT) || 3000,
-    strictPort: true,
     proxy: {
       '/api': {
         target: 'https://localhost:7203',
