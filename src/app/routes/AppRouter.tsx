@@ -8,6 +8,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import UserPage from "@/pages/UserPage";
 import DesignDumpPage from "../../pages/DesignDumpPage";
 import GamesPage from "../../pages/GamesPage";
+import DiscoverPage from "../../pages/DiscoverPage";
 import NotFoundPage from "../../pages/NotFoundPage";
 
 const router = createBrowserRouter([
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
 					{
 						path: "/games",
 						element: <GamesPage />,
+					},
+					{
+						path: "/discover",
+						element: <DiscoverPage />,
 					},
 					{
 						// Add any more logged in routes here
