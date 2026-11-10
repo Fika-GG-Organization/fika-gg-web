@@ -19,10 +19,10 @@ import {
 import type { CalendarItem } from "@/shared/components/ui/CalendarEvent";
 
 const EventCalendar = () => {
-	const [isLoading, setIsLoading] = useState<boolean>(true);
+	const [_isLoading, setIsLoading] = useState<boolean>(true);
 	const [data, setData] = useState<EventCalendarResponse>([]);
 	const [calendarView, setCalendarView] = useState<CalendarView>("week");
-	const [today, setToday] = useState<Date>(new Date(2026, 10, 2));
+	const [today, _setToday] = useState<Date>(new Date());
 	const [step, setStep] = useState<number>(0);
 
 	const onViewChange = useCallback(
