@@ -9,12 +9,15 @@ import {
     Link,
     Menu,
     MenuItem,
+		Stack,
     Toolbar,
     Typography,
+		useMediaQuery,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import PersonIcon from '@mui/icons-material/Person';
 import { useAuth } from '@/app/auth/useAuth';
+import { theme } from '@/app/theme/theme';
 import ThemeModeSwitch from '@/app/theme/ThemeModeSwitch';
 
 // the links in the middle when ur logged in
@@ -36,6 +39,7 @@ export default function Navbar() {
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
 	const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
+	const greaterThanMediumWidth = useMediaQuery(theme.breakpoints.up("md"));
 
 	const isLoginPage = pathname === '/login';
 	const isRegisterPage = pathname === '/register';
@@ -67,6 +71,23 @@ export default function Navbar() {
 						fika.gg
 					</Typography>
 				</Box>
+				{greaterThanMediumWidth && (
+					<Stack 
+						direction={"row"} spacing={3} sx={{ paddingInline: { xs: 1, md: 1.5, }, alignItems: "baseline", }}
+					>
+						<Box component={RouterLink} to={memberLinks[0].to} sx={{ textDecoration: "none", color: "inherit", }}>
+							{memberLinks[0].label}
+						</Box>
+						<Box component={RouterLink} to={memberLinks[1].to} sx={{ textDecoration: "none", color: "inherit", }}>
+							{memberLinks[1].label}
+						</Box>
+						{isAuthenticated && (
+							<Box component={RouterLink} to={memberLinks[2].to} sx={{ textDecoration: "none", color: "inherit", }}>
+								{memberLinks[2].label}
+							</Box>
+						)}
+					</Stack>
+				)}
 
                 {isAuthenticated && (
                     <Box component="nav" aria-label="Huvudmeny" sx={{ display: { xs: 'none', md: 'flex' }, gap: 2.5 }}>
