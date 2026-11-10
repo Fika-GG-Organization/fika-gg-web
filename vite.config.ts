@@ -6,7 +6,8 @@ export default defineConfig({
   plugins: [react()],
 	resolve: { tsconfigPaths: true },
   server: {
-    port: 3000,
+    port: Number(process.env.PORT) || 3000,
+    strictPort: true,
     proxy: {
       '/api': {
         target: 'https://localhost:7203',
