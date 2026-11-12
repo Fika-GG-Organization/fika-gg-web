@@ -1,3 +1,6 @@
+/**
+ * Represents the HTTP Response body for getting a single event.
+ */
 export interface EventGetResponse {
 	id: number;
 	hostId: string;
@@ -12,6 +15,9 @@ export interface EventGetResponse {
 	createdAt: Date;
 }
 
+/**
+ * Represents a game in the event.
+ */
 export interface EventGetGame {
 	id: number;
 	rawgId?: number;
@@ -19,6 +25,9 @@ export interface EventGetGame {
 	coverUrl?: string;
 }
 
+/**
+ * Represents a participant in the event participants list.
+ */
 export interface EventGetParticipant {
 	eventId: number;
 	userId: string;
@@ -29,6 +38,9 @@ export interface EventGetParticipant {
 	joinedAt: Date;
 }
 
+/**
+ * Props for EventLayouts.
+ */
 export interface EventLayoutProps {
 	isLoading: boolean;
 	data: EventGetResponse | undefined;

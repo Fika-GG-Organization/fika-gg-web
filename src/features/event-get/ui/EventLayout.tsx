@@ -21,6 +21,7 @@ const PLACEHOLDER_DESC =
 const PLACEHOLDER_JOIN_DESC =
 	"Joina för att säkra din plats. Du kan hoppa av när som helst innan det börjar. Du kan joina som backup när det är fullt.";
 
+/** Desktop layout for the event page. Includes a skeleton that shows the basic component structure while it is loading data. */
 const EventLayout = ({ data, ...props }: EventLayoutProps) => {
 	return (
 		<Stack direction={"column"}>
