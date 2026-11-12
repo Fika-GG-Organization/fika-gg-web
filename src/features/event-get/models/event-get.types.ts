@@ -1,5 +1,3 @@
-import type { ParticipantStatus } from "@/shared/types/user.types";
-
 export interface EventGetResponse {
 	id: number;
 	hostId: string;
@@ -35,3 +33,10 @@ export interface EventLayoutProps {
 	isLoading: boolean;
 	data: EventGetResponse | undefined;
 }
+
+/**
+ * Represents user participation status to an event.
+ * - 0 = Joined: User has joined.
+ * - 1 = Backup: User has joined and is above max player limit.
+ */
+export type ParticipantStatus = "0" | "1";
