@@ -2,14 +2,19 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
 import { theme } from "@/app/theme/theme";
-import { EventLayout, getEventByIdAsync, type EventGetResponse } from "@/features/event-get";
+import {
+	EventDesktopLayout,
+	EventMobileLayout,
+	getEventByIdAsync,
+	type EventGetResponse,
+} from "@/features/event-get";
 import Container from "@mui/material/Container";
 import BackButton from "@/shared/components/ui/Buttons/BackButton";
 
 export default function EventPage() {
 	const nav = useNavigate();
 	const { eventId = "" } = useParams();
-	const aboveSmallWidth = useMediaQuery(theme.breakpoints.up("sm"));
+	const aboveSmallWidth = useMediaQuery(theme.breakpoints.up("md"));
 
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [data, setData] = useState<EventGetResponse | undefined>(undefined);
@@ -35,8 +40,8 @@ export default function EventPage() {
 		<Container component={"main"}>
 			<BackButton icon={"left"} underline />
 			{aboveSmallWidth ?
-				<EventLayout isLoading={isLoading} data={data} />
-			:	<></>}
+				<EventDesktopLayout isLoading={isLoading} data={data} />
+			:	<EventMobileLayout isLoading={isLoading} data={data}></EventMobileLayout>}
 		</Container>
 	);
 }

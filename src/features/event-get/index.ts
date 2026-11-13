@@ -1,6 +1,3 @@
-import { getEventByIdAsync } from "./api";
-import EventLayout from "./ui";
-
+export { getEventByIdAsync } from "./api";
 export * from "./models";
-export { EventLayout };
-export { getEventByIdAsync };
+export * from "./ui";
