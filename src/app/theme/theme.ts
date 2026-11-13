@@ -31,6 +31,10 @@ export const theme = createTheme({
           fieldLine: '#88665B',
           cover: 'repeating-linear-gradient(135deg,#E4513F10 0 2px,transparent 2px 13px),linear-gradient(100deg,#3B1A15,#241815 72%)',
         },
+				success: { main: "#d7ec6e", },
+				info: { main: "#ffdcd7" },
+				warning: { main: "#ffc23f" },
+				error: { main: "#fe563f", },
       },
     },
     light: {
@@ -47,6 +51,10 @@ export const theme = createTheme({
           fieldLine: '#9C8471',
           cover: 'repeating-linear-gradient(135deg,#B23A2A12 0 2px,transparent 2px 13px),#EADFCF',
         },
+				success: { main: "#92ae06", },
+				info: { main: "#433e3d" },
+				warning: { main: "#d08e00" },
+				error: { main: "#fe563f", },
       },
     },
   },
@@ -115,10 +123,20 @@ export const theme = createTheme({
         root: ({ theme }) => ({
           backgroundColor: theme.palette.background.paper,
           color: theme.palette.text.primary,
-          borderBottom: `1.5px solid ${theme.palette.fika.line}`,
+          borderBottom: `1.5px solid ${theme.palette.fika.fieldLine}`,
         }),
       },
     },
+
+		MuiAlert: {
+			styleOverrides: {
+				root: ({ theme }) => ({
+					backgroundColor: `${theme.palette.background.paper}`,
+					border: `1.5px solid ${theme.palette.fika.line}`
+				}),
+			},
+		},
+
     MuiOutlinedInput: {
       styleOverrides: {
         notchedOutline: ({ theme }) => ({ 
