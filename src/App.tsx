@@ -1,18 +1,18 @@
-import AppRouter from './app/routes/AppRouter'
-import { AuthProvider } from './app/auth/AuthProvider'
-import { AppProvider } from './app/theme/ThemeProvider'
-import { ToastProvider } from './app/toast'
+import AppRouter from "./app/routes/AppRouter";
+import { AuthProvider } from "./app/auth/AuthProvider";
+import { AppProvider } from "./app/theme/ThemeProvider";
+import { ToastProvider } from "./app/toast";
 
 function App() {
-  return (
-    <AppProvider>
+	return (
+		<AppProvider>
 			<ToastProvider>
-      	<AuthProvider>
-        	<AppRouter />
-      	</AuthProvider>
+				<AuthProvider>
+					<AppRouter />
+				</AuthProvider>
 			</ToastProvider>
-    </AppProvider>
-  )
+		</AppProvider>
+	);
 }
 
-export default App
+export default App;
