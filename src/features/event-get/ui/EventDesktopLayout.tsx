@@ -1,5 +1,7 @@
 import type { EventLayoutProps } from "../models";
 import { formatEventTime2 } from "@/shared/utils/formatEventTime";
+import { theme } from "@/app/theme/theme";
+import { useMediaQuery } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
@@ -14,22 +16,26 @@ import ParticipantList, { type ListPlayer } from "@/shared/components/ui/Partici
 
 const LABEL_PLACEHOLDER = "Placeholder";
 const LABEL_JOIN = "Joina";
-const LABEL_LINK = "Kopiera inbjudningslänken";
+const LABEL_LINK = "Kopiera inbjudan";
 const LABEL_DESCRIPTION = "Om eventet";
 const PLACEHOLDER_DESC =
 	"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 const PLACEHOLDER_JOIN_DESC =
 	"Joina för att säkra din plats. Du kan hoppa av när som helst innan det börjar. Du kan joina som backup när det är fullt.";
+const LABEL_FULL_PARTY = "Fullt";
+const LABEL_AVAILABLE_PARTY = "platser kvar";
 
 /** Desktop layout for the event page. Includes a skeleton that shows the basic component structure while it is loading data. */
-const EventLayout = ({ data, ...props }: EventLayoutProps) => {
+const EventDesktopLayout = ({ data, ...props }: EventLayoutProps) => {
+	const greaterThanLargeWith = useMediaQuery(theme.breakpoints.up("lg"));
+
 	return (
 		<Stack direction={"column"}>
 			{props.isLoading && (
 				<Grid container rowSpacing={4} columnSpacing={4}>
 					<Grid size={12}>
 						<Skeleton variant={"rectangular"}>
-							<GameBanner name={LABEL_PLACEHOLDER} variant={"detail"} fill={false} />
+							<GameBanner name={LABEL_PLACEHOLDER} fill={true} />
 						</Skeleton>
 					</Grid>
 					<Grid size={8}>
@@ -50,7 +56,7 @@ const EventLayout = ({ data, ...props }: EventLayoutProps) => {
 							</Stack>
 						</Stack>
 					</Grid>
-					<Grid size={"auto"}>
+					<Grid size={4}>
 						<Skeleton variant={"rectangular"}>
 							<JoinPanel headline={LABEL_PLACEHOLDER} joined={0} max={0} />
 						</Skeleton>
@@ -67,7 +73,7 @@ const EventLayout = ({ data, ...props }: EventLayoutProps) => {
 							fill={false}
 						/>
 					</Grid>
-					<Grid size={8}>
+					<Grid size={greaterThanLargeWith ? 8 : 7}>
 						<Stack spacing={2.5}>
 							<PageHeader
 								title={data?.title ?? LABEL_PLACEHOLDER}
@@ -97,19 +103,19 @@ const EventLayout = ({ data, ...props }: EventLayoutProps) => {
 							/>
 						</Stack>
 					</Grid>
-					<Grid size={"auto"}>
+					<Grid size={greaterThanLargeWith ? 4 : 5}>
 						<JoinPanel
-							headline={"1 plats kvar"}
+							headline={
+								data!.participantCount! <= data!.maxPlayers! ?
+									`${data!.maxPlayers! - data!.participantCount!} ${LABEL_AVAILABLE_PARTY}`
+								:	LABEL_FULL_PARTY
+							}
 							message={PLACEHOLDER_JOIN_DESC}
 							joined={data!.participantCount ?? 0}
 							max={data!.maxPlayers ?? 0}
 						>
-							<Button variant={"contained"} size={"large"}>
-								{LABEL_JOIN}
-							</Button>
-							<CopyButton copyText={"https://wikipedia.com"} size={"large"}>
-								{LABEL_LINK}
-							</CopyButton>
+							<Button variant={"contained"}>{LABEL_JOIN}</Button>
+							<CopyButton copyText={"https://wikipedia.com"}>{LABEL_LINK}</CopyButton>
 						</JoinPanel>
 					</Grid>
 				</Grid>
@@ -118,4 +124,4 @@ const EventLayout = ({ data, ...props }: EventLayoutProps) => {
 	);
 };
 
-export default EventLayout;
+export default EventDesktopLayout;
