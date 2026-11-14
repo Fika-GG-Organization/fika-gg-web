@@ -10,6 +10,7 @@ import DesignDumpPage from "../../pages/DesignDumpPage";
 import GamesPage from "../../pages/GamesPage";
 import DiscoverPage from "../../pages/DiscoverPage";
 import NotFoundPage from "../../pages/NotFoundPage";
+import EventPage from "@/pages/EventPage";
 import EventCalendarPage from "@/pages/EventCalendarPage";
 
 const router = createBrowserRouter([
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
 			{
 				path: "/register",
 				element: <RegisterPage />,
+			},
+			{
+				path: "/event/:eventId",
+				element: <EventPage />,
 			},
 			{
 				path: "/calendar",
