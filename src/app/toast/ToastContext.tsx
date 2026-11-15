@@ -14,11 +14,11 @@ export const ToastProvider = (props: PropsWithChildren) => {
 
 	useEffect(() => {
 		if (pendingToasts.length && !activeToast) {
-			console.log(
-				`New toast:\n` +
-					`  key:     ${pendingToasts[pendingToasts.length - 1].key.toString()}\n` +
-					`  message: '${pendingToasts[pendingToasts.length - 1].message}'`,
-			);
+			// console.log(
+			// 	`New toast:\n` +
+			// 		`  key:     ${pendingToasts[pendingToasts.length - 1].key.toString()}\n` +
+			// 		`  message: '${pendingToasts[pendingToasts.length - 1].message}'`,
+			// );
 
 			// If no toast is active, set first pending toast as active and remove it from pending list
 			setActiveToast({ ...pendingToasts[0] });
