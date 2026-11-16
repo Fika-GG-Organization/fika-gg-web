@@ -1,4 +1,4 @@
-import {box, Grid, Typgography, Container, TextField, switch, FormControlLabel, CircularProgress, Box, Alert} from "@mui/material"
+import {Grid, Typography, Container, TextField, Switch, FormControlLabel, CircularProgress, Box, Alert} from "@mui/material"
 import PageHeader from "@/shared/components/ui/PageHeader"
 import UserAvatar from "@/shared/components/ui/UserAvatar"
 import AvatarUploader from "@/features/avatar/components/AvatarUploader"    
@@ -26,7 +26,8 @@ export default function UserSettingsPage(){
                 const data = await getUserData();
                 if(!cancelled) return;
                 setUser(data);
-                setDisplayName(data.DisplayName);
+                setDisplayName(data.displayName);
+
             }
             catch{
                 if(!cancelled) setError("Failed to load user profile")
@@ -67,9 +68,7 @@ export default function UserSettingsPage(){
 
             {/* avatar uploader + Display name edit trext box, email edit textbox*/}
             <Container>
-                <UserAvatar
-                    name={displayName} src={user?.AvatarUrl}
-                />
+                <AvatarUploader/>
             </Container>
 
             {/*Darkmode toggle container*/}
@@ -77,12 +76,7 @@ export default function UserSettingsPage(){
                 <FormControlLabel control={<switch/>} label={TEXT_DARKMODE_SWITCH_LABEL}/>
 
             </Container>
-
-            {/*Logout container*/}
-            <Container>
-
-            </Container>
-
+            
             {/* Delete account container */}
             <Container>
 
