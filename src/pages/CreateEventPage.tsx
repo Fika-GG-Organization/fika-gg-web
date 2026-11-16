@@ -9,9 +9,12 @@ import FormSection from '@/shared/components/ui/FormSection';
 import NumberStepper from '@/shared/components/ui/NumberStepper';
 import GamePickerList from '@/shared/components/ui/GamePickerList';
 import EventCard from '@/shared/components/ui/EventCard';
+import { useToast } from '@/app/toast';
+import { createEventAsync } from '@/features/event-create';
 
 export default function CreateEventPage() {
     const navigate = useNavigate();
+    const toast = useToast();
     const [search, setSearch] = useState('');
     const [results, setResults] = useState<GameSearchResult[]>([]);
     const [game, setGame] = useState<GameSearchResult | null>(null);
@@ -78,19 +81,18 @@ export default function CreateEventPage() {
 
         setIsSaving(true);
         try {
-            // to do: send the event to the api when createEvent exists
-            // await createEvent({
-            //     title: title.trim(),
-            //     description: description.trim() || null,
-            //     startTime: start.toISOString(),
-            //     endTime: end.toISOString(),
-            //     maxPlayers,
-            //     createdAt: now.toISOString(),
-            //     eventGame: { rawgId: game.rawgId, name: game.name, coverUrl: game.coverUrl },
-            // });
+            const created = await createEventAsync({
+                title: title.trim(),
+                description: description.trim() || null,
+                startTime: start.toISOString(),
+                endTime: end.toISOString(),
+                maxPlayers,
+                createdAt: now.toISOString(),
+                eventGame: { rawgId: game.rawgId, name: game.name, coverUrl: game.coverUrl },
+            });
 
-            // to do: go to the event page after publishing when it exists
-            // navigate('/');
+            toast('Eventet är publicerat!', { variant: 'success' });
+            navigate(`/event/${created.id}`)
         } catch {
             setError('Kunde inte skapa eventet. Försök igen.');
         } finally {
