@@ -1,39 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
-import { Box, Grid, Skeleton, Typography } from "@mui/material";
-import { useToast } from "@/app/toast";
+import { Box, CircularProgress, Grid, Typography } from "@mui/material";
 import { getUserData } from "@/features/user/api/userApi";
-import type { UserResponse } from "@/features/user/types/UserResponse";
+import type { EventResponse, UserResponse } from "@/features/user/types/UserResponse";
 import EventRow from "@/shared/components/ui/EventRow";
 import ProfileHeader from "@/shared/components/ui/ProfileHeader";
 import UserGameList from "@/shared/components/ui/UserGameList";
-
-const games = [
-  { id: 1, name: "Valorant", gamerTag: "alexk#4410" },
-  { id: 2, name: "League of Legends", gamerTag: "alexk-euw" },
-  { id: 3, name: "Counter-Strike 2", gamerTag: "alexk" },
-  { id: 4, name: "Minecraft", gamerTag: "alexcraft" },
-];
-
-const upcomingEvent = {
-  date: "2026-11-07T18:00:00",
-  title: "Lördags-rankat",
-  subtitle: "Valorant · 18:00–21:00 · 3/5 spelare",
-  status: "joined" as const,
-  statusLabel: "Deltar",
-};
-
-const pastEvent = {
-  date: "2026-10-24T19:00:00",
-  title: "Fredagsmys med gänget",
-  subtitle: "Counter-Strike 2 · 19:00–22:00 · 5 spelare",
-  status: "host" as const,
-  statusLabel: "Värd",
-};
+import { formatEventTime } from "@/shared/utils/formatEventTime";
+import { formatEventLink } from "@/shared/utils/formatEventLink";
 
 export default function UserPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [me, setMe] = useState<UserResponse | undefined>();
-  const toast = useToast();
 
   useEffect(() => {
     async function fetchMe() {
@@ -51,12 +28,18 @@ export default function UserPage() {
     }
 
     fetchMe();
-  });
+  }, []);
+
+	/** Combines events that user hosts with events that user joined into one */
+  const mapEvents = useCallback((hostedEvents: EventResponse[], userEvents: EventResponse[]) => {
+    const m1 = hostedEvents.map((v) => v);
+    m1.push(...userEvents.map((v) => v));
+    return m1;
+  }, []);
 
   return (
     <Box sx={{ maxWidth: 1120, mx: "auto" }}>
-      {isLoading && me === undefined && <Skeleton></Skeleton>}
-      {!isLoading && me === undefined && <Typography>{"Something went wrong"}</Typography>}
+      {isLoading && me === undefined && <CircularProgress />}
       {!isLoading && me !== undefined && (
         <>
           <ProfileHeader
@@ -80,10 +63,7 @@ export default function UserPage() {
                   })),
                 ]}
                 onAdd={() => {}}
-                onEdit={useCallback((id: string | number) => {
-                  toast("Cannot edit gamer tag because that property does not exist.", { variant: "error" });
-                  // There's no 'gamerTag' property in ownedGames: GameSearchResult
-                }, [])}
+                onEdit={() => {}}
               />
             </Grid>
 
@@ -96,7 +76,23 @@ export default function UserPage() {
                   <Typography component="h2" sx={{ fontSize: 22, fontWeight: 700 }}>
                     Kommande event
                   </Typography>
-                  <EventRow {...upcomingEvent} />
+                  {mapEvents(me.hostedEvents, me.userEvents).map((v) => {
+                    // Check if the event start date is in the future
+                    if (new Date(v.eventStart) > new Date()) {
+                      return (
+                        <EventRow
+                          key={v.id}
+                          date={v.eventStart}
+                          title={v.title}
+                          // hostedEvents has no game title name.
+                          subtitle={`PLACEHOLDER · ${formatEventTime(v.eventStart, v.eventEnd)} · ${v.participantCount ?? "?"}/${v.maxPlayers ?? "?"}`}
+                          href={formatEventLink(v.id)}
+                          // status={}
+                          // statusLabel={""}
+                        />
+                      );
+                    }
+                  })}
                 </Box>
 
                 <Box
@@ -106,7 +102,22 @@ export default function UserPage() {
                   <Typography component="h2" sx={{ fontSize: 22, fontWeight: 700 }}>
                     Tidigare event
                   </Typography>
-                  <EventRow {...pastEvent} />
+                  {mapEvents(me.hostedEvents, me.userEvents).map((v) => {
+                    if (new Date() > new Date(v.eventStart)) {
+                      return (
+                        <EventRow
+                          key={v.id}
+                          date={v.eventStart}
+                          title={v.title}
+                          // hostedEvents has no game title name.
+                          subtitle={`PLACEHOLDER · ${formatEventTime(v.eventStart, v.eventEnd)} · ${v.participantCount ?? "?"}/${v.maxPlayers ?? "?"}`}
+                          href={formatEventLink(v.id)}
+                          // status={}
+                          // statusLabel={""}
+                        />
+                      );
+                    }
+                  })}
                 </Box>
               </Box>
             </Grid>
