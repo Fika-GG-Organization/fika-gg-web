@@ -13,5 +13,5 @@ export interface User {
   id: string;
   email: string;
   displayName: string;
-  avatarUrl?: string;
+  avatarUrl?: string | null;
 }

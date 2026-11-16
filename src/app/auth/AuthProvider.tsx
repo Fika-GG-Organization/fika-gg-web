@@ -29,6 +29,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		};
 	}, []);
 
+	const updateUser = (changes: Partial<User>) => {
+		setUser((prev) => (prev ? { ...prev, ...changes } : prev));
+	};
+
 	const refreshUser = useCallback(async () => {
 		setUser(await fetchCurrentUser());
 	}, []);
@@ -54,7 +58,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 				isLoading,
 				login,
 				logout,
-				refreshUser
+				refreshUser,
+				updateUser
 			}}
 		>
 			{children}
