@@ -3,7 +3,6 @@ import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import axios from 'axios';
 import { Alert, Button, Link, Stack, TextField } from '@mui/material';
 import { useAuth } from '@/app/auth/useAuth';
-import { loginUser } from '../api/authApi';
 import AuthCard from './AuthCard';
 
 export const LoginForm = () => {
@@ -20,8 +19,7 @@ export const LoginForm = () => {
         setError('');
 
         try {
-            const data = await loginUser({ email, password });
-            login(data.accessToken);
+            await login({ email, password });
             // email is just to show ur logged in on the temp page, remove later
             navigate('/temp', { state: { email } });
         } catch (err) {

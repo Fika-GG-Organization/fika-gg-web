@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, type ReactNode } from "react";
 import { AuthContext } from "./AuthContext";
-import { authApi } from "./authApi";
+import { authApi } from "@/features/auth/api/authApi";
 import type { LoginRequest, User } from "./auth.types";
 
 async function fetchCurrentUser(): Promise<User | null> {
@@ -47,7 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 	};
 
 	return (
-		<AuthContext.Provider 
+		<AuthContext.Provider
 			value={{
 				user,
 				isAuthenticated: !!user,

@@ -3,11 +3,12 @@ import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import axios from 'axios';
 import { Alert, Button, Link, Stack, TextField } from '@mui/material';
 import { useAuth } from '@/app/auth/useAuth';
-import { registerUser, loginUser } from '../api/authApi';
+import { authApi } from '../api/authApi';
 import { registerErrorMessage } from '../authErrors';
 import AuthCard from './AuthCard';
 
 export const RegisterForm = () => {
+    const [displayName, setDisplayName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -29,11 +30,10 @@ export const RegisterForm = () => {
         setIsLoading(true);
 
         try {
-            await registerUser({ email, password });
+            await authApi.register({ displayName, email, password });
 
             // log in straight away so u dont have to type it all again
-            const loginData = await loginUser({ email, password });
-            login(loginData.accessToken);
+            await login({ email, password });
             navigate('/temp', { state: { email } });
         } catch (err) {
             if (axios.isAxiosError(err)) {
@@ -61,6 +61,16 @@ export const RegisterForm = () => {
             <form onSubmit={handleSubmit}>
                 <Stack spacing={2}>
                     {error && <Alert severity="error">{error}</Alert>}
+
+                    <TextField
+                        label="Visningsnamn"
+                        value={displayName}
+                        onChange={(e) => setDisplayName(e.target.value)}
+                        autoComplete="nickname"
+                        fullWidth
+                        required
+                        disabled={isLoading}
+                    />
 
                     <TextField
                         label="E-post"
