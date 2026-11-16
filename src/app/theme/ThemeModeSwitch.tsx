@@ -19,24 +19,24 @@ interface UserPreference {
 }
 
 export default function ThemeModeSwitch () {
-    const { token } = useAuth();
+    const { user } = useAuth();
 
     return (
         <ThemeModeSwitchContent
-            key={token ?? 'guest'}
-            token={token}
+            key={user?.id ?? 'guest'}
+            isLoggedIn={Boolean(user)}
         />
     );
 }
 
 export function ThemeModeSwitchContent({
-    token,
+    isLoggedIn,
 }: {
-    token: string | null;
+    isLoggedIn: boolean;
 })  {
     const { mode, systemMode, setMode } = useColorScheme();
 
-    const [isLoading, setIsLoading] = useState(Boolean(token));
+    const [isLoading, setIsLoading] = useState(isLoggedIn);
     const [isSaving, setIsSaving] = useState(false);
     const [loadError, setLoadError] = useState('');
     const [saveError, setSaveError] = useState('');
@@ -62,10 +62,10 @@ export function ThemeModeSwitchContent({
     });
 
     useEffect(() => {
-        if (!token) {
+        if (!isLoggedIn) {
             return;
         }
-        
+
         const currentSession = ++session.current;
         let ignore = false;
 
@@ -74,9 +74,6 @@ export function ThemeModeSwitchContent({
                 const { data } = await apiClient.get<UserPreference>(
                     '/users/me/preferences',
                     {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
                         // give up after 5 secs zzz
                         timeout: 5000,
                     },
@@ -110,10 +107,10 @@ export function ThemeModeSwitchContent({
             session.current = currentSession + 1;
             cancelPendingSave();
         };
-    }, [token]);
+    }, [isLoggedIn]);
 
     async function savePreference(nextMode: ThemePreference) {
-        if (!token || saveInFlight.current) {
+        if (!isLoggedIn || saveInFlight.current) {
             return;
         }
 
@@ -127,11 +124,11 @@ export function ThemeModeSwitchContent({
             await apiClient.put(
                 '/users/me/preferences/theme',
                 { themePreference: nextMode},
-            );
+            )
         } catch {
             if (session.current === currentSession) {
                 setSaveError('Temat bytte här, men kunde inte sparas på ditt konto.');
-            };
+            }
         } finally {
             if (session.current === currentSession) {
                 saveInFlight.current = false;
@@ -164,7 +161,7 @@ export function ThemeModeSwitchContent({
         }
 
         // guests only save their choice in this browser through MUI.
-        if (!token) {
+        if (!isLoggedIn) {
             return;
         }
 

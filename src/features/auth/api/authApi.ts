@@ -1,16 +1,15 @@
-import axios from "axios";
-import type { LoginRequest, LoginResponse } from "../../../app/auth/auth.types";
+import { apiClient } from '@/shared/api/axiosClient';
+import type { LoginRequest, RegisterRequest, User } from '@/app/auth/auth.types';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+export const authApi = {
+	register: (request: RegisterRequest) =>
+		apiClient.post('/user/register', request),
 
-export async function loginUser(credentials: LoginRequest): Promise<LoginResponse> {
-	const response = await axios.post<LoginResponse>(
-		`${API_BASE_URL}/auth/login`, 
-		credentials
-	);
-	return response.data;
-}
+	login: (request: LoginRequest) =>
+		apiClient.post('/auth/login', request, { params: { useCookies: true } }),
 
-export async function registerUser(credentials: LoginRequest): Promise<void> {
-  await axios.post(`${API_BASE_URL}/auth/register`, credentials);
-}
+	logout: () => apiClient.post('/auth/logout'),
+
+	getCurrentUser: () =>
+		apiClient.get<User>('/user/me').then((response) => response.data),
+};
