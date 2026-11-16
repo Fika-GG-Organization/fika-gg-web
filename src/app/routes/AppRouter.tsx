@@ -10,25 +10,38 @@ import DesignDumpPage from "../../pages/DesignDumpPage";
 import GamesPage from "../../pages/GamesPage";
 import DiscoverPage from "../../pages/DiscoverPage";
 import NotFoundPage from "../../pages/NotFoundPage";
+import CreateEventPage from '../../pages/CreateEventPage';
+import EventPage from "@/pages/EventPage";
 import EventCalendarPage from "@/pages/EventCalendarPage";
+import GuestRoute from "./GuestRoute";
 
 const router = createBrowserRouter([
 	{
 		element: <Layout />,
-		children: 
+		children:
 		[
 			{
-				path: "/",
-				index: true,
-				element: <HomePage />,
+				element: <GuestRoute />,
+				children:
+				[
+					{
+						path: "/",
+						index: true,
+						element: <HomePage />,
+					},
+					{
+						path: "/login",
+						element: <LoginPage />,
+					},
+					{
+						path: "/register",
+						element: <RegisterPage />,
+					}
+				],
 			},
 			{
-				path: "/login",
-				element: <LoginPage />,
-			},
-			{
-				path: "/register",
-				element: <RegisterPage />,
+				path: "/event/:eventId",
+				element: <EventPage />,
 			},
 			{
 				path: "/calendar",
@@ -41,9 +54,9 @@ const router = createBrowserRouter([
 			...(import.meta.env.DEV ? [{ path: "/design", element: <DesignDumpPage /> }] : []),
 			{
 				element: <ProtectedRoute />,
-				children: 
+				children:
 				[
-					
+
 					{
 						path: "/temp",
 						element: <TempPage />,
@@ -59,6 +72,10 @@ const router = createBrowserRouter([
 					{
 						path: "/discover",
 						element: <DiscoverPage />,
+					},
+					{
+						path: '/events/new',
+						element: <CreateEventPage />,
 					},
 					{
 						// Add any more logged in routes here

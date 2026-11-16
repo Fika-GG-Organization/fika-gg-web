@@ -3,18 +3,15 @@ export interface LoginRequest {
 	password: string;
 }
 
-export interface LoginResponse {
-	tokenType: string;
-	accessToken: string;
-	expiresIn: number;
-	refreshToken: string;
+export interface RegisterRequest {
+	displayName: string;
+	email: string;
+	password: string;
 }
 
-// For later use
-
-// export interface User {
-//   id: string;
-//   email: string;
-//   displayName: string;
-//   avatarUrl?: string;
-// }
+export interface User {
+  id: string;
+  email: string;
+  displayName: string;
+  avatarUrl?: string | null;
+}
