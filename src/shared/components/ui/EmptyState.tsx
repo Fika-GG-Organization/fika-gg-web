@@ -11,7 +11,7 @@ export default function EmptyState({ title, description, action }: EmptyStatePro
     return (
         <Box
             sx={(theme) => ({
-                border: `1.5px dashes ${theme.palette.fika.fieldLine}`,
+                border: `1.5px dashed ${theme.palette.fika.fieldLine}`,
                 borderRadius: '12px',
                 px: 3,
                 py: 5,

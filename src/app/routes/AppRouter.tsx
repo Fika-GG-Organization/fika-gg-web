@@ -8,8 +8,11 @@ import ProtectedRoute from "./ProtectedRoute";
 import UserPage from "@/pages/UserPage";
 import DesignDumpPage from "../../pages/DesignDumpPage";
 import GamesPage from "../../pages/GamesPage";
+import DiscoverPage from "../../pages/DiscoverPage";
 import NotFoundPage from "../../pages/NotFoundPage";
 import CreateEventPage from '../../pages/CreateEventPage';
+import EventPage from "@/pages/EventPage";
+import EventCalendarPage from "@/pages/EventCalendarPage";
 
 const router = createBrowserRouter([
 	{
@@ -28,6 +31,14 @@ const router = createBrowserRouter([
 			{
 				path: "/register",
 				element: <RegisterPage />,
+			},
+			{
+				path: "/event/:eventId",
+				element: <EventPage />,
+			},
+			{
+				path: "/calendar",
+				element: <EventCalendarPage />,
 			},
 			{
 				// Add more routes here
@@ -50,6 +61,10 @@ const router = createBrowserRouter([
 					{
 						path: "/games",
 						element: <GamesPage />,
+					},
+					{
+						path: "/discover",
+						element: <DiscoverPage />,
 					},
 					{
 						path: '/events/new',

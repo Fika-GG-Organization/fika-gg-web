@@ -6,6 +6,12 @@ export function startOfDay(d: Date): Date {
     return x;
 }
 
+export function endOfDay(d: Date): Date {
+	const x = new Date(d);
+	x.setHours(23, 59, 59, 999);
+	return x;
+}
+
 export function addDays(d: Date, days: number): Date {
     const x = new Date(d);
     x.setDate(x.getDate() + days);
@@ -35,4 +41,9 @@ export function isSameDay(a: Date, b: Date): boolean {
 export function monthGrid(d: Date): Date[] {
     const first = startOfWeek(startOfMonth(d));
     return Array.from({ length: 42 }, (_, i) => addDays(first, i));
+}
+
+export function weekColumns(d: Date): Date[] {
+	const first = startOfWeek(d);
+	return Array.from({ length: 7 }, (_, i) => addDays(first, i));
 }
