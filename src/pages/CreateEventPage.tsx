@@ -11,6 +11,8 @@ import GamePickerList from '@/shared/components/ui/GamePickerList';
 import EventCard from '@/shared/components/ui/EventCard';
 import { useToast } from '@/app/toast';
 import { createEventAsync } from '@/features/event-create';
+import { getUserData } from '@/features/user/api/userApi';
+import type { UserResponse } from '@/features/user/types/UserResponse';
 
 export default function CreateEventPage() {
     const navigate = useNavigate();
@@ -25,6 +27,7 @@ export default function CreateEventPage() {
     const [maxPlayers, setMaxPlayers] = useState(5);
     const [error, setError] = useState('');
     const [isSaving, setIsSaving] = useState(false);
+    const [user, setUser] = useState<UserResponse | null>(null);
 
     const canSearch = search.trim().length >= 2;
 
@@ -53,6 +56,24 @@ export default function CreateEventPage() {
             clearTimeout(timer);
         };
     }, [search]);
+
+    useEffect(() => {
+        let ignore = false;
+
+        getUserData()
+            .then((data) => {
+                if (!ignore) {
+                    setUser(data);
+                }
+            })
+            .catch(() => {
+                // if it fails the preview will just say "Du", not worth an error
+            });
+
+        return () => {
+            ignore = true;
+        }
+    }, []);
 
     const handleSubmit = async (e: SubmitEvent) => {
         e.preventDefault();
@@ -207,8 +228,8 @@ export default function CreateEventPage() {
                         gameName={game?.name ?? 'Välj ett spel'}
                         coverUrl={game?.coverUrl}
                         timeLabel={startTime && endTime ? formatEventTime(startTime, endTime) : 'Välj tid'}
-                        // to do: show the real name when we have the logged in user here
-                        hostName="Du"
+                        hostName={user?.displayName ?? 'Du'}
+                        hostAvatarUrl={user?.avatarUrl}
                         joined={1}
                         max={maxPlayers}
                         status="open"
