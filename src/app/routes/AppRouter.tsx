@@ -10,6 +10,7 @@ import DesignDumpPage from "../../pages/DesignDumpPage";
 import GamesPage from "../../pages/GamesPage";
 import DiscoverPage from "../../pages/DiscoverPage";
 import NotFoundPage from "../../pages/NotFoundPage";
+import CreateEventPage from '../../pages/CreateEventPage';
 import EventPage from "@/pages/EventPage";
 import EventCalendarPage from "@/pages/EventCalendarPage";
 
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
 					{
 						path: "/discover",
 						element: <DiscoverPage />,
+					},
+					{
+						path: '/events/new',
+						element: <CreateEventPage />,
 					},
 					{
 						// Add any more logged in routes here
