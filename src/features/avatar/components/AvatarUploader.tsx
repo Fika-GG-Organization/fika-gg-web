@@ -1,32 +1,39 @@
 import { useRef, useState, type ChangeEvent } from 'react';
-import { 
-	Box, 
-	Button, 
-	CircularProgress, 
-	Typography, 
-	Link 
+import {
+	Box,
+	Button,
+	CircularProgress,
+	Typography,
+	Link
 } from '@mui/material';
 import UserAvatar from 'shared/components/ui/UserAvatar';
-import { type AvatarUploaderProps } from '../types/avatar.types';
 import { uploadAvatar, deleteAvatar } from '../api/avatarApi';
+import { useAuth } from 'app/auth/useAuth';
 
 const MAX_FILE_BYTES = 5 * 1024 * 1024; // 5MB
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
-export default function AvatarUploader({ name, avatarUrl, onChange }: AvatarUploaderProps) {
+export default function AvatarUploader() {
+	const { user, updateUser } = useAuth();
 	const inputRef = useRef<HTMLInputElement>(null);
 	const [isBusy, setIsBusy] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
+	if (!user)
+	{
+		return null;
+	}
+
 	async function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
 		const file = event.target.files?.[0];
+		event.target.value = ''; // reset the input so the same file can be selected again
 
 		if (!file)
 		{
 			return;
 		}
-	
-		if (!ALLOWED_TYPES.includes(file.type)) 
+
+		if (!ALLOWED_TYPES.includes(file.type))
 		{
 			setError('Endast JPEG, PNG och WEBP är tillåtna filtyper.');
 			return;
@@ -43,8 +50,8 @@ export default function AvatarUploader({ name, avatarUrl, onChange }: AvatarUplo
 
 		try
 		{
-			const { avatarUrl: newUrl } = await uploadAvatar(file);
-			onChange(newUrl);
+			const { avatarUrl } = await uploadAvatar(file);
+			updateUser({ avatarUrl });
 		}
 		catch
 		{
@@ -53,13 +60,13 @@ export default function AvatarUploader({ name, avatarUrl, onChange }: AvatarUplo
 			setIsBusy(false);
 		}
 	}
-		
+
 	async function handleDelete() {
 		setError(null);
 		setIsBusy(true);
 		try {
 			await deleteAvatar();
-			onChange(null);
+			updateUser({ avatarUrl :null});
 		} catch {
 			setError('Något gick fel vid borttagning av bilden.');
 		} finally {
@@ -69,18 +76,19 @@ export default function AvatarUploader({ name, avatarUrl, onChange }: AvatarUplo
 
 	return (
 		<Box>
-			<Box sx={{ 
+			<Box sx={{
 				display: 'flex',
 				alignItems: 'center',
 				gap: 2.5,
 				flexWrap: 'wrap',
 			}}>
-				<Box sx={{ positon: 'relative' }}>
+				<Box sx={{ position: 'relative' }}>
 					<UserAvatar
-						name={name}
-						src={avatarUrl}
+						name={user.displayName}
+						src={user.avatarUrl}
 						size={80}
 					/>
+					{isBusy && (
 						<CircularProgress
 							size={80}
 							thickness={2}
@@ -89,6 +97,7 @@ export default function AvatarUploader({ name, avatarUrl, onChange }: AvatarUplo
 								inset: 0
 							}}
 						/>
+					)}
 				</Box>
 
 				<Button
@@ -96,10 +105,10 @@ export default function AvatarUploader({ name, avatarUrl, onChange }: AvatarUplo
 					onClick={() => inputRef.current?.click()}
 					disabled={isBusy}
 				>
-					{avatarUrl ? 'Laddar upp...' : 'Ladda upp profilbild'}
+					{isBusy ? 'Laddar upp...' : 'Ladda upp profilbild'}
 				</Button>
 
-				{avatarUrl && (
+				{user.avatarUrl && (
 					<Link
 						component="button"
 						type="button"
@@ -109,7 +118,7 @@ export default function AvatarUploader({ name, avatarUrl, onChange }: AvatarUplo
 						Ta bort
 					</Link>
 				)}
-				
+
 				<input
 					type="file"
 					ref={inputRef}
@@ -122,10 +131,10 @@ export default function AvatarUploader({ name, avatarUrl, onChange }: AvatarUplo
 			{error && (
 				<Typography
 					role="alert"
-					sx={{ 
-						color: 'error.main', 
+					sx={{
+						color: 'error.main',
 						fontSize: 14,
-						mt: 1 
+						mt: 1
 					}}
 				>
 					{error}
