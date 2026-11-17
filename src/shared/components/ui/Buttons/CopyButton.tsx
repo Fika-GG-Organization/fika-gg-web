@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import Button, { type ButtonProps } from "@mui/material/Button";
 import LinkIcon from "@mui/icons-material/Link";
 import LinkOffIcon from "@mui/icons-material/LinkOff";
@@ -50,14 +51,14 @@ interface BackButtonProps extends ButtonProps {
 const CopyButton = ({ copyText, icon = "left", underline, variant, ...props }: BackButtonProps) => {
   const toast = useToast();
 
-  function handleClick() {
+  const handleClick = useCallback(() => {
     if (isSecureContext && copyText) {
       navigator.clipboard.writeText(copyText);
       toast(TOAST_COPY_SUCCESS, { variant: "info", autoHideDuration: 3000 });
     } else {
       toast(TOAST_COPY_FAILED, { variant: "error", autoHideDuration: 3000 });
     }
-  }
+  }, [copyText]);
 
   return (
     <Button
