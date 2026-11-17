@@ -74,7 +74,7 @@ export const GameSearch = () => {
                                     void addGameToUser(game.rawgId);
                                 }}
                             >
-                                Add
+                                Lägg till
                             </Button>
                         </Box>
                     );
