@@ -82,6 +82,7 @@ export default function DashboardPage() {
 		]).then(([user, upcoming]) => {
 			const myEventIds = [...user.hostedEvents, ...user.userEvents].map((e) => e.id);
 			const myGameIds = user.ownedGames.map((g) => g.rawgId);
+			const ownedGames = user.ownedGames.filter((g) => g.name != null && g.name != null);
 
 			const sorted = [...upcoming].sort(
 				(a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
@@ -103,7 +104,7 @@ export default function DashboardPage() {
 			);
 
 			setMyGames(
-				user.ownedGames.map((g) => ({
+				ownedGames.map((g) => ({
 					id: g.rawgId,
 					name: g.name,
 					coverUrl: g.coverUrl,
