@@ -18,10 +18,13 @@ export type PasswordInputProps = TextFieldProps & {
 };
 
 /**
- * Password input field. Set {@linkcode showPasswordButton} to toggle
- * 'show button' on or off.
- * @param props Extends {@linkcode TextFieldProps}, which allows you
- * to treat this component as a {@linkcode TextField}.
+ * Password input field with a 'show password' button.
+ * @remarks
+ * * Set {@linkcode showPasswordButton} to toggle the 'show password' button on or off (default value: `true`).
+ * * If `id` is not set, the value will default to a randomly generated id.
+ * * If `required` is not set, the value will default to `true`.
+ * * If `fullWidth` is not set, the value will default to `true`.
+ * @param props Extends {@linkcode TextFieldProps}, which allows you to treat this component as a {@linkcode TextField}.
  */
 const PasswordInput = ({ showPasswordButton = true, ...props }: PasswordInputProps) => {
   const defaultId = useId();
@@ -32,6 +35,7 @@ const PasswordInput = ({ showPasswordButton = true, ...props }: PasswordInputPro
       <IconButton
         aria-label={showPassword ? ARIA_LABEL_SHOWN_TRUE : ARIA_LABEL_SHOWN_FALSE}
         edge={"end"}
+				// Sets if password is shown or hidden.
         onClick={() => setShowPassword((show) => !show)}
         onMouseDown={(e) => e.preventDefault()}
         onMouseUp={(e) => e.preventDefault()}
