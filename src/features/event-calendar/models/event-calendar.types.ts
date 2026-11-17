@@ -9,7 +9,7 @@ export interface EventCalendarQueryParams {
 /**
  * Represents the HTTP Response body. Contains an array of events.
  */
-export interface EventCalendarResponse extends Array<EventCalendarResponseItem> {}
+export type EventCalendarResponse = EventCalendarResponseItem[];
 
 /**
  * Represents a single event in the response array.
@@ -19,10 +19,14 @@ export interface EventCalendarResponseItem {
 	hostId: string;
 	title: string;
 	description: string | null;
-	gameId: number | null;
+	game: {
+		id: number;
+		rawgId: number | null;
+		name: string;
+		coverUrl: string | null;
+	} | null;
 	startTime: Date;
 	endTime: Date;
-	coverUrl: string | null;
 	participantCount: number | null;
 	maxPlayers: number | null;
 	createdAt: Date;

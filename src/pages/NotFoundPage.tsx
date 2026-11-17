@@ -7,8 +7,8 @@ import PageHeader from "shared/components/ui/PageHeader";
 export default function NotFoundPage() {
 	const { isAuthenticated } = useAuth();
 
-	const homePath = isAuthenticated ? "/temp" : "/";
-	
+	const homePath = isAuthenticated ? "/home" : "/";
+
   return (
     <Container maxWidth="sm" sx={{ textAlign: "center", py: 8 }}>
       <Box sx={{ mb: 2 }}>

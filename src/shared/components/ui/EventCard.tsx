@@ -10,7 +10,7 @@ type EventCardProps = {
     gameName: string;
     coverUrl?: string | null;
     timeLabel: string;
-    hostName: string;
+    hostName?: string;
     hostAvatarUrl?: string | null;
     joined: number;
     max: number;
@@ -67,10 +67,12 @@ export default function EventCard({
 
                 <Typography sx={{ fontSize: 15, color: 'text.secondary' }}>{timeLabel}</Typography>
 
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'text.secondary', fontSize: 14 }}>
-                    <UserAvatar name={hostName} src={hostAvatarUrl} size={28} />
-                    Värd: {hostName}
-                </Box>
+                {hostName && (
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'text.secondary', fontSize: 14 }}>
+                        <UserAvatar name={hostName} src={hostAvatarUrl} size={28} />
+                        Värd: {hostName}
+                    </Box>
+                )}
 
                 {/* pushes the bottom part down so cards in a row line up */}
                 <Box sx={{ flexGrow: 1 }} />
