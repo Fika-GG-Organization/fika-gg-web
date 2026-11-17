@@ -14,6 +14,9 @@ import CreateEventPage from '../../pages/CreateEventPage';
 import EventPage from "@/pages/EventPage";
 import EventCalendarPage from "@/pages/EventCalendarPage";
 import GuestRoute from "./GuestRoute";
+import AboutPage from '@/pages/AboutPage';
+import PrivacyPage from '@/pages/PrivacyPage';
+import ContactPage from '@/pages/ContactPage';
 
 const router = createBrowserRouter([
 	{
@@ -38,6 +41,18 @@ const router = createBrowserRouter([
 						element: <RegisterPage />,
 					}
 				],
+			},
+			{
+				path: '/about',
+				element: <AboutPage />,
+			},
+			{
+				path: '/privacy',
+				element: <PrivacyPage />,
+			},
+			{
+				path: '/contact',
+				element: <ContactPage />,
 			},
 			{
 				path: "/event/:eventId",
