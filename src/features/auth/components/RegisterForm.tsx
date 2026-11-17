@@ -34,7 +34,7 @@ export const RegisterForm = () => {
 
             // log in straight away so u dont have to type it all again
             await login({ email, password });
-            navigate('/temp', { state: { email } });
+            navigate('/home');
         } catch (err) {
             if (axios.isAxiosError(err)) {
                 setError(registerErrorMessage(err.response?.data));

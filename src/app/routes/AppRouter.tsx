@@ -3,7 +3,7 @@ import Layout from "../../shared/components/layouts/Layout";
 import HomePage from "../../pages/HomePage";
 import LoginPage from "../../pages/LoginPage";
 import RegisterPage from "../../pages/RegisterPage";
-import TempPage from "../../pages/TempPage";
+import DashboardPage from "../../pages/DashboardPage";
 import ProtectedRoute from "./ProtectedRoute";
 import UserPage from "@/pages/UserPage";
 import DesignDumpPage from "../../pages/DesignDumpPage";
@@ -24,6 +24,7 @@ const router = createBrowserRouter([
 		children:
 		[
 			{
+				// Routes that are only accessible to guests
 				element: <GuestRoute />,
 				children:
 				[
@@ -73,8 +74,8 @@ const router = createBrowserRouter([
 				[
 
 					{
-						path: "/temp",
-						element: <TempPage />,
+						path: "/home",
+						element: <DashboardPage />,
 					},
 					{
 						path: "/profile",

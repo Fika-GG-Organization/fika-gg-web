@@ -20,8 +20,7 @@ export const LoginForm = () => {
 
         try {
             await login({ email, password });
-            // email is just to show ur logged in on the temp page, remove later
-            navigate('/temp', { state: { email } });
+            navigate('/home');
         } catch (err) {
             if (axios.isAxiosError(err) && err.response?.status === 401) {
                 setError('Fel e-post eller lösenord. Testa igen.');
