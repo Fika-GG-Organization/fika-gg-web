@@ -2,7 +2,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Box, Card, CardActionArea, Typography } from '@mui/material';
 import GameBanner from '@/shared/components/ui/GameBanner';
 import StatusPill from '@/shared/components/ui/StatusPill';
-import { formatEventTime } from 'shared/utils/formatEventTime';
+import { formatEventTime } from '@/shared/utils/formatEventTime';
+import { formatEventLink } from '@/shared/utils/formatEventLink';
 import type { DashboardEvent } from '../types/dashboard.types';
 import EmptyState from "@/shared/components/ui/EmptyState";
 import SectionHeader from './SectionHeader';
@@ -48,7 +49,7 @@ export default function NextEventCard({ event }: Props) {
       <Card>
         <CardActionArea
           component={RouterLink}
-          to={`/event/${event.id}`}
+          to={formatEventLink(event.id)}
           sx={{
             display: 'flex',
             flexDirection: { xs: 'column', md: 'row' },
