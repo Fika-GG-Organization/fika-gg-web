@@ -14,7 +14,7 @@ export default function MyGamesList({ games }: Props) {
       <SectionHeader title="Mina spel" link={{ label: '+ Lägg till spel', to: '/games' }} />
       {games.length === 0 ? (
         <EmptyState
-          title="Du har inga spel"
+          title="Inga spel än"
           description="Lägg till dina spel så visar vi event du kan hoppa in i."
         />
       ) : (

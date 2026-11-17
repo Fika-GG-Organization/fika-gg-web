@@ -8,11 +8,11 @@ type Props = {
   events: DashboardEvent[];
 }
 
-export default function ThisWeeksList({ events }: Props) {
+export default function ThisWeekList({ events }: Props) {
 	return (
 		<Box component="section">
 			<SectionHeader
-				title="Mina spel"
+				title="Den här veckan"
 				link={events.length > 0 ? { label: 'Alla mina event',
 				to: '/calendar' } : undefined} />
 			{events.length === 0 ? (

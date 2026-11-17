@@ -1,5 +1,5 @@
 import { Container, Grid } from '@mui/material';
-import ThisWeeksList from '@/features/dashboard/components/ThisWeekList';
+import ThisWeekList from '@/features/dashboard/components/ThisWeekList';
 import OpenSpotsList from '@/features/dashboard/components/OpenSpotsList';
 import NextEventCard from '@/features/dashboard/components/NextEventCard';
 import MyGamesList from '@/features/dashboard/components/MyGamesList';
@@ -130,7 +130,7 @@ export default function DashboardPage() {
 			<NextEventCard event={nextEvent} />
 			<Grid container spacing={4}>
 				<Grid size={{ xs: 12, md: 6 }}>
-					<ThisWeeksList events={thisWeek} />
+					<ThisWeekList events={thisWeek} />
 				</Grid>
 				<Grid
 					size={{ xs: 12, md: 6 }}
