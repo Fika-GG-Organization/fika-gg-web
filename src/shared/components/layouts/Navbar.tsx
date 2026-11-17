@@ -39,8 +39,7 @@ export default function Navbar() {
 
 	const isLoginPage = pathname === '/login';
 	const isRegisterPage = pathname === '/register';
-	// change this to /events when the upptäck page exists
-	const homePath = isAuthenticated ? '/temp' : '/';
+	const homePath = isAuthenticated ? '/home' : '/';
 
 	const handleLogout = () => {
 		setMenuAnchor(null);
