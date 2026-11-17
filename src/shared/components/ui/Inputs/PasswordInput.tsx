@@ -45,7 +45,7 @@ const PasswordInput = ({ showPasswordButton = true, ...props }: PasswordInputPro
     <TextField
       {...props}
       fullWidth={props.fullWidth ?? true}
-      id={props.id ?? `${defaultId}`}
+      id={props.id ?? `password-${defaultId}`}
       label={props.label ?? LABEL_PASSWORD}
       required={props.required ?? true}
       type={showPassword ? "text" : "password"}
