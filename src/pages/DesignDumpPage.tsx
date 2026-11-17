@@ -27,6 +27,7 @@ import ConfirmDialog from '../shared/components/ui/ConfirmDialog';
 import FormSection from '../shared/components/ui/FormSection';
 import NumberStepper from '../shared/components/ui/NumberStepper';
 import GamePickerList from '../shared/components/ui/GamePickerList';
+import PasswordInput from '@/shared/components/ui/Inputs/PasswordInput';
 
 // one section per component so its easy to find stuff
 function Section({ title, children }: { title: string; children: ReactNode }) {
@@ -551,6 +552,24 @@ export default function DesignDumpPage() {
                     onClose={() => setConfirmOpen(false)}
                 />
             </Section>
+
+						<Section title="Custom Input fields">
+								<Example label="Password input with an optional 'show password' button">
+										<Box sx={{ border: "1px solid #000", width: "300px" }}>
+												<PasswordInput
+														label={"Password (Show: ON)"}
+												/>
+										</Box>
+								</Example>
+								<Example label="Same password input, except the optional 'show password' button is hidden">
+										<Box sx={{ border: "1px solid #000", width: "300px" }}>
+												<PasswordInput
+														showPasswordButton={false}
+														label={"Password (Show: OFF)"}
+												/>
+										</Box>
+								</Example>
+						</Section>
 
             <Section title="FormSection + NumberStepper">
                 <Example label="FormSection with a TextField and a NumberStepper inside">
