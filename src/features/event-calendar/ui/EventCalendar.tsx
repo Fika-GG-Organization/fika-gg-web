@@ -20,7 +20,6 @@ import type { CalendarItem } from "@/shared/components/ui/CalendarEvent";
 import { formatEventLink } from "@/shared/utils/formatEventLink";
 
 const EventCalendar = () => {
-	const [_isLoading, setIsLoading] = useState<boolean>(true);
 	const [data, setData] = useState<EventCalendarResponse>([]);
 	const [calendarView, setCalendarView] = useState<CalendarView>("week");
 	const [today, _setToday] = useState<Date>(new Date());
@@ -29,21 +28,18 @@ const EventCalendar = () => {
 	const onViewChange = useCallback(
 		(value: CalendarView) => {
 			console.debug("Calendar view set to:", value);
-			setIsLoading(true);
 			setCalendarView(value);
 		},
 		[],
 	);
 	const onNext = useCallback(() => {
-		setIsLoading(true);
 		setStep(step + 1);
 	}, [step]);
 	const onPrev = useCallback(() => {
-		setIsLoading(true);
 		setStep(step - 1);
 	}, [step]);
 	const onToday = useCallback(() => {
-		setIsLoading(true);
+
 		setStep(0);
 	}, []);
 
@@ -67,7 +63,6 @@ const EventCalendar = () => {
 			);
 			console.debug(`Data is:`, res);
 			setData(res);
-			setIsLoading(false);
 		}
 		const d = calendarDates();
 		fetch(startOfDay(d[0]), endOfDay(d[d.length - 1]));
