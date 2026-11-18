@@ -11,7 +11,7 @@ export default function GuestRoute() {
 
   if (isAuthenticated)
   {
-    return <Navigate to="/temp" replace />;
+    return <Navigate to="/home" replace />;
   }
 
   return <Outlet />;

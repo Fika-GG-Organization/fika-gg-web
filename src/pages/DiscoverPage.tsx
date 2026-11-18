@@ -5,6 +5,7 @@ import EmptyState from "@/shared/components/ui/EmptyState";
 import EventCard from "@/shared/components/ui/EventCard";
 import FilterChips from "@/shared/components/ui/FilterChips";
 import { formatEventTime } from "@/shared/utils/formatEventTime";
+import { formatEventLink } from '@/shared/utils/formatEventLink';
 
 const games = ["Valorant", "League of Legends", "Counter-Strike 2", "Minecraft"];
 
@@ -154,6 +155,7 @@ export default function DiscoverPage() {
                     {filteredEvents.map((event) => (
                         <EventCard
                             key={event.id}
+														href={formatEventLink(event.id)}
                             title={event.title}
                             gameName={event.gameName}
                             timeLabel={formatEventTime(event.startsAt.toISOString(), event.endsAt.toISOString())}

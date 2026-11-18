@@ -13,6 +13,7 @@ import { useToast } from '@/app/toast';
 import { createEventAsync } from '@/features/event-create';
 import { getUserData } from '@/features/user/api/userApi';
 import type { UserResponse } from '@/features/user/types/UserResponse';
+import { formatEventLink } from '@/shared/utils/formatEventLink';
 
 export default function CreateEventPage() {
     const navigate = useNavigate();
@@ -113,7 +114,7 @@ export default function CreateEventPage() {
             });
 
             toast('Eventet är publicerat!', { variant: 'success' });
-            navigate(`/event/${created.id}`)
+						navigate(formatEventLink(created.id));
         } catch {
             setError('Kunde inte skapa eventet. Försök igen.');
         } finally {

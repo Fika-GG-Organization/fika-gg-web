@@ -17,6 +17,7 @@ import {
 	weekColumns,
 } from "@/shared/utils/dates";
 import type { CalendarItem } from "@/shared/components/ui/CalendarEvent";
+import { formatEventLink } from "@/shared/utils/formatEventLink";
 
 const EventCalendar = () => {
 	const [_isLoading, setIsLoading] = useState<boolean>(true);
@@ -84,9 +85,10 @@ const EventCalendar = () => {
 				<WeekView
 					weekStart={startOfWeek(addDays(today, step * 7))}
 					today={today}
-					items={data.map((v, i): CalendarItem => {
+					items={data.map((v): CalendarItem => {
 						return {
-							id: i,
+							id: v.id,
+							href: formatEventLink(v.id),
 							start: v.startTime,
 							title: v.title,
 							timeLabel: "",
@@ -99,9 +101,10 @@ const EventCalendar = () => {
 				<MonthView
 					month={startOfMonth(addMonths(today, step))}
 					today={today}
-					items={data.map((v, i): CalendarItem => {
+					items={data.map((v): CalendarItem => {
 						return {
-							id: i,
+							id: v.id,
+							href: formatEventLink(v.id),
 							start: v.startTime,
 							title: v.title,
 							timeLabel: "",
