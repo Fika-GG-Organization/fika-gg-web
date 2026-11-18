@@ -12,6 +12,11 @@ export async function getUserData(): Promise<UserResponse> {
   return response.data;
 }
 
+export async function addGameToUser(gameId: number): Promise<void> {
+  await apiClient.post(`/user/add/game/${gameId}`);
+  console.log(`Game with ID ${gameId} added to user.`);
+}
+
 // sets the gamertag on one of ur games, empty string removes it
 export async function updateGamerTagAsync(gameId: number, gamerTag: string): Promise<void> {
   await apiClient.put(`/user/update/game/${gameId}`, { gamerTag });
