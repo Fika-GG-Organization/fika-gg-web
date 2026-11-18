@@ -20,9 +20,11 @@ import type { CalendarItem } from "@/shared/components/ui/CalendarEvent";
 import { formatEventLink } from "@/shared/utils/formatEventLink";
 
 const EventCalendar = () => {
+	// to do: add a loading state to the calendar, there was an unused isLoading here before
+	// const [_isLoading, setIsLoading] = useState<boolean>(true);
 	const [data, setData] = useState<EventCalendarResponse>([]);
 	const [calendarView, setCalendarView] = useState<CalendarView>("week");
-	const [today, _setToday] = useState<Date>(new Date());
+	const [today] = useState<Date>(new Date());
 	const [step, setStep] = useState<number>(0);
 
 	const onViewChange = useCallback(
@@ -59,7 +61,7 @@ const EventCalendar = () => {
 				"end-time": end,
 			}).then(
 				(response) => response,
-				(_err): EventCalendarResponse => [],
+				(): EventCalendarResponse => [],
 			);
 			console.debug(`Data is:`, res);
 			setData(res);

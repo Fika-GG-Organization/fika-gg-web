@@ -31,7 +31,7 @@ export default function EventPage() {
 				.then((response) => {
 					setData(response);
 				})
-				.catch((_err) => {
+				.catch(() => {
 					nav("/error", { replace: true });
 				})
 				.finally(() => {
