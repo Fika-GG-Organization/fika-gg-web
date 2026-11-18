@@ -1,12 +1,10 @@
-import type { GameSearchResult } from "@/features/game/game.types";
-
 export interface UserResponse {
     id: string;
     displayName: string;
     avatarUrl?: string;
     userEvents: EventResponse[];
     hostedEvents: EventResponse[];
-    ownedGames: GameSearchResult[];
+    ownedGames: OwnedGame[];
 }
 
 export interface EventResponse {
@@ -18,4 +16,13 @@ export interface EventResponse {
   gameId?: number | null;
   participantCount?: number | null;
   maxPlayers?: number | null;
+}
+
+// a game on the users profile, gameId is our db id, use it for update/remove
+export interface OwnedGame {
+    gameId: number;
+    rawgId: number | null;
+    name: string;
+    coverUrl: string | null;
+    gamerTag: string | null;
 }
