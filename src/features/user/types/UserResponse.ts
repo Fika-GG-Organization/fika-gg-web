@@ -19,3 +19,7 @@ export interface EventResponse {
   participantCount?: number | null;
   maxPlayers?: number | null;
 }
+
+export interface SiteTheme {
+    themePreference: "light" | "dark";
+}

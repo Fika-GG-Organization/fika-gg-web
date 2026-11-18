@@ -12,4 +12,7 @@ export const authApi = {
 
 	getCurrentUser: () =>
 		apiClient.get<User>('/user/me').then((response) => response.data),
+
+	deleteCurrentUser: () => 
+		apiClient.delete('/user/delete')
 };

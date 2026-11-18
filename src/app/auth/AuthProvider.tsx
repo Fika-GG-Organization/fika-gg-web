@@ -37,6 +37,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		setUser(await fetchCurrentUser());
 	}, []);
 
+	const deleteCurrentUser = async () => {
+		await authApi.deleteCurrentUser();
+		setUser(null);
+	}
+
 	const login = async (request: LoginRequest) => {
 		await authApi.login(request);
 		await refreshUser();
@@ -59,7 +64,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 				login,
 				logout,
 				refreshUser,
-				updateUser
+				updateUser,
+				deleteCurrentUser
 			}}
 		>
 			{children}

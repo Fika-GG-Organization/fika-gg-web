@@ -7,5 +7,6 @@ export interface AuthContextType {
 	logout: () => Promise<void>;
 	refreshUser: () => Promise<void>;
 	updateUser: (changes: Partial<User>) => void;
+	deleteCurrentUser: () => Promise<void>;
 	isAuthenticated: boolean;
 }
