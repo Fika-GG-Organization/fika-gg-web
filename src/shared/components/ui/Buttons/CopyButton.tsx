@@ -8,14 +8,12 @@ const LABEL_BUTTON_COPY = "Kopiera";
 const TOAST_COPY_SUCCESS = "Kopierad";
 const TOAST_COPY_FAILED = "Kunde inte kopiera";
 
-interface BackButtonProps extends ButtonProps {
+interface CopyButtonProps extends ButtonProps {
   /** The string that will be copied to clipboard. If not set, button will be disabled. */
   copyText?: string | undefined;
-  /** On which side an icon should appear, if at all.
-	 * @default "left"
-	 */
+  /** On which side an icon should appear, if at all. @default "left" */
   icon?: "left" | "right" | "none" | undefined;
-  /** Set display text to have underline. */
+  /** Set display text to have underline. @default false */
   underline?: boolean | undefined;
 }
 
@@ -48,23 +46,27 @@ interface BackButtonProps extends ButtonProps {
  *
  * @see {@link https://developer.mozilla.org/docs/Web/Security/Defenses/Secure_Contexts#why_should_some_features_be_restricted | mozilla.org/docs/Web/Security/Defenses/Secure_Contexts}
  */
-const CopyButton = ({ copyText, icon = "left", underline, variant, ...props }: BackButtonProps) => {
+const CopyButton = ({ copyText, icon = "left", underline = false, variant, ...props }: CopyButtonProps) => {
   const toast = useToast();
 
-  const handleClick = useCallback(() => {
-    if (isSecureContext && copyText) {
-      navigator.clipboard.writeText(copyText);
-      toast(TOAST_COPY_SUCCESS, { variant: "info", autoHideDuration: 3000 });
-    } else {
-      toast(TOAST_COPY_FAILED, { variant: "error", autoHideDuration: 3000 });
-    }
-  }, [copyText]);
+  const handleClick = useCallback(async () => {
+    const failureToast = toast(TOAST_COPY_FAILED, { variant: "error", autoHideDuration: 3000 });
+		const successToast = toast(TOAST_COPY_SUCCESS, { variant: "info", autoHideDuration: 3000 });
+
+		if (!isSecureContext || !copyText) {
+			failureToast;
+			return;
+		}
+		await navigator.clipboard.writeText(copyText)
+			.then(() => successToast)
+			.catch(() => failureToast);
+  }, [toast, copyText]);
 
   return (
     <Button
       {...props}
       aria-label={"Copy to clipboard."}
-      disabled={!copyText ? true : false}
+      disabled={(!isSecureContext || !copyText) ? true : false}
       onClick={handleClick}
       startIcon={
         icon === "left" ? copyText !== undefined ? <LinkIcon /> : <LinkOffIcon /> : undefined
