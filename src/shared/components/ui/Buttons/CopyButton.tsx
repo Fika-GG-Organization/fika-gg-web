@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Button, { type ButtonProps } from "@mui/material/Button";
 import LinkIcon from "@mui/icons-material/Link";
 import LinkOffIcon from "@mui/icons-material/LinkOff";
@@ -50,14 +50,26 @@ interface BackButtonProps extends ButtonProps {
  */
 const CopyButton = ({ copyText, icon = "left", underline, variant, ...props }: BackButtonProps) => {
   const toast = useToast();
+	const [copy, setCopy] = useState<string | undefined>();
 
-  const handleClick = useCallback(() => {
-    if (isSecureContext && copyText) {
-      navigator.clipboard.writeText(copyText);
-      toast(TOAST_COPY_SUCCESS, { variant: "info", autoHideDuration: 3000 });
-    } else {
-      toast(TOAST_COPY_FAILED, { variant: "error", autoHideDuration: 3000 });
-    }
+	useEffect(() => {
+		// Each time 'copyText' changes and is not undefined, set 'copyText' value to 'copy'.
+		if (copyText !== undefined) {
+			setCopy(copy);
+		}
+	}, [copyText]);
+
+  const handleClick = useCallback(async () => {
+    try {
+			if (isSecureContext && copy) {
+				await navigator.clipboard.writeText(copy);
+				toast(TOAST_COPY_SUCCESS, { variant: "info", autoHideDuration: 3000 });
+			} else {
+				throw new Error();
+			}
+		} catch {
+			toast(TOAST_COPY_FAILED, { variant: "error", autoHideDuration: 3000 });
+		}
   }, [copyText]);
 
   return (
