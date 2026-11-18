@@ -50,16 +50,19 @@ const CopyButton = ({ copyText, icon = "left", underline = false, variant, ...pr
   const toast = useToast();
 
   const handleClick = useCallback(async () => {
-    const failureToast = toast(TOAST_COPY_FAILED, { variant: "error", autoHideDuration: 3000 });
-		const successToast = toast(TOAST_COPY_SUCCESS, { variant: "info", autoHideDuration: 3000 });
+    const failureToast = () => toast(TOAST_COPY_FAILED, { variant: "error", autoHideDuration: 3000 });
+    const successToast = () => toast(TOAST_COPY_SUCCESS, { variant: "info", autoHideDuration: 3000 });
 
-		if (!isSecureContext || !copyText) {
-			failureToast;
+    if (!isSecureContext || !copyText) {
+			failureToast();
 			return;
 		}
-		await navigator.clipboard.writeText(copyText)
-			.then(() => successToast)
-			.catch(() => failureToast);
+    try {
+      await navigator.clipboard.writeText(copyText);
+      successToast();
+    } catch {
+      failureToast();
+    }
   }, [toast, copyText]);
 
   return (

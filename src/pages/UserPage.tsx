@@ -29,7 +29,6 @@ export default function UserPage() {
         setIsLoading(false);
       });
     }
-    // no setIsLoading(true) here, it already starts as true and setting it again blanks the page every time we refetch
     fetchMe();
   }, [reloadKey]);
 
