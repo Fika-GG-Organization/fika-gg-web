@@ -51,7 +51,7 @@ export default function DashboardPage() {
 
 			setMyGames(
 				ownedGames.map((g) => ({
-					id: g.rawgId,
+					id: g.gameId,
 					name: g.name,
 					coverUrl: g.coverUrl,
 					eventCount: upcoming.filter((u) => u.game?.rawgId === g.rawgId).length,
