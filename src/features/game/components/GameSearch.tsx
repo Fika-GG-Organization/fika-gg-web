@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Autocomplete, Avatar, Box, Link, TextField, Typography } from "@mui/material";
+import { Autocomplete, Avatar, Box, Button, Link, TextField, Typography } from "@mui/material";
 import { searchGames } from "../api/gameApi";
 import type { GameSearchResult } from "../game.types";
+import { addGameToUser } from "@/features/user/api/userApi";
 
 export const GameSearch = () => {
     const [input, setInput] = useState("");
@@ -55,9 +56,26 @@ export const GameSearch = () => {
                 renderOption={(props, game) => {
                     const { key, ...optionProps } = props;
                     return (
-                        <Box component="li" key={key} {...optionProps} sx={{ gap: 1.5 }}>
+                        <Box
+                            component="li"
+                            key={key}
+                            {...optionProps}
+                            sx={{ display: "flex", alignItems: "center", gap: 1.5 }}
+                        >
                             <Avatar src={game.coverUrl ?? undefined} variant ="rounded" />
-                            {game.name}
+                            <Box sx={{ flexGrow: 1 }}>{game.name}</Box>
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                size="small"
+                                sx={{ minHeight: 32, px: 1.5 }}
+                                onClick={(event) => {
+                                    event.stopPropagation();
+                                    void addGameToUser(game.rawgId);
+                                }}
+                            >
+                                Lägg till
+                            </Button>
                         </Box>
                     );
                 }}
