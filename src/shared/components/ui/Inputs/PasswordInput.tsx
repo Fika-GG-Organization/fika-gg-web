@@ -22,8 +22,6 @@ export type PasswordInputProps = TextFieldProps & {
  * @remarks
  * * Set {@linkcode showPasswordButton} to toggle the 'show password' button on or off (default value: `true`).
  * * If `id` is not set, the value will default to a randomly generated id.
- * * If `required` is not set, the value will default to `true`.
- * * If `fullWidth` is not set, the value will default to `true`.
  * @param props Extends {@linkcode TextFieldProps}, which allows you to treat this component as a {@linkcode TextField}.
  */
 const PasswordInput = ({ showPasswordButton = true, ...props }: PasswordInputProps) => {
@@ -48,10 +46,8 @@ const PasswordInput = ({ showPasswordButton = true, ...props }: PasswordInputPro
   return (
     <TextField
       {...props}
-      fullWidth={props.fullWidth ?? true}
       id={props.id ?? `${defaultId}`}
       label={props.label ?? LABEL_PASSWORD}
-      required={props.required ?? true}
       type={showPassword ? "text" : "password"}
       slotProps={{
         input: {
