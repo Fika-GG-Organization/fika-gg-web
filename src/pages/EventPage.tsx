@@ -18,6 +18,12 @@ export default function EventPage() {
 
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [data, setData] = useState<EventGetResponse | undefined>(undefined);
+	const [prevEventId, setPrevEventId] = useState<string>(eventId);
+
+	if (eventId !== prevEventId) {
+		setPrevEventId(eventId);
+		setIsLoading(true);
+	}
 
 	useEffect(() => {
 		async function fetch(routeId: string) {
@@ -32,9 +38,8 @@ export default function EventPage() {
 					setIsLoading(false);
 				});
 		}
-		setIsLoading(true);
 		fetch(eventId);
-	}, []);
+	}, [eventId, nav]);
 
 	return (
 		<Container component={"main"}>

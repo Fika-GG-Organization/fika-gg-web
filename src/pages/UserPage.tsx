@@ -26,7 +26,6 @@ export default function UserPage() {
         setIsLoading(false);
       });
     }
-    setIsLoading(true);
     fetchMe();
   }, []);
 

@@ -29,28 +29,32 @@ const EventCalendar = () => {
 	const onViewChange = useCallback(
 		(value: CalendarView) => {
 			console.debug("Calendar view set to:", value);
+			setIsLoading(true);
 			setCalendarView(value);
 		},
-		[calendarView],
+		[],
 	);
 	const onNext = useCallback(() => {
+		setIsLoading(true);
 		setStep(step + 1);
 	}, [step]);
 	const onPrev = useCallback(() => {
+		setIsLoading(true);
 		setStep(step - 1);
 	}, [step]);
 	const onToday = useCallback(() => {
+		setIsLoading(true);
 		setStep(0);
-	}, [step]);
+	}, []);
 
-	function calendarDates(): Date[] {
+	const calendarDates = useCallback((): Date[] => {
 		switch (calendarView) {
 			case "week":
 				return weekColumns(addDays(today, step * 7));
 			case "month":
 				return monthGrid(addMonths(today, step));
 		}
-	}
+	}, [calendarView, today, step]);
 
 	useEffect(() => {
 		async function fetch(start: Date, end: Date) {
@@ -65,11 +69,9 @@ const EventCalendar = () => {
 			setData(res);
 			setIsLoading(false);
 		}
-
-		setIsLoading(true);
-		let d = calendarDates();
+		const d = calendarDates();
 		fetch(startOfDay(d[0]), endOfDay(d[d.length - 1]));
-	}, [calendarView, step]);
+	}, [calendarDates]);
 
 	return (
 		<Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
