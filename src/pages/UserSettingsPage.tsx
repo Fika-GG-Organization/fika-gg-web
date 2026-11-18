@@ -1,6 +1,5 @@
 import {Grid, Typography, Container, TextField, Switch, FormControlLabel, CircularProgress, Box, Alert} from "@mui/material"
 import PageHeader from "@/shared/components/ui/PageHeader"
-import UserAvatar from "@/shared/components/ui/UserAvatar"
 import AvatarUploader from "@/features/avatar/components/AvatarUploader"    
 import { type UserResponse } from "@/features/user/types/UserResponse"
 import { getUserData } from "@/features/user/api/userApi"
@@ -76,7 +75,7 @@ export default function UserSettingsPage(){
                 <FormControlLabel control={<switch/>} label={TEXT_DARKMODE_SWITCH_LABEL}/>
 
             </Container>
-            
+
             {/* Delete account container */}
             <Container>
 
