@@ -118,7 +118,7 @@ const EventDesktopLayout = ({ data, ...props }: EventLayoutProps) => {
 							max={data!.maxPlayers ?? 0}
 						>
 							<Button variant={"contained"}>{LABEL_JOIN}</Button>
-							<CopyButton copyText={window.location.href}>{LABEL_LINK}</CopyButton>
+							<CopyButton copyText={"https://wikipedia.com"}>{LABEL_LINK}</CopyButton>
 						</JoinPanel>
 					</Grid>
 				</Grid>
