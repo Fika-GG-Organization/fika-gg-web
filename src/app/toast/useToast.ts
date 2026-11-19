@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { ToastContext } from "./ToastContext";
+import { ToastContext } from "./toast.context";
 import { USE_TOAST_ERROR_MESSAGE } from "./toast.constants";
 
 /**
@@ -36,13 +36,13 @@ import { USE_TOAST_ERROR_MESSAGE } from "./toast.constants";
  * The returned function signature is `toast(message, options?)`, where:
  * * `message` — String that is displayed on the toast component.
  * * `options?` — Configure the style and behaviour of the toast component.
- *   * `autoHideDuration?` — The number of milliseconds to wait before 
+ *   * `autoHideDuration?` — The number of milliseconds to wait before
  *     automatically hiding the toast component. Set to `null` to disable
  *     this behaviour.
  *   * `variant?` — Sets the color and icon of the toast component.
  *
  * Here's an example on how to include the optional `options` parameter.
- * 
+ *
  * ```tsx
  * toast("404 Not Found", { autoHideDuration: null, variant: "warning" });
  * ```

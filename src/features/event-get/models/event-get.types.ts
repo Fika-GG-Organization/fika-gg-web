@@ -3,7 +3,7 @@
  */
 export interface EventGetResponse {
 	id: number;
-	hostId: string;
+	host: EventGetHost;
 	title: string;
 	description?: string;
 	game?: EventGetGame;
@@ -23,6 +23,13 @@ export interface EventGetGame {
 	rawgId?: number;
 	name: string;
 	coverUrl?: string;
+}
+
+/** Represents the event's host. */
+export interface EventGetHost {
+	id: string;
+	displayName: string;
+	avatarUrl?: string | undefined;
 }
 
 /**

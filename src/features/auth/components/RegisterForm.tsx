@@ -6,6 +6,7 @@ import { useAuth } from '@/app/auth/useAuth';
 import { authApi } from '../api/authApi';
 import { registerErrorMessage } from '../authErrors';
 import AuthCard from './AuthCard';
+import PasswordInput from "@/shared/components/ui/Inputs/PasswordInput";
 
 export const RegisterForm = () => {
     const [displayName, setDisplayName] = useState('');
@@ -34,7 +35,7 @@ export const RegisterForm = () => {
 
             // log in straight away so u dont have to type it all again
             await login({ email, password });
-            navigate('/temp', { state: { email } });
+            navigate('/home');
         } catch (err) {
             if (axios.isAxiosError(err)) {
                 setError(registerErrorMessage(err.response?.data));
@@ -82,9 +83,8 @@ export const RegisterForm = () => {
                         required
                         disabled={isLoading}
                     />
-                    <TextField
+                    <PasswordInput
                         label="Lösenord"
-                        type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         autoComplete="new-password"
@@ -93,9 +93,8 @@ export const RegisterForm = () => {
                         required
                         disabled={isLoading}
                     />
-                    <TextField
+                    <PasswordInput
                         label="Skriv lösenordet igen"
-                        type="password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         autoComplete="new-password"

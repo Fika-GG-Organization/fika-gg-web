@@ -34,8 +34,8 @@ const EventDesktopLayout = ({ data, ...props }: EventLayoutProps) => {
 			{props.isLoading && (
 				<Grid container rowSpacing={4} columnSpacing={4}>
 					<Grid size={12}>
-						<Skeleton variant={"rectangular"}>
-							<GameBanner name={LABEL_PLACEHOLDER} fill={true} />
+						<Skeleton variant={"rectangular"} >
+							<GameBanner name={LABEL_PLACEHOLDER} />
 						</Skeleton>
 					</Grid>
 					<Grid size={8}>
@@ -83,7 +83,10 @@ const EventDesktopLayout = ({ data, ...props }: EventLayoutProps) => {
 									:	undefined
 								}
 							/>
-							<HostCard name={LABEL_PLACEHOLDER} />
+							<HostCard
+								name={data?.host.displayName ?? LABEL_PLACEHOLDER}
+								avatarUrl={data?.host.avatarUrl}
+							/>
 							<Stack>
 								<Typography component="h2" sx={{ fontSize: 22, fontWeight: 700 }}>
 									{LABEL_DESCRIPTION}
@@ -97,7 +100,7 @@ const EventDesktopLayout = ({ data, ...props }: EventLayoutProps) => {
 										id: p.userId,
 										name: p.displayName,
 										avatarUrl: p.avatarUrl,
-										note: data!.hostId === p.userId ? "Värd" : "Spelare",
+										note: data!.host.id === p.userId ? "Värd" : "Spelare",
 									};
 								})}
 							/>

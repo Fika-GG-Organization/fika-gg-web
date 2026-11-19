@@ -67,7 +67,10 @@ const EventMobileLayout = ({ data, ...props }: EventLayoutProps) => {
 							:	undefined
 						}
 					/>
-					<HostCard name={LABEL_PLACEHOLDER} />
+					<HostCard
+						name={data?.host.displayName ?? LABEL_PLACEHOLDER}
+						avatarUrl={data?.host.avatarUrl}
+					/>
 					<Stack sx={{ paddingY: 1 }}>
 						<Typography component="h2" sx={{ fontSize: 16, fontWeight: 700 }}>
 							{LABEL_DESCRIPTION}
@@ -94,7 +97,7 @@ const EventMobileLayout = ({ data, ...props }: EventLayoutProps) => {
 								id: p.userId,
 								name: p.displayName,
 								avatarUrl: p.avatarUrl,
-								note: data!.hostId === p.userId ? "Värd" : "Spelare",
+								note: data!.host.id === p.userId ? "Värd" : "Spelare",
 							};
 						})}
 					/>

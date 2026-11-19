@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Alert, Button, Link, Stack, TextField } from '@mui/material';
 import { useAuth } from '@/app/auth/useAuth';
 import AuthCard from './AuthCard';
+import PasswordInput from '@/shared/components/ui/Inputs/PasswordInput';
 
 export const LoginForm = () => {
     const [email, setEmail] = useState('');
@@ -20,8 +21,7 @@ export const LoginForm = () => {
 
         try {
             await login({ email, password });
-            // email is just to show ur logged in on the temp page, remove later
-            navigate('/temp', { state: { email } });
+            navigate('/home');
         } catch (err) {
             if (axios.isAxiosError(err) && err.response?.status === 401) {
                 setError('Fel e-post eller lösenord. Testa igen.');
@@ -60,9 +60,8 @@ export const LoginForm = () => {
                         required
                         disabled={isLoading}
                     />
-                    <TextField
+                    <PasswordInput
                         label="Lösenord"
-                        type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         autoComplete="current-password"
