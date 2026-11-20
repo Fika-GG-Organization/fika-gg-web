@@ -1,4 +1,4 @@
-import { LABEL_JOIN, LABEL_LEAVE } from "../config/constants";
+import { LABEL_JOIN, LABEL_JOIN_AS_BACKUP, LABEL_LEAVE } from "../config/constants";
 import Button, { type ButtonProps } from "@mui/material/Button";
 
 export interface JoinButtonProps extends ButtonProps {
@@ -7,6 +7,8 @@ export interface JoinButtonProps extends ButtonProps {
 	 * If `false` clicking the button will activate {@linkcode JoinButtonProps.onJoin}.
 	 * @default false */
 	isParticipant: boolean;
+	/** If event has reached participant limit. */
+  isFull: boolean;
 	/**
 	 * Callback function that you must create. The user should join the event when activated.
 	 */
@@ -25,6 +27,7 @@ export interface JoinButtonProps extends ButtonProps {
  */
 export default function JoinButton({
   isParticipant = false,
+  isFull,
   loading,
   onJoin,
   onLeave,
@@ -39,9 +42,9 @@ export default function JoinButton({
         // Toggles API call to join or leave
         ...(isParticipant ? { onClick: onLeave } : { onClick: onJoin })
       }
-      variant={isParticipant ? "contained" : "outlined"}
+      variant={isParticipant ? "outlined" : "contained"}
     >
-      {isParticipant ? LABEL_LEAVE : LABEL_JOIN}
+      {isParticipant ? LABEL_LEAVE : isFull ? LABEL_JOIN_AS_BACKUP : LABEL_JOIN}
     </Button>
   );
 }

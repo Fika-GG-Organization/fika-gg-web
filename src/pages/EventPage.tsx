@@ -74,6 +74,7 @@ export default function EventPage() {
         loading={joinLoading}
 				onJoin={handleJoin}
 				onLeave={handleLeave}
+				isFull={data ? (data.participantCount! >= data.maxPlayers! ? true : false) : false}
       />
       <CopyButton copyText={window.location.href}></CopyButton>
     </>
