@@ -50,7 +50,6 @@ export default function UserPage() {
 
   return (
     <Box sx={{ maxWidth: 1120, mx: "auto" }}>
-      <AvatarUploader/>
       {isLoading && me === undefined && <CircularProgress />}
       {!isLoading && me !== undefined && (
         <>
