@@ -11,6 +11,7 @@ import {
 } from "@/features/event-get";
 import {
 	formatAlreadyJoinedErrorToast,
+	formatCannotLeaveAsOwnerToast,
 	formatErrorToast,
   JoinButton,
   joinEventAsync,
@@ -61,8 +62,15 @@ export default function EventPage() {
 		setJoinLoading(true);
     await leaveEventAsync<EventGetResponse>(eventId)
       .then((res) => setData(res.data))
-      .catch((_err) => {
-				formatErrorToast(toast);
+      .catch((err) => {
+				switch (err.response?.status) {
+					case 400:
+						formatCannotLeaveAsOwnerToast(toast);
+						break;
+					default:
+						formatErrorToast(toast);
+						break;
+				}
       })
       .finally(() => setJoinLoading(false));
   }, [joinLoading, eventId]);

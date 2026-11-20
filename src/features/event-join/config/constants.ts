@@ -6,3 +6,4 @@ export const LABEL_JOIN_AS_BACKUP = "Joina som backup";
 export const LABEL_LEAVE = "Lämna";
 export const ERROR_MESSAGE = "Någonting gick fel. Försök igen.";
 export const JOIN_ERROR_400_MESSAGE = "Du är redan en deltagare till detta event. Försök igen.";
+export const LEAVE_ERROR_IS_OWNER = "Du kan inte lämna ett event som du har skapat. Vill du hellre radera den?";
