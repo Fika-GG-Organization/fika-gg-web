@@ -9,8 +9,6 @@ import UserGameList from "@/shared/components/ui/UserGameList";
 import { formatEventTime } from "@/shared/utils/formatEventTime";
 import { formatEventLink } from "@/shared/utils/formatEventLink";
 import EmptyState from "@/shared/components/ui/EmptyState";
-// For testing purposes until SettingsPage is here
-import AvatarUploader from "@/features/avatar/components/AvatarUploader";
 
 export default function UserPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
