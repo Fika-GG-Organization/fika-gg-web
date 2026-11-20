@@ -16,7 +16,11 @@ export type EventCalendarResponse = EventCalendarResponseItem[];
  */
 export interface EventCalendarResponseItem {
 	id: number;
-	hostId: string;
+	host: {
+		id: string,
+		displayName: string;
+		avatarUrl: string | undefined;
+	} | null;
 	title: string;
 	description: string | null;
 	game: {

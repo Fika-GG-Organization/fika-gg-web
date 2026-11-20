@@ -20,10 +20,11 @@ import type { CalendarItem } from "@/shared/components/ui/CalendarEvent";
 import { formatEventLink } from "@/shared/utils/formatEventLink";
 
 const EventCalendar = () => {
-	const [_isLoading, setIsLoading] = useState<boolean>(true);
+	// to do: add a loading state to the calendar, there was an unused isLoading here before
+	// const [_isLoading, setIsLoading] = useState<boolean>(true);
 	const [data, setData] = useState<EventCalendarResponse>([]);
 	const [calendarView, setCalendarView] = useState<CalendarView>("week");
-	const [today, _setToday] = useState<Date>(new Date());
+	const [today] = useState<Date>(new Date());
 	const [step, setStep] = useState<number>(0);
 
 	const onViewChange = useCallback(
@@ -31,7 +32,7 @@ const EventCalendar = () => {
 			console.debug("Calendar view set to:", value);
 			setCalendarView(value);
 		},
-		[calendarView],
+		[],
 	);
 	const onNext = useCallback(() => {
 		setStep(step + 1);
@@ -40,17 +41,18 @@ const EventCalendar = () => {
 		setStep(step - 1);
 	}, [step]);
 	const onToday = useCallback(() => {
-		setStep(0);
-	}, [step]);
 
-	function calendarDates(): Date[] {
+		setStep(0);
+	}, []);
+
+	const calendarDates = useCallback((): Date[] => {
 		switch (calendarView) {
 			case "week":
 				return weekColumns(addDays(today, step * 7));
 			case "month":
 				return monthGrid(addMonths(today, step));
 		}
-	}
+	}, [calendarView, today, step]);
 
 	useEffect(() => {
 		async function fetch(start: Date, end: Date) {
@@ -59,17 +61,14 @@ const EventCalendar = () => {
 				"end-time": end,
 			}).then(
 				(response) => response,
-				(_err): EventCalendarResponse => [],
+				(): EventCalendarResponse => [],
 			);
 			console.debug(`Data is:`, res);
 			setData(res);
-			setIsLoading(false);
 		}
-
-		setIsLoading(true);
-		let d = calendarDates();
+		const d = calendarDates();
 		fetch(startOfDay(d[0]), endOfDay(d[d.length - 1]));
-	}, [calendarView, step]);
+	}, [calendarDates]);
 
 	return (
 		<Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>

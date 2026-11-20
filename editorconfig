@@ -1,0 +1,40 @@
+##################################
+# Common Settings
+##################################
+
+# This file is the top-most EditorConfig file
+# Stops EditorConfig from looking for other .editorconfig files in the folder above
+root = true
+
+# All Files
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 2
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+
+##################################
+# Specific File Settings
+##################################
+
+# HTML, CSS, JavaScript and TypeScript Files
+[*.{html,css,js,jsx,ts,tsx,svg}]
+max_line_length = 100
+
+[*.{yml,yaml}]
+end_of_line = lf
+indent_size = 2
+indent_style = space
+
+# Config Files
+[*{config.js,config.json}]
+max_line_length = 200
+
+# Markdown Files
+[*.{md,mdx}]
+end_of_line = crlf
+indent_size = 4
+trim_trailing_whitespace = false
