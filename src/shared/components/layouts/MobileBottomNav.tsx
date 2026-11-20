@@ -1,14 +1,15 @@
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { BottomNavigation, BottomNavigationAction, Paper } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import EventIcon from '@mui/icons-material/Event';
+// import EventIcon from '@mui/icons-material/Event';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import PersonIcon from '@mui/icons-material/Person';
 import { useAuth } from '@/app/auth/useAuth';
 
 const tabs = [
     { to: '/discover', label: 'Upptäck', icon: <SearchIcon /> },
-    { to: '/my-events', label: 'Mina event', icon: <EventIcon /> },
+    // TODO: Add in future?
+    // { to: '/my-events', label: 'Mina event', icon: <EventIcon /> },
     { to: '/events/new', label: 'Skapa', icon: <AddCircleOutlineOutlinedIcon /> },
     { to: '/profile', label: 'Profil', icon: <PersonIcon /> },
 ];
