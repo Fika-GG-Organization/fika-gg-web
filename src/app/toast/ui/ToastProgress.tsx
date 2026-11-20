@@ -38,6 +38,7 @@ export default function ToastProgress(props: ToastProgress) {
 	return (
 		<Box sx={{ width: "100%", pY: 8 }}>
 			<LinearProgress
+				color={"info"}
 				max={props.maxDuration}
 				min={0}
 				value={progress}
