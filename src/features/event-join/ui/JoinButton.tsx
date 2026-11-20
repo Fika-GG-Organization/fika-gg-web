@@ -3,19 +3,19 @@ import Button, { type ButtonProps } from "@mui/material/Button";
 
 export interface JoinButtonProps extends ButtonProps {
   /**
-	 * If `true`, clicking the button will activate {@linkcode JoinButtonProps.onLeave}.
-	 * If `false` clicking the button will activate {@linkcode JoinButtonProps.onJoin}.
-	 * @default false */
-	isParticipant: boolean;
-	/** If event has reached participant limit. */
+   * If `true`, clicking the button will activate {@linkcode JoinButtonProps.onLeave}.
+   * If `false` clicking the button will activate {@linkcode JoinButtonProps.onJoin}.
+   * @default false */
+  isParticipant: boolean;
+  /** If event has reached participant limit. */
   isFull: boolean;
-	/**
-	 * Callback function that you must create. The user should join the event when activated.
-	 */
+  /**
+   * Callback function that you must create. The user should join the event when activated.
+   */
   onJoin: () => Promise<void>;
-	/**
-	 * Callback function that you must create. The user should leave the event when activated.
-	 */
+  /**
+   * Callback function that you must create. The user should leave the event when activated.
+   */
   onLeave: () => Promise<void>;
   loading: boolean;
 }
@@ -36,7 +36,7 @@ export default function JoinButton({
   return (
     <Button
       {...props}
-      color={isParticipant ? "secondary" : "primary"}
+      color={isParticipant ? "info" : "primary"}
       loading={loading}
       {
         // Toggles API call to join or leave
