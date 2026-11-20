@@ -2,9 +2,11 @@ import { useCallback, useState } from "react";
 import type { PropsWithChildren } from "react";
 import type { ToastFunction, ToastType } from "./toast.types";
 import { AUTO_HIDE_DURATION, ANCHOR_ORIGIN } from "./toast.constants";
-import Alert from "@mui/material/Alert";
-import Snackbar from "@mui/material/Snackbar";
 import { ToastContext } from "./toast.context";
+import ToastProgress from "./ui/ToastProgress";
+import Alert from "@mui/material/Alert";
+import Stack from "@mui/material/Stack";
+import Snackbar from "@mui/material/Snackbar";
 
 export const ToastProvider = (props: PropsWithChildren) => {
 	const [open, setOpen] = useState<boolean>(false);
@@ -13,12 +15,6 @@ export const ToastProvider = (props: PropsWithChildren) => {
 
 
 	if (pendingToasts.length && !activeToast) {
-		// console.log(
-		// 	`New toast:\n` +
-		// 		`  key:     ${pendingToasts[pendingToasts.length - 1].key.toString()}\n` +
-		// 		`  message: '${pendingToasts[pendingToasts.length - 1].message}'`,
-		// );
-
 		// If no toast is active, set first pending toast as active and remove it from pending list
 		setActiveToast({ ...pendingToasts[0] });
 		setPendingToasts((toasts) => toasts.slice(1));
@@ -35,7 +31,8 @@ export const ToastProvider = (props: PropsWithChildren) => {
 			{
 				message: message,
 				key: new Date().getTime(),
-				autoHideDuration: options?.autoHideDuration,
+				// A progress bar will not show up if set to `null`
+				autoHideDuration: options?.autoHideDuration === undefined ? AUTO_HIDE_DURATION : options.autoHideDuration,
 				variant: options?.variant ?? "info",
 			},
 		]);
@@ -44,27 +41,35 @@ export const ToastProvider = (props: PropsWithChildren) => {
 	return (
 		<ToastContext.Provider value={{ toast: addToast }}>
 			{props.children}
-			<Snackbar
-				key={activeToast ? activeToast.key : undefined}
-				open={open}
-				anchorOrigin={ANCHOR_ORIGIN}
-				autoHideDuration={activeToast?.autoHideDuration ?? AUTO_HIDE_DURATION}
-				onClose={() => setOpen(false)}
-				slotProps={{
-					clickAwayListener: { mouseEvent: false }, // Prevents close when clicking outside the component.
-					transition: { onExited: () => setActiveToast(undefined) }, // Resets after exit animation is completed.
-				}}
-			>
-				<Alert
+			{activeToast && (
+				<Snackbar
+					key={activeToast.key}
+					open={open}
+					anchorOrigin={ANCHOR_ORIGIN}
+					autoHideDuration={activeToast.autoHideDuration}
 					onClose={() => setOpen(false)}
-					icon={activeToast?.variant !== "info" ? null : false }
-					role={"status"}
-					severity={activeToast?.variant}
-					variant={"standard"}
+					slotProps={{
+						clickAwayListener: { mouseEvent: false }, // Prevents close when clicking outside the component.
+						transition: { onExited: () => setActiveToast(undefined) }, // Resets after exit animation is completed.
+					}}
 				>
-					{activeToast ? activeToast.message : undefined}
-				</Alert>
-			</Snackbar>
+					<Alert
+						onClose={() => setOpen(false)}
+						icon={activeToast.variant !== "info" ? null : false }
+						role={"status"}
+						severity={activeToast.variant}
+						variant={"standard"}
+						sx={{ height: "90%" }}
+					>
+						<Stack sx={{ width: "100%", height: "100%", flexDirection: "column" }}>
+							{activeToast.message ?? undefined}
+							{activeToast.autoHideDuration && (
+								<ToastProgress maxDuration={activeToast.autoHideDuration}/>
+							)}
+						</Stack>
+					</Alert>
+				</Snackbar>
+			)}
 		</ToastContext.Provider>
 	);
 };
