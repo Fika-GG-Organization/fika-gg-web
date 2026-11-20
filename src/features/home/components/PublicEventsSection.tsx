@@ -46,7 +46,7 @@ export default function PublicEventsSection() {
 						</Typography>
 						<Link
 							component={RouterLink}
-							to="/events"
+							to="/calendar"
 							sx={{
 								color: 'text.Primary',
 								fontWeight: 600
