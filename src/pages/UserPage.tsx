@@ -8,6 +8,7 @@ import ProfileHeader from "@/shared/components/ui/ProfileHeader";
 import UserGameList from "@/shared/components/ui/UserGameList";
 import { formatEventTime } from "@/shared/utils/formatEventTime";
 import { formatEventLink } from "@/shared/utils/formatEventLink";
+import EmptyState from "@/shared/components/ui/EmptyState";
 
 export default function UserPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -34,10 +35,16 @@ export default function UserPage() {
 
 	/** Combines events that user hosts with events that user joined into one */
   const mapEvents = useCallback((hostedEvents: EventResponse[], userEvents: EventResponse[]) => {
-    const m1 = hostedEvents.map((v) => v);
-    m1.push(...userEvents.map((v) => v));
-    return m1;
+    const all = [...hostedEvents, ...userEvents];
+    return all.filter((e, i) => all.findIndex((x) => x.id === e.id) === i); // remove duplicates
   }, []);
+
+  const allEvents = me ? mapEvents(me.hostedEvents, me.userEvents) : [];
+  const now = new Date();
+  const upcomingEvents = allEvents.filter((v) => new Date(v.eventStart) > now);
+  const pastEvents = allEvents.filter((v) => new Date(v.eventStart) <= now);
+  const subtitleFor = (v: EventResponse) =>
+    `${me?.hostedEvents.some((h) => h.id === v.id) ? "Värd" : "Deltagare"} · ${formatEventTime(v.eventStart, v.eventEnd)} · ${v.participantCount ?? "?"}/${v.maxPlayers ?? "?"}`;
 
   return (
     <Box sx={{ maxWidth: 1120, mx: "auto" }}>
@@ -76,23 +83,23 @@ export default function UserPage() {
                   <Typography component="h2" sx={{ fontSize: 22, fontWeight: 700 }}>
                     Kommande event
                   </Typography>
-                  {mapEvents(me.hostedEvents, me.userEvents).map((v) => {
-                    // Check if the event start date is in the future
-                    if (new Date(v.eventStart) > new Date()) {
-                      return (
-                        <EventRow
-                          key={v.id}
-                          date={v.eventStart}
-                          title={v.title}
-                          // hostedEvents has no game title name.
-                          subtitle={`PLACEHOLDER · ${formatEventTime(v.eventStart, v.eventEnd)} · ${v.participantCount ?? "?"}/${v.maxPlayers ?? "?"}`}
-                          href={formatEventLink(v.id)}
-                          // status={}
-                          // statusLabel={""}
-                        />
-                      );
-                    }
-                  })}
+                  {upcomingEvents.length === 0 ? (
+                    <EmptyState
+                      title="Inga kommande event"
+                      description="Hitta ett event att hoppa in i."
+                      action={{ label: "Upptäck event", to: "/discover" }}
+                    />
+                  ) : (
+                    upcomingEvents.map((v) => (
+                      <EventRow
+                        key={v.id}
+                        date={v.eventStart}
+                        title={v.title}
+                        subtitle={subtitleFor(v)}
+                        href={formatEventLink(v.id)}
+                      />
+                    ))
+                  )}
                 </Box>
 
                 <Box
@@ -102,22 +109,19 @@ export default function UserPage() {
                   <Typography component="h2" sx={{ fontSize: 22, fontWeight: 700 }}>
                     Tidigare event
                   </Typography>
-                  {mapEvents(me.hostedEvents, me.userEvents).map((v) => {
-                    if (new Date() > new Date(v.eventStart)) {
-                      return (
-                        <EventRow
-                          key={v.id}
-                          date={v.eventStart}
-                          title={v.title}
-                          // hostedEvents has no game title name.
-                          subtitle={`PLACEHOLDER · ${formatEventTime(v.eventStart, v.eventEnd)} · ${v.participantCount ?? "?"}/${v.maxPlayers ?? "?"}`}
-                          href={formatEventLink(v.id)}
-                          // status={}
-                          // statusLabel={""}
-                        />
-                      );
-                    }
-                  })}
+                  {pastEvents.length === 0 ? (
+                    <EmptyState title="Inga tidigare event" />
+                  ) : (
+                    pastEvents.map((v) => (
+                      <EventRow
+                        key={v.id}
+                        date={v.eventStart}
+                        title={v.title}
+                        subtitle={subtitleFor(v)}
+                        href={formatEventLink(v.id)}
+                      />
+                    ))
+                  )}
                 </Box>
               </Box>
             </Grid>
