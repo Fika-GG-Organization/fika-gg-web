@@ -28,7 +28,7 @@ export default function DashboardPage() {
 		]).then(([user, upcoming]) => {
 			const myEventIds = [...user.hostedEvents, ...user.userEvents].map((e) => e.id);
 			const myGameIds = user.ownedGames.map((g) => g.rawgId);
-			const ownedGames = user.ownedGames.filter((g) => g.name != null && g.name != null);
+			const ownedGames = user.ownedGames.filter((g) => g.name != null);
 
 			const sorted = [...upcoming].sort(
 				(a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime()

@@ -1,27 +1,40 @@
 import { Box, Container, Link, Typography } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import EventCard from 'shared/components/ui/EventCard';
-import { mockEvents } from '../types/mockEvents';
-import { formatEventTime } from 'shared/utils/formatEventTime';
+import EmptyState from 'shared/components/ui/EmptyState';
+import { useEffect, useState } from 'react';
+import { formatEventTime } from '@/shared/utils/formatEventTime';
+import { formatEventLink } from '@/shared/utils/formatEventLink';
+import { addDays } from '@/shared/utils/dates';
+import { getEventsAsync } from '@/features/event-calendar/api';
+import type { EventCalendarResponseItem } from '@/features/event-calendar/models/event-calendar.types';
 
 export default function PublicEventsSection() {
-	// TODO: Replace mockEvents with actual events from the API when available
-	const events = mockEvents;
+	const [events, setEvents] = useState<EventCalendarResponseItem[]>([]);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		const now = new Date();
+		getEventsAsync({ 'start-time': now, 'end-time': addDays(now, 7) })
+			.then((data) => setEvents(data.slice(0, 6)))
+			.catch(() => setEvents([]))
+			.finally(() => setLoading(false));
+	}, []);
 
   return (
 		<Box component="section">
-			<Container 
-				maxWidth="lg" 
+			<Container
+				maxWidth="lg"
 				sx={{ py: { xs: 5, md: 7 } }}>
-					<Box 
-						sx={{ 
+					<Box
+						sx={{
 						display: 'flex',
-						justifyContent: 'space-between', 
-						alignItems: 'baseline', 
-						mb: 3 
+						justifyContent: 'space-between',
+						alignItems: 'baseline',
+						mb: 3
 						}}
 					>
-						<Typography 
+						<Typography
 							variant="h2"
 							sx={{
 								fontSize: { xs: '2rem', md: '2.5rem' },
@@ -42,7 +55,12 @@ export default function PublicEventsSection() {
 							Se alla events
 						</Link>
 					</Box>
-
+					{!loading && events.length === 0 && (
+						<EmptyState
+							title="Inga events"
+							action={{ label: 'Kom igång', to: '/register' }}
+						/>
+					)}
 					<Box
 						sx={{
 							display: 'grid',
@@ -51,23 +69,23 @@ export default function PublicEventsSection() {
 						}}
 					>
 						{events.map((event) => {
-							const spotsleft = event.maxParticipants - event.participantsCount;
+							const spotsleft = (event.maxPlayers ?? 0) - (event.participantCount ?? 0);
 							const isFull = spotsleft <= 0;
 
 							return (
 								<EventCard
 									key={event.id}
 									title={event.title}
-									gameName={event.gameName}	
-									coverUrl={event.gameImageUrl}
-									timeLabel={formatEventTime(event.startsAt, event.endsAt)}
-									hostName={event.hostName}
-									hostAvatarUrl={event.hostAvatarUrl}
-									joined={event.participantsCount}
-									max={event.maxParticipants}
+									gameName={event.game?.name ?? 'Okänt spel'}
+									coverUrl={event.game?.coverUrl}
+									timeLabel={formatEventTime(String(event.startTime), String(event.endTime))}
+									hostName={event.host?.displayName}
+									hostAvatarUrl={event.host?.avatarUrl}
+									joined={event.participantCount ?? 0}
+									max={event.maxPlayers ?? 0}
 									status={isFull ? 'full' : 'open'}
 									statusLabel={isFull ? 'Fullt - reserv' : `${spotsleft === 1 ? 'plats' : 'platser' } kvar`}
-									href={`/events/${event.id}`}
+									href={formatEventLink(event.id)}
 								/>
 							);
 						})}
