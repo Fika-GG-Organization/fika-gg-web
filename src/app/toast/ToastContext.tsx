@@ -1,12 +1,15 @@
 import { useCallback, useState } from "react";
 import type { PropsWithChildren } from "react";
-import type { ToastFunction, ToastType } from "./toast.types";
+import type { ToastFunction, ToastType, ToastVariant } from "./toast.types";
 import { AUTO_HIDE_DURATION, ANCHOR_ORIGIN } from "./toast.constants";
 import { ToastContext } from "./toast.context";
 import ToastProgress from "./ui/ToastProgress";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
+import ErrorIcon from "@mui/icons-material/Error";
+import WarningIcon from "@mui/icons-material/Warning";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 export const ToastProvider = (props: PropsWithChildren) => {
 	const [open, setOpen] = useState<boolean>(false);
@@ -38,6 +41,19 @@ export const ToastProvider = (props: PropsWithChildren) => {
 		]);
 	}, []);
 
+	function handleIcon(variant: ToastVariant | null | undefined): React.ReactNode {
+		switch (variant) {
+			case "success":
+				return <CheckCircleIcon />;
+			case "warning":
+				return <WarningIcon />;
+			case "error":
+				return <ErrorIcon />;
+			default:
+				return false;
+		}
+	}
+
 	return (
 		<ToastContext.Provider value={{ toast: addToast }}>
 			{props.children}
@@ -55,7 +71,7 @@ export const ToastProvider = (props: PropsWithChildren) => {
 				>
 					<Alert
 						onClose={() => setOpen(false)}
-						icon={activeToast.variant !== "info" ? null : false }
+						icon={handleIcon(activeToast.variant)}
 						role={"status"}
 						severity={activeToast.variant}
 						variant={"standard"}
