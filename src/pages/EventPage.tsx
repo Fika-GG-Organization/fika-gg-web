@@ -10,9 +10,8 @@ import {
   type EventGetResponse,
 } from "@/features/event-get";
 import {
-	formatAlreadyJoinedErrorToast,
-	formatCannotLeaveAsOwnerToast,
-	formatErrorToast,
+  formatJoinErrorToast,
+  formatLeaveErrorToast,
   JoinButton,
   joinEventAsync,
   leaveEventAsync,
@@ -21,6 +20,7 @@ import BackButton from "@/shared/components/ui/Buttons/BackButton";
 import CopyButton from "@/shared/components/ui/Buttons/CopyButton";
 import { useMediaQuery } from "@mui/material";
 import Container from "@mui/material/Container";
+import { formatJoinSuccessToast, formatLeaveSuccessToast } from "@/features/event-join/utils/formatToasts";
 
 export default function EventPage() {
   const nav = useNavigate();
@@ -44,16 +44,12 @@ export default function EventPage() {
   const handleJoin = useCallback(async () => {
     setJoinLoading(true);
     await joinEventAsync<EventGetResponse>(eventId)
-      .then((res) => setData(res.data))
+      .then((res) => {
+				setData(res.data);
+				formatJoinSuccessToast(toast);
+			})
       .catch((err) => {
-        switch (err.response?.status) {
-          case 400:
-            formatAlreadyJoinedErrorToast(toast);
-            break;
-          default:
-            formatErrorToast(toast);
-            break;
-        }
+        formatJoinErrorToast(err.response?.status, toast)
       })
       .finally(() => setJoinLoading(false));
   }, [joinLoading, eventId]);
@@ -61,16 +57,12 @@ export default function EventPage() {
   const handleLeave = useCallback(async () => {
 		setJoinLoading(true);
     await leaveEventAsync<EventGetResponse>(eventId)
-      .then((res) => setData(res.data))
+      .then((res) => {
+				setData(res.data);
+				formatLeaveSuccessToast(toast);
+			})
       .catch((err) => {
-				switch (err.response?.status) {
-					case 400:
-						formatCannotLeaveAsOwnerToast(toast);
-						break;
-					default:
-						formatErrorToast(toast);
-						break;
-				}
+				formatLeaveErrorToast(err.response?.status, toast);
       })
       .finally(() => setJoinLoading(false));
   }, [joinLoading, eventId]);
