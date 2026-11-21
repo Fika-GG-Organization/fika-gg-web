@@ -17,14 +17,16 @@ type ConfirmDialogProps = {
     confirmLabel: string;
     cancelLabel?: string;
     checkboxLabel?: string;
+    loading?: boolean;
+    loadingLabel?: string;
     onConfirm: () => void;
     onClose: () => void;
 };
 
 // the inside of the dialog, its own component so the checkbox resets every time the dialog opens
-function ConfirmBody({ description, confirmLabel, cancelLabel, checkboxLabel, onConfirm, onClose }: Omit<ConfirmDialogProps, 'open' | 'title'>) {
+function ConfirmBody({ description, confirmLabel, cancelLabel, checkboxLabel, loading = false, loadingLabel = 'Vänta...', onConfirm, onClose }: Omit<ConfirmDialogProps, 'open' | 'title'>) {
     const [checked, setChecked] = useState(false);
-    const canConfirm = !checkboxLabel || checked;
+    const canConfirm = (!checkboxLabel || checked) && !loading;
 
     return (
         <>
@@ -42,11 +44,11 @@ function ConfirmBody({ description, confirmLabel, cancelLabel, checkboxLabel, on
                 )}
             </DialogContent>
             <DialogActions sx={{ px: 3, pb: 2.5 }}>
-                <Button onClick={onClose} variant="outlined" autoFocus sx={{ color: 'text.primary' }}>
+                <Button onClick={onClose} variant="outlined" autoFocus disabled={loading} sx={{ color: 'text.primary' }}>
                     {cancelLabel}
                 </Button>
                 <Button onClick={onConfirm} variant="contained" disabled={!canConfirm}>
-                    {confirmLabel}
+                    {loading ? loadingLabel : confirmLabel}
                 </Button>
             </DialogActions>
         </>
