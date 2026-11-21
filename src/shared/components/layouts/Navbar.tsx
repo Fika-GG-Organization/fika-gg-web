@@ -20,7 +20,7 @@ import ThemeModeSwitch from '@/app/theme/ThemeModeSwitch';
 
 // the links in the middle, authOnly true means when ure logged in
 const navLinks = [
-    { to: '/discover', label: 'Upptäck', authOnly: true },
+    { to: '/discover', label: 'Upptäck', authOnly: false },
     { to: '/calendar', label: 'Kalender', authOnly: false },
     // TODO: Add in future?
     // { to: '/my-events', label: 'Mina event', authOnly: true },
