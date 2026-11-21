@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, type ReactNode } from "react";
 import { AuthContext } from "./AuthContext";
 import { authApi } from "@/features/auth/api/authApi";
-import type { LoginRequest, User } from "./auth.types";
+import type { LoginRequest, User, UserProfileEdit } from "./auth.types";
 
 async function fetchCurrentUser(): Promise<User | null> {
 	try {
@@ -37,6 +37,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		setUser(await fetchCurrentUser());
 	}, []);
 
+	const deleteCurrentUser = async () => {
+		await authApi.deleteCurrentUser();
+		setUser(null);
+	}
+
 	const login = async (request: LoginRequest) => {
 		await authApi.login(request);
 		await refreshUser();
@@ -50,6 +55,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		}
 	};
 
+	const updateUserProfile = async (request: UserProfileEdit) =>{
+		await authApi.updateUserProfile(request)
+		await refreshUser();
+	}
+
 	return (
 		<AuthContext.Provider
 			value={{
@@ -59,7 +69,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 				login,
 				logout,
 				refreshUser,
-				updateUser
+				updateUser,
+				deleteCurrentUser,
+				updateUserProfile
 			}}
 		>
 			{children}

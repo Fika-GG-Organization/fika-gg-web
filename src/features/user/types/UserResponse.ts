@@ -18,6 +18,9 @@ export interface EventResponse {
   maxPlayers?: number | null;
 }
 
+export interface SiteTheme {
+    themePreference: "light" | "dark";
+}
 // a game on the users profile, gameId is our db id, use it for update/remove
 export interface OwnedGame {
     gameId: number;
