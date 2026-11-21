@@ -54,24 +54,28 @@ export default function NextEventCard({ event }: Props) {
             display: 'flex',
             flexDirection: { xs: 'column', md: 'row' },
             alignItems: 'stretch',
+            justifyContent: 'flex-start'
           }}
         >
           <Box sx={{
-            width: { xs: "100%", md: "40%" },
+            width: { xs: "100%", md: "50%" },
             height: { xs: 140, md: 260 }
             }}
           >
-            <GameBanner name={event.gameName} fill/>
+            <GameBanner name={event.gameName} coverUrl={event.coverUrl} fill/>
           </Box>
           <Box sx={{
+            flex: 1,
             p: 3,
             display: 'flex',
             flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            textAlign: 'center',
             gap: 1
           }}
           >
             <Box sx={{
-              p: 3,
               display: 'flex',
               alignItems: 'center',
               gap: 1
@@ -80,7 +84,7 @@ export default function NextEventCard({ event }: Props) {
                 fontFamily: "monospace",
                 fontSize: 12,
                 textTransform: 'uppercase',
-                color: "text.Secondary"
+                color: "text.secondary"
               }}>
                 {event.gameName}
               </Typography>
@@ -97,18 +101,18 @@ export default function NextEventCard({ event }: Props) {
               {event.title}
             </Typography>
 
-            <Typography sx={{ color: 'text.Secondary' }}>
+            <Typography sx={{ color: 'text.secondary' }}>
               {formatEventTime(event.startTime, event.endTime)}
               {event.hostName && ` - värd: ${event.hostName}`}
             </Typography>
 
             <Typography
               sx={{
-                color: 'text.Secondary',
+                color: 'text.secondary',
                 fontSize: 14
               }}
             >
-              {event.participantCount} / {event.maxParticipants} med - {spotsLeft} platser kvar
+              {event.participantCount} / {event.maxParticipants} med - {spotsLeft > 0 ? `${spotsLeft} platser kvar` : 'Fullt'}
             </Typography>
           </Box>
         </CardActionArea>

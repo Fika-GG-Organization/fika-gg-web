@@ -80,28 +80,17 @@ export default function HeroSection() {
 					</Box>
 				</Box>
 				<Box
+					component="img"
+					src="/fikagghero.webp"
+					alt="Kaffe i en orange kopp framför ett tangentbord"
 					sx={{
 						aspectRatio: '4 / 3',
-						border: 1,
-						borderStyle: 'dashed',
-						borderColor: 'text.Secondary',
+						width: '100%',
+						objectFit: 'cover',
 						borderRadius: 2,
-						bgcolor: 'action.hover',
-						display: 'flex',
-						alignItems: 'center',
-						justifyContent: 'center'
+						dipsplay: 'block'
 					}}
-				>
-					<Typography
-						variant="caption"
-						sx={{
-							color: 'text.Secondary',
-							letterSpacing: 1,
-						}}
-					>
-						PLACEHOLDER TEXT HÄR, ERSÄTT MED BILD
-					</Typography>
-				</Box>
+				/>
 			</Container>
 		</Box>
 	);
