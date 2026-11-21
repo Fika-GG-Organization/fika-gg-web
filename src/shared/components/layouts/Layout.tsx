@@ -13,7 +13,7 @@ export default function Layout() {
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                minHeight: '100vh',
+                minHeight: '100dvh',
                 // space for the bottom nav so it doesnt cover the footer on phones
                 pb: { xs: isAuthenticated ? '80px' : 0, md: 0 },
             }}
