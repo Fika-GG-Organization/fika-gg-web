@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material';
 import type { DashboardGame } from '../types/dashboard.types';
 import GameBanner from '@/shared/components/ui/GameBanner';
 import EmptyState from "@/shared/components/ui/EmptyState";
-import SectionHeader from '../../../shared/components/ui/SectionHeader';
+import SectionHeader from '@/shared/components/ui/SectionHeader';
 
 type Props = {
   games: DashboardGame[];
