@@ -4,6 +4,7 @@ export interface DashboardEvent {
   startTime: string;
   endTime: string;
   gameName: string;
+  coverUrl: string | null;
   hostName: string;
   participantCount: number;
   maxParticipants: number;

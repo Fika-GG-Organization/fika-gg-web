@@ -14,40 +14,77 @@ const footerLinks = [
  * used in: Layout
  */
 export default function Footer() {
-    return (
-        <Box
-            component="footer"
-            sx={(theme) => ({
-                borderTop: `1.5px solid ${theme.palette.fika.line}`,
-                bgcolor: 'background.paper',
-                px: { xs: 2, md: 4 },
-                py: 3,
-                display: 'flex',
-                flexWrap: 'wrap',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: 2,
-            })}
-        >
-            <Typography sx={{ fontWeight: 800 }}>fika.gg</Typography>
+  return (
+    <Box
+			component="footer"
+			sx={(theme) => ({
+				borderTop: `1.5px solid ${theme.palette.fika.line}`,
+				bgcolor: 'background.paper',
+				px: { xs: 2, md: 4 },
+				py: { xs: 1.5, md: 2.5 },
+			})}
+		>
+			<Box
+				sx={{
+					width: '100%',
+					display: 'grid',
+					alignItems: 'center',
+					columnGap: 2,
+					gridTemplateColumns: { xs: '1fr auto', md: '1fr auto 1fr' },
+					gridTemplateAreas: {
+						xs: `"logo links"
+								"copy links"`,
+						md: `"logo links copy"`,
+					}
+				}}
+			>
+				<Typography
+					sx={{
+						gridArea: 'logo',
+						fontWeight: 800,
+						fontSize: { xs: 14, md: 16 } }}
+				>
+					fika.gg
+				</Typography>
 
-            <Box component="nav" aria-label="Sidfot" sx={{ display: 'flex', flexWrap: 'wrap', gap: 2.5 }}>
-                {footerLinks.map((link) => (
-                    <Link
-                        key={link.to}
-                        component={RouterLink}
-                        to={link.to}
-                        underline="hover"
-                        sx={{ color: 'text.secondary', fontSize: 14, '&:hover': { color: 'text.primary' } }}
-                    >
-                        {link.label}
-                    </Link>
-                ))}
-            </Box>
+				<Box
+					component="nav"
+					aria-label="Sidfot"
+					sx={{
+						gridArea: 'links',
+						display: 'flex',
+						flexWrap: 'wrap',
+						gap: { xs: 2.5, md: 4 }}}
+				>
+					{footerLinks.map((link) => (
+						<Link
+							key={link.to}
+							component={RouterLink}
+							to={link.to}
+							underline="hover"
+							sx={{
+								color: 'text.secondary',
+								fontSize: {	xs: 14, md: 16 },
+								whiteSpace: 'nowrap',
+								'&:hover': { color: 'text.primary' }
+							}}
+						>
+							{link.label}
+						</Link>
+					))}
+				</Box>
 
-            <Typography sx={{ color: 'text.secondary', fontSize: 14 }}>
-                © {new Date().getFullYear()} fika.gg
-            </Typography>
-        </Box>
-    );
+				<Typography
+					sx={{
+						gridArea: 'copy',
+						justifySelf: { xs: 'start', md: 'end' },
+						color: 'text.secondary',
+						fontSize: { xs: 11, md: 13 }
+					}}
+				>
+					© {new Date().getFullYear()} fika.gg
+				</Typography>
+			</Box>
+		</Box>
+	);
 }
