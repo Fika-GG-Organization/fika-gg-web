@@ -33,7 +33,7 @@ export default function ToastProgress(props: ToastProgress) {
 		if (progress >= props.maxDuration) {
 			clearInterval(timerRef.current);
 		}
-	}, [progress])
+	}, [progress, props.maxDuration])
 
 	return (
 		<Box sx={{ width: "100%", pY: 8 }}>
