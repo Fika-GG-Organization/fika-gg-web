@@ -407,6 +407,25 @@ PUT `api/events/updateEvent/{eventId}`
 
     The user is not authorized to update this event.
 
+### Delete an event
+
+Deletes an event owned by the authenticated user.
+
+#### Request
+
+DELETE `api/events/deleteEvent/{eventId}`
+
+- Route Parameter
+    - `eventId` event ID
+
+#### Response
+
+- 200 OK
+
+- 401 Unauthorized / 403 Forbidden
+
+    The user is not authorized to delete this event.
+
 ### Get all events between two dates
 
 Get all dates whose start dates begin between two dates time values.
