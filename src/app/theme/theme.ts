@@ -31,10 +31,14 @@ export const theme = createTheme({
           fieldLine: '#88665B',
           cover: 'repeating-linear-gradient(135deg,#E4513F10 0 2px,transparent 2px 13px),linear-gradient(100deg,#3B1A15,#241815 72%)',
         },
-				success: { main: "#d7ec6e", },
+				success: { main: "#b8d333", },
 				info: { main: "#ffdcd7" },
-				warning: { main: "#ffc23f" },
-				error: { main: "#fe563f", },
+				warning: { main: "#ffae00" },
+				error: { main: "#ff4d00", },
+				SnackbarContent: {
+					bg: '#3A2420',
+					color: '#4E3530',
+				},
       },
     },
     light: {
@@ -51,10 +55,14 @@ export const theme = createTheme({
           fieldLine: '#9C8471',
           cover: 'repeating-linear-gradient(135deg,#B23A2A12 0 2px,transparent 2px 13px),#EADFCF',
         },
-				success: { main: "#92ae06", },
-				info: { main: "#433e3d" },
-				warning: { main: "#d08e00" },
-				error: { main: "#fe563f", },
+				success: { main: "#588813", },
+				info: { main: "#595351" },
+				warning: { main: "#eb5e00" },
+				error: { main: "#e02601", },
+				SnackbarContent: {
+					bg: '#F3DCD6',
+					color: '#9C8471',
+				},
       },
     },
   },
@@ -71,7 +79,7 @@ export const theme = createTheme({
       fontWeight: 750,
       letterSpacing: '-0.025em',
     },
-    
+
     button: {
       textTransform: 'none',
       fontWeight: 700,
@@ -113,7 +121,7 @@ export const theme = createTheme({
         }),
       },
     },
-    
+
     MuiAppBar: {
       defaultProps: {
         elevation: 0,
@@ -131,15 +139,15 @@ export const theme = createTheme({
 		MuiAlert: {
 			styleOverrides: {
 				root: ({ theme }) => ({
-					backgroundColor: `${theme.palette.background.paper}`,
-					border: `1.5px solid ${theme.palette.fika.line}`
+					backgroundColor: `${theme.palette.SnackbarContent.bg}`,
+					border: `1.5px solid ${theme.palette.SnackbarContent.color}`
 				}),
 			},
 		},
 
     MuiOutlinedInput: {
       styleOverrides: {
-        notchedOutline: ({ theme }) => ({ 
+        notchedOutline: ({ theme }) => ({
           borderColor: theme.palette.fika.fieldLine,
           borderWidth: 1.5
         }),

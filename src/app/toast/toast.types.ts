@@ -35,4 +35,4 @@ export type ToastType = {
 	variant?: ToastVariant | undefined;
 };
 
-type ToastVariant = OverridableStringUnion<AlertColor, AlertPropsColorOverrides>;
+export type ToastVariant = OverridableStringUnion<AlertColor, AlertPropsColorOverrides>;
