@@ -5,9 +5,10 @@ type Props = {
   title: string;
   link?: {label: string; to: string};
   meta?: string;
+  size?: 'medium' | 'large';
 }
 
-export default function SectionHeader({ title, link, meta }: Props) {
+export default function SectionHeader({ title, link, meta, size = 'medium' }: Props) {
   return (
     <Box
       sx={{
@@ -21,7 +22,7 @@ export default function SectionHeader({ title, link, meta }: Props) {
       <Typography
         component="h2"
         sx={{
-          fontSize: 22,
+          fontSize: size === 'large' ? { xs: 28, md: 36 } : 22,
           fontWeight: 700
         }}
       >

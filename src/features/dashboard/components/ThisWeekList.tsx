@@ -14,7 +14,7 @@ export default function ThisWeekList({ events }: Props) {
 		<Box component="section">
 			<SectionHeader
 				title="Den här veckan"
-				link={events.length > 0 ? { label: 'Alla mina event',
+				link={events.length > 0 ? { label: 'Alla mina events',
 				to: '/calendar' } : undefined} />
 			{events.length === 0 ? (
 				<EmptyState

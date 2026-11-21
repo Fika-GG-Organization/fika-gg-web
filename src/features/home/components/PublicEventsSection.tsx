@@ -29,6 +29,7 @@ export default function PublicEventsSection() {
 					<SectionHeader
 						title="Händer den här veckan"
 						link={{ label: 'Se alla events', to: '/discover'}}
+						size="large"
 					/>
 					{!loading && events.length === 0 && (
 						<EmptyState
