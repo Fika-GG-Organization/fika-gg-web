@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { Box, Divider, Typography, Button, Link, TextField } from '@mui/material';
+import { useToast } from '@/app/toast';
 import LinkIcon from '@mui/icons-material/Link';
 import JoinPanel from '@/shared/components/ui/JoinPanel';
 import StatusPill from '../shared/components/ui/StatusPill';
@@ -101,6 +102,7 @@ export default function DesignDumpPage() {
     const [maxPlayers, setMaxPlayers] = useState(5);
     const [pickedGame, setPickedGame] = useState<string | number | null>(3272);
     const [pickedTile, setPickedTile] = useState<string | number | null>(null);
+		const toast = useToast();
 
     return (
         <Box sx={{ maxWidth: 1200, mx: 'auto', px: 3, py: 5, display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -610,6 +612,67 @@ export default function DesignDumpPage() {
                     </Example>
                 </Box>
             </Section>
+
+						<Section title="Toast Pop-up Variants">
+								<Example label="Click on the buttons to see toast variants">
+										<Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}
+										>
+												<Button
+														color="info"
+														variant="outlined"
+														onClick={() => toast("I am Info Toast", { variant: "info" })}
+												>
+														{"Info"}
+												</Button>
+												<Button
+														color="success"
+														variant="outlined"
+														onClick={() => toast("I am Success Toast", { variant: "success" })}
+												>
+														{"Success"}
+												</Button>
+												<Button
+														color="warning"
+														variant="outlined"
+														onClick={() => toast("I am Warning Toast", { variant: "warning" })}
+												>
+														{"Warning"}
+												</Button>
+												<Button
+														color="error"
+														variant="outlined"
+														onClick={() => toast("I am Error Toast", { variant: "error" })}
+												>
+														{"Error"}
+												</Button>
+										</Box>
+								</Example>
+								<Example label={"Click on the buttons to see fast and slow toasts"}>
+										<Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
+												<Button
+														color={"info"}
+														variant={"outlined"}
+														onClick={() => toast("Zoomies", { variant: "info", autoHideDuration: 1000 })}
+												>
+														{"Blink or you'll miss me."}
+												</Button>
+												<Button
+														color={"info"}
+														variant={"outlined"}
+														onClick={() => toast("See you on the flipside", { variant: "info" })}
+												>
+														{"This is the default toast duration."}
+												</Button>
+												<Button
+														color={"info"}
+														variant={"outlined"}
+														onClick={() => toast("I'm so slow you have to press the close button.", { variant: "info", autoHideDuration: null })}
+												>
+														{"I won't disappear at all."}
+												</Button>
+										</Box>
+								</Example>
+						</Section>
         </Box>
     );
 }
