@@ -27,37 +27,31 @@ export default function Footer() {
 			<Box
 				sx={{
 					width: '100%',
-					maxWidth: 560,
-					mx: 'auto',
-					display: 'flex',
+					display: 'grid',
 					alignItems: 'center',
-					justifyContent: 'space-between',
-					gap: 2,
+					columnGap: 2,
+					gridTemplateColumns: { xs: '1fr auto', md: '1fr auto 1fr' },
+					gridTemplateAreas: {
+						xs: `"logo links"
+								"copy links"`,
+						md: `"logo links copy"`,
+					}
 				}}
 			>
-				{/* logo & year, left side on desktop, top on mobile */}
-				<Box sx={{ lineHeight: 1.2 }}>
-					<Typography
-						sx={{
-							fontWeight: 800,
-							fontSize: { xs: 14, md: 16 } }}
-					>
-						fika.gg
-					</Typography>
-					<Typography
-						sx={{
-							color: 'text.secondary',
-							fontSize: { xs: 11, md: 13 }
-						}}
-					>
-						© {new Date().getFullYear()} fika.gg
-					</Typography>
-				</Box>
+				<Typography
+					sx={{
+						gridArea: 'logo',
+						fontWeight: 800,
+						fontSize: { xs: 14, md: 16 } }}
+				>
+					fika.gg
+				</Typography>
 
 				<Box
 					component="nav"
 					aria-label="Sidfot"
 					sx={{
+						gridArea: 'links',
 						display: 'flex',
 						flexWrap: 'wrap',
 						gap: { xs: 2.5, md: 4 }}}
@@ -79,6 +73,17 @@ export default function Footer() {
 						</Link>
 					))}
 				</Box>
+
+				<Typography
+					sx={{
+						gridArea: 'copy',
+						justifySelf: { xs: 'start', md: 'end' },
+						color: 'text.secondary',
+						fontSize: { xs: 11, md: 13 }
+					}}
+				>
+					© {new Date().getFullYear()} fika.gg
+				</Typography>
 			</Box>
 		</Box>
 	);
