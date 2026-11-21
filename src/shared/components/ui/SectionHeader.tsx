@@ -14,6 +14,7 @@ export default function SectionHeader({ title, link, meta }: Props) {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'baseline',
+        gap: 2,
         mb: 2
       }}
     >
@@ -35,7 +36,9 @@ export default function SectionHeader({ title, link, meta }: Props) {
           to={link.to}
           sx={{
             color: 'text.primary',
-            fontWeight: 600
+            fontWeight: 600,
+            whiteSpace: 'nowrap',
+            flexShrink: 0,
           }}
         >
           {link.label}

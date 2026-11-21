@@ -1,11 +1,11 @@
-import { Box, Container, Link, Typography } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import { Box, Container } from '@mui/material';
 import EventCard from 'shared/components/ui/EventCard';
 import EmptyState from 'shared/components/ui/EmptyState';
 import { useEffect, useState } from 'react';
 import { formatEventTime } from '@/shared/utils/formatEventTime';
 import { formatEventLink } from '@/shared/utils/formatEventLink';
 import { addDays } from '@/shared/utils/dates';
+import SectionHeader from '@/shared/components/ui/SectionHeader';
 import { getEventsAsync } from '@/features/event-calendar/api';
 import type { EventCalendarResponseItem } from '@/features/event-calendar/models/event-calendar.types';
 
@@ -26,35 +26,10 @@ export default function PublicEventsSection() {
 			<Container
 				maxWidth="lg"
 				sx={{ py: { xs: 5, md: 7 } }}>
-					<Box
-						sx={{
-						display: 'flex',
-						justifyContent: 'space-between',
-						alignItems: 'baseline',
-						mb: 3
-						}}
-					>
-						<Typography
-							variant="h2"
-							sx={{
-								fontSize: { xs: '2rem', md: '2.5rem' },
-								fontWeight: 700,
-								mb: 3
-							}}
-						>
-							Händer den här veckan
-						</Typography>
-						<Link
-							component={RouterLink}
-							to="/calendar"
-							sx={{
-								color: 'text.Primary',
-								fontWeight: 600
-							}}
-							>
-							Se alla events
-						</Link>
-					</Box>
+					<SectionHeader
+						title="Händer den här veckan"
+						link={{ label: 'Se alla events', to: '/discover'}}
+					/>
 					{!loading && events.length === 0 && (
 						<EmptyState
 							title="Inga events"

@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import EventRow from "@/shared/components/ui/EventRow";
 import type { DashboardEvent } from "../types/dashboard.types";
 import EmptyState from "@/shared/components/ui/EmptyState";
-import SectionHeader from './SectionHeader';
+import SectionHeader from '../../../shared/components/ui/SectionHeader';
 import { formatEventLink } from "@/shared/utils/formatEventLink";
 
 type Props = {

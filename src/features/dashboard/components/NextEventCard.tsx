@@ -6,7 +6,7 @@ import { formatEventTime } from '@/shared/utils/formatEventTime';
 import { formatEventLink } from '@/shared/utils/formatEventLink';
 import type { DashboardEvent } from '../types/dashboard.types';
 import EmptyState from "@/shared/components/ui/EmptyState";
-import SectionHeader from './SectionHeader';
+import SectionHeader from '../../../shared/components/ui/SectionHeader';
 import { formatDaysUntil } from '../dashboard.helpers';
 
 type Props = {
