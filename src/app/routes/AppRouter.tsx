@@ -65,6 +65,10 @@ const router = createBrowserRouter([
 				element: <EventCalendarPage />,
 			},
 			{
+				path: "/discover",
+				element: <DiscoverPage />,
+			},
+			{
 				// Add more routes here
 			},
 			// only in dev so it never ends up on the real site
@@ -85,10 +89,6 @@ const router = createBrowserRouter([
 					{
 						path: "/games",
 						element: <GamesPage />,
-					},
-					{
-						path: "/discover",
-						element: <DiscoverPage />,
 					},
 					{
 						path: '/events/new',
