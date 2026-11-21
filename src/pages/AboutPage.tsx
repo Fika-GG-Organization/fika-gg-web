@@ -46,6 +46,26 @@ export default function AboutPage() {
                         ))}
                     </Box>
                 </TextSection>
+                <TextSection title="Bildkälla">
+                    <Typography>
+												Foto:{' '}
+												<Link
+														href="https://unsplash.com/@wolfart32?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText"
+														target="_blank"
+														rel="noopener noreferrer"
+												>
+														Rodrigo Rodrigues | WOLF Λ R T
+												</Link>{' '}
+														på {' '}
+												<Link
+														href="https://unsplash.com/photos/orange-mug-filled-with-dark-liquid-on-desk-MDxkYz0EAv8?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText"
+														target="_blank"
+														rel="noopener noreferrer"
+												>
+														Unsplash
+												</Link>
+                    </Typography>
+                </TextSection>
             </Stack>
         </Box>
     );
