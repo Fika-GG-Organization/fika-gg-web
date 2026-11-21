@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link as RouterLink } from "react-router-dom";
 import { theme } from "@/app/theme/theme";
 import { useAuth } from "@/app/auth/useAuth";
 import { useToast } from "@/app/toast";
@@ -18,8 +18,7 @@ import {
 } from "@/features/event-join";
 import BackButton from "@/shared/components/ui/Buttons/BackButton";
 import CopyButton from "@/shared/components/ui/Buttons/CopyButton";
-import { Button, useMediaQuery } from "@mui/material";
-import Container from "@mui/material/Container";
+import { Container, Button, Typography, useMediaQuery } from "@mui/material";
 import { formatJoinSuccessToast, formatLeaveSuccessToast } from "@/features/event-join/utils/formatToasts";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
@@ -29,7 +28,7 @@ import { deleteEventAsync } from "@/features/event-delete";
 export default function EventPage() {
   const nav = useNavigate();
   const toast = useToast();
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const { eventId = "" } = useParams();
   const aboveSmallWidth = useMediaQuery(theme.breakpoints.up("md"));
 
@@ -90,7 +89,7 @@ export default function EventPage() {
     }
   }, [deleteLoading, eventId, nav, toast]);
 
-  const joinActions: React.ReactNode = (
+  const joinActions: React.ReactNode = isAuthenticated ? (
     <>
       <JoinButton
         isParticipant={data?.players.find((v) => v.userId == user?.id) ? true : false}
@@ -118,6 +117,32 @@ export default function EventPage() {
           </Button>
         </>
       )}
+      <CopyButton copyText={window.location.href}></CopyButton>
+    </>
+  ) : (
+    <>
+      <Typography sx={{
+        fontSize: 14,
+        color: 'text.secondary',
+        textAlign: 'center',
+      }}
+      >
+        Registrera eller logga in för att delta
+      </Typography>
+      <Button
+        component={RouterLink}
+        to="/register"
+        variant="contained"
+      >
+        Skapa konto
+      </Button>
+      <Button
+        component={RouterLink}
+        to="/login"
+        variant="outlined"
+      >
+        Logga in
+      </Button>
       <CopyButton copyText={window.location.href}></CopyButton>
     </>
   );

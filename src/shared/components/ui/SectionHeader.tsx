@@ -5,22 +5,24 @@ type Props = {
   title: string;
   link?: {label: string; to: string};
   meta?: string;
+  size?: 'medium' | 'large';
 }
 
-export default function SectionHeader({ title, link, meta }: Props) {
+export default function SectionHeader({ title, link, meta, size = 'medium' }: Props) {
   return (
     <Box
       sx={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'baseline',
+        gap: 2,
         mb: 2
       }}
     >
       <Typography
         component="h2"
         sx={{
-          fontSize: 22,
+          fontSize: size === 'large' ? { xs: 28, md: 36 } : 22,
           fontWeight: 700
         }}
       >
@@ -35,7 +37,9 @@ export default function SectionHeader({ title, link, meta }: Props) {
           to={link.to}
           sx={{
             color: 'text.primary',
-            fontWeight: 600
+            fontWeight: 600,
+            whiteSpace: 'nowrap',
+            flexShrink: 0,
           }}
         >
           {link.label}
