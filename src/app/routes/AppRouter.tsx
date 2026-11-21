@@ -17,6 +17,7 @@ import GuestRoute from "./GuestRoute";
 import AboutPage from '@/pages/AboutPage';
 import PrivacyPage from '@/pages/PrivacyPage';
 import ContactPage from '@/pages/ContactPage';
+import UserSettingsPage from "@/pages/UserSettingsPage";
 
 const router = createBrowserRouter([
 	{
@@ -92,6 +93,10 @@ const router = createBrowserRouter([
 					{
 						path: '/events/new',
 						element: <CreateEventPage />,
+					},
+					{
+						path: '/settings',
+						element: <UserSettingsPage/>
 					},
 					{
 						// Add any more logged in routes here

@@ -15,3 +15,10 @@ export interface User {
   displayName: string;
   avatarUrl?: string | null;
 }
+
+export interface UserProfileEdit{
+	DisplayName?: string;
+	Email?: string;
+	CurrentPassword?: string;
+	NewPassword?: string;
+}
