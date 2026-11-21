@@ -18,9 +18,12 @@ import {
 } from "@/features/event-join";
 import BackButton from "@/shared/components/ui/Buttons/BackButton";
 import CopyButton from "@/shared/components/ui/Buttons/CopyButton";
-import { useMediaQuery } from "@mui/material";
-import { Container, Button, Typography } from "@mui/material";
+import { Container, Button, Typography, useMediaQuery } from "@mui/material";
 import { formatJoinSuccessToast, formatLeaveSuccessToast } from "@/features/event-join/utils/formatToasts";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import ConfirmDialog from "@/shared/components/ui/ConfirmDialog";
+import { deleteEventAsync } from "@/features/event-delete";
 
 export default function EventPage() {
   const nav = useNavigate();
@@ -33,6 +36,8 @@ export default function EventPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   // Determines loading of the join button
   const [joinLoading, setJoinLoading] = useState<boolean>(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const [data, setData] = useState<EventGetResponse | undefined>(undefined);
   const [prevEventId, setPrevEventId] = useState<string>(eventId);
 
@@ -52,7 +57,7 @@ export default function EventPage() {
         formatJoinErrorToast(err.response?.status, toast)
       })
       .finally(() => setJoinLoading(false));
-  }, [joinLoading, eventId]);
+  }, [eventId, toast]);
 
   const handleLeave = useCallback(async () => {
 		setJoinLoading(true);
@@ -65,7 +70,24 @@ export default function EventPage() {
 				formatLeaveErrorToast(err.response?.status, toast);
       })
       .finally(() => setJoinLoading(false));
-  }, [joinLoading, eventId]);
+  }, [eventId, toast]);
+
+  const handleDelete = useCallback(async () => {
+    if (deleteLoading) {
+      return;
+    }
+
+    setDeleteLoading(true);
+    try {
+      await deleteEventAsync(eventId);
+      toast("Eventet har raderats.", { variant: "success" });
+      nav("/discover", { replace: true });
+    } catch {
+      toast("Det gick inte att radera eventet. Försök igen.", { variant: "error" });
+    } finally {
+      setDeleteLoading(false);
+    }
+  }, [deleteLoading, eventId, nav, toast]);
 
   const joinActions: React.ReactNode = isAuthenticated ? (
     <>
@@ -76,6 +98,25 @@ export default function EventPage() {
 				onLeave={handleLeave}
 				isFull={data ? (data.participantCount! >= data.maxPlayers! ? true : false) : false}
       />
+      {data?.host.id === user?.id && (
+        <>
+          <Button
+            variant="outlined"
+            startIcon={<EditOutlinedIcon />}
+            onClick={() => nav(`/events/${eventId}/edit`)}
+          >
+            Redigera event
+          </Button>
+          <Button
+            variant="outlined"
+            color="error"
+            startIcon={<DeleteOutlineOutlinedIcon />}
+            onClick={() => setDeleteDialogOpen(true)}
+          >
+            Radera event
+          </Button>
+        </>
+      )}
       <CopyButton copyText={window.location.href}></CopyButton>
     </>
   ) : (
@@ -130,6 +171,21 @@ export default function EventPage() {
       ) : (
         <EventMobileLayout isLoading={isLoading} data={data} actions={joinActions} />
       )}
+      <ConfirmDialog
+        open={deleteDialogOpen}
+        title="Radera eventet?"
+        description={`Är du säker på att du vill radera "${data?.title ?? "eventet"}"? Det går inte att ångra.`}
+        confirmLabel="Radera event"
+        checkboxLabel="Jag förstår att eventet tas bort permanent"
+        loading={deleteLoading}
+        loadingLabel="Raderar..."
+        onConfirm={() => void handleDelete()}
+        onClose={() => {
+          if (!deleteLoading) {
+            setDeleteDialogOpen(false);
+          }
+        }}
+      />
     </Container>
   );
 }
