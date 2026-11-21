@@ -1,3 +1,3 @@
 // index.ts
-export { createEventAsync } from './api';
+export { createEventAsync, updateEventAsync } from './api';
 export * from './models';

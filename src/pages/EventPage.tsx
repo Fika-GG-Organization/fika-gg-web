@@ -18,9 +18,10 @@ import {
 } from "@/features/event-join";
 import BackButton from "@/shared/components/ui/Buttons/BackButton";
 import CopyButton from "@/shared/components/ui/Buttons/CopyButton";
-import { useMediaQuery } from "@mui/material";
+import { Button, useMediaQuery } from "@mui/material";
 import Container from "@mui/material/Container";
 import { formatJoinSuccessToast, formatLeaveSuccessToast } from "@/features/event-join/utils/formatToasts";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 export default function EventPage() {
   const nav = useNavigate();
@@ -52,7 +53,7 @@ export default function EventPage() {
         formatJoinErrorToast(err.response?.status, toast)
       })
       .finally(() => setJoinLoading(false));
-  }, [joinLoading, eventId]);
+  }, [eventId, toast]);
 
   const handleLeave = useCallback(async () => {
 		setJoinLoading(true);
@@ -65,7 +66,7 @@ export default function EventPage() {
 				formatLeaveErrorToast(err.response?.status, toast);
       })
       .finally(() => setJoinLoading(false));
-  }, [joinLoading, eventId]);
+  }, [eventId, toast]);
 
   const joinActions: React.ReactNode = (
     <>
@@ -76,6 +77,15 @@ export default function EventPage() {
 				onLeave={handleLeave}
 				isFull={data ? (data.participantCount! >= data.maxPlayers! ? true : false) : false}
       />
+      {data?.host.id === user?.id && (
+        <Button
+          variant="outlined"
+          startIcon={<EditOutlinedIcon />}
+          onClick={() => nav(`/events/${eventId}/edit`)}
+        >
+          Redigera event
+        </Button>
+      )}
       <CopyButton copyText={window.location.href}></CopyButton>
     </>
   );

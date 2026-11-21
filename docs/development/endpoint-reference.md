@@ -369,6 +369,44 @@ GET `api/games/search`
 
 ## Event endpoints
 
+### Update an event
+
+Updates an event owned by the authenticated user.
+
+#### Request
+
+PUT `api/events/updateEvent/{eventId}`
+
+- Route Parameter
+    - `eventId` event ID
+- Body
+
+    ```json
+    {
+      "title": "string",
+      "description": null,
+      "startTime": "2026-11-21T18:00:00Z",
+      "endTime": "2026-11-21T20:00:00Z",
+      "maxPlayers": 5,
+      "createdAt": "2026-11-20T12:00:00Z",
+      "eventGame": {
+        "rawgId": 1,
+        "name": "string",
+        "coverUrl": null
+      }
+    }
+    ```
+
+#### Response
+
+- 200 OK
+
+    Returns the updated event.
+
+- 401 Unauthorized / 403 Forbidden
+
+    The user is not authorized to update this event.
+
 ### Get all events between two dates
 
 Get all dates whose start dates begin between two dates time values.

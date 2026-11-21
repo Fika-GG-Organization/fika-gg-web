@@ -95,6 +95,10 @@ const router = createBrowserRouter([
 						element: <CreateEventPage />,
 					},
 					{
+						path: '/events/:eventId/edit',
+						element: <CreateEventPage />,
+					},
+					{
 						path: '/settings',
 						element: <UserSettingsPage/>
 					},
