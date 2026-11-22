@@ -9,6 +9,7 @@ import UserGameList from "@/shared/components/ui/UserGameList";
 import { formatEventTime } from "@/shared/utils/formatEventTime";
 import { formatEventLink } from "@/shared/utils/formatEventLink";
 import EmptyState from "@/shared/components/ui/EmptyState";
+import FilterChips from "@/shared/components/ui/FilterChips";
 import { useNavigate } from "react-router-dom";
 
 export default function UserPage() {
@@ -16,6 +17,7 @@ export default function UserPage() {
   const [me, setMe] = useState<UserResponse | undefined>();
   const [editingGame, setEditingGame] = useState<OwnedGame | null>(null);
   const [reloadKey, setReloadKey] = useState(0); // bump this to refetch the profile after editing a game
+  const [eventFilter, setEventFilter] = useState<"all" | "hosting" | "joined">("all");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,9 +44,11 @@ export default function UserPage() {
   }, []);
 
   const allEvents = me ? mapEvents(me.hostedEvents, me.userEvents) : [];
+  const isHost = (v: EventResponse) => me?.hostedEvents.some((h) => h.id === v.id) ?? false;
+  const filteredEvents = eventFilter === "all" ? allEvents : allEvents.filter((v) => isHost(v) === (eventFilter === "hosting"));
   const now = new Date();
-  const upcomingEvents = allEvents.filter((v) => new Date(v.eventStart) > now);
-  const pastEvents = allEvents.filter((v) => new Date(v.eventStart) <= now);
+  const upcomingEvents = filteredEvents.filter((v) => new Date(v.eventStart) > now);
+  const pastEvents = filteredEvents.filter((v) => new Date(v.eventStart) <= now);
   const subtitleFor = (v: EventResponse) =>
     `${me?.hostedEvents.some((h) => h.id === v.id) ? "Värd" : "Deltagare"} · ${formatEventTime(v.eventStart, v.eventEnd)} · ${v.participantCount ?? "?"}/${v.maxPlayers ?? "?"}`;
 
@@ -57,13 +61,14 @@ export default function UserPage() {
             name={me.displayName}
             avatarUrl={me.avatarUrl}
             stats={[
-              { label: "Spel", value: me.ownedGames.length },
-              { label: "Events", value: me.hostedEvents.length },
+              { label: "spel", value: me.ownedGames.length },
+              { label: "som värd", value: me.hostedEvents.length },
+              { label: "som deltagare", value: me.userEvents.length - me.hostedEvents.length },
             ]}
           />
 
           <Grid container spacing={4} sx={{ mt: 6 }}>
-            <Grid size={{ xs: 12, md: 5 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <UserGameList
                 games={me.ownedGames.map((g) => ({
                   id: g.gameId,
@@ -76,8 +81,20 @@ export default function UserPage() {
               />
             </Grid>
 
-            <Grid size={{ xs: 12, md: 7 }}>
+            <Grid size={{ xs: 12, md: 8 }}>
               <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                <FilterChips
+                    label="Filtrera event"
+                    options={[
+                      { value: "all", label: "Alla" },
+                      { value: "hosting", label: "Värd" },
+                      { value: "joined", label: "Deltagare" },
+                    ]}
+                    selected={eventFilter}
+                    onChange={(value) => setEventFilter(value as "all" | "hosting" | "joined")
+                    }
+                  />
+                {upcomingEvents.length > 0 && (
                 <Box
                   component="section"
                   sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}
@@ -85,14 +102,7 @@ export default function UserPage() {
                   <Typography component="h2" sx={{ fontSize: 22, fontWeight: 700 }}>
                     Kommande event
                   </Typography>
-                  {upcomingEvents.length === 0 ? (
-                    <EmptyState
-                      title="Inga kommande event"
-                      description="Hitta ett event att hoppa in i."
-                      action={{ label: "Upptäck event", to: "/discover" }}
-                    />
-                  ) : (
-                    upcomingEvents.map((v) => (
+                    {upcomingEvents.map((v) => (
                       <EventRow
                         key={v.id}
                         date={v.eventStart}
@@ -100,10 +110,10 @@ export default function UserPage() {
                         subtitle={subtitleFor(v)}
                         href={formatEventLink(v.id)}
                       />
-                    ))
-                  )}
+                    ))}
                 </Box>
-
+                )}
+                {pastEvents.length > 0 && (
                 <Box
                   component="section"
                   sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}
@@ -111,10 +121,7 @@ export default function UserPage() {
                   <Typography component="h2" sx={{ fontSize: 22, fontWeight: 700 }}>
                     Tidigare event
                   </Typography>
-                  {pastEvents.length === 0 ? (
-                    <EmptyState title="Inga tidigare event" />
-                  ) : (
-                    pastEvents.map((v) => (
+                    {pastEvents.map((v) => (
                       <EventRow
                         key={v.id}
                         date={v.eventStart}
@@ -122,9 +129,23 @@ export default function UserPage() {
                         subtitle={subtitleFor(v)}
                         href={formatEventLink(v.id)}
                       />
-                    ))
-                  )}
+                    ))}
                 </Box>
+                )}
+                {filteredEvents.length === 0 && (
+                    <EmptyState
+                      title={
+                        eventFilter === "hosting" ? "Du är inte värd för några event än"
+                        : eventFilter === "joined" ? "Du har inte gått med i några event än"
+                        : "Du har inga event än"
+                      }
+                      action={
+                        eventFilter === "hosting"
+                        ? { label: "Skapa event", to: "/events/new" }
+                        : { label: "Upptäck event", to: "/discover" }
+                      }
+                    />
+                )}
               </Box>
             </Grid>
           </Grid>
