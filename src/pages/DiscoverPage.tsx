@@ -191,7 +191,7 @@ export default function DiscoverPage() {
                   variant="outlined"
                   onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
                 >
-                  Visa fler {filteredEvents.length - visibleCount} event
+                  Visa fler {filteredEvents.length - visibleCount} events
                 </Button>
               </Box>
             )}
