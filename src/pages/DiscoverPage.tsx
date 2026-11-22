@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import DiscoverSearchbar, { type DiscoverTimeFilter } from "@/components/discover/DiscoverSearchbar";
 import EmptyState from "@/shared/components/ui/EmptyState";
 import EventCard from "@/shared/components/ui/EventCard";
@@ -49,6 +49,8 @@ function getDateRange(filter: DiscoverTimeFilter, today: Date): [Date, Date] | n
     return [start, end];
 }
 
+  const PAGE_SIZE = 10;
+
 export default function DiscoverPage() {
     const [search, setSearch] = useState("");
     const [when, setWhen] = useState<DiscoverTimeFilter>("all");
@@ -56,6 +58,8 @@ export default function DiscoverPage() {
     const [selectedGame, setSelectedGame] = useState("all");
     const [events, setEvents] = useState<DiscoverEvent[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+    const resetPaging = () => setVisibleCount(PAGE_SIZE);
 
     useEffect(() => {
       const now = new Date();
@@ -123,11 +127,11 @@ export default function DiscoverPage() {
 
             <DiscoverSearchbar
                 search={search}
-                onSearchChange={setSearch}
+                onSearchChange={value => { setSearch(value); resetPaging(); }}
                 when={when}
-                onWhenChange={setWhen}
+                onWhenChange={value => { setWhen(value); resetPaging(); }}
                 onlyAvailable={onlyAvailable}
-                onOnlyAvailableChange={setOnlyAvailable}
+                onOnlyAvailableChange={value => { setOnlyAvailable(value); resetPaging(); }}
             />
 
             <Box sx={{ mt: 3, mb: 4 }}>
@@ -138,7 +142,7 @@ export default function DiscoverPage() {
                     label="Filtrera event på spel"
                     options={gameOptions}
                     selected={selectedGame}
-                    onChange={setSelectedGame}
+                    onChange={(value) => { setSelectedGame(value); resetPaging(); }}
                     scroll
                 />
             </Box>
@@ -159,7 +163,7 @@ export default function DiscoverPage() {
                 />
             ) : (
                 <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "repeat(2, minmax(0, 1fr))" }, gap: 2 }}>
-                    {filteredEvents.map((event) => (
+                    {filteredEvents.slice(0, visibleCount).map((event) => (
                         <EventCard
                             key={event.id}
 														href={formatEventLink(event.id)}
@@ -176,6 +180,20 @@ export default function DiscoverPage() {
                         />
                     ))}
                 </Box>
+            )}
+            {visibleCount < filteredEvents.length && (
+              <Box sx={{
+                display: "flex",
+                justifyContent: "center",
+                mt: 3,
+              }}>
+                <Button
+                  variant="outlined"
+                  onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
+                >
+                  Visa fler {filteredEvents.length - visibleCount} events
+                </Button>
+              </Box>
             )}
         </Box>
     );
