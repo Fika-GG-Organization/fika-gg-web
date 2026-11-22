@@ -29,12 +29,13 @@ export default function GamesPage() {
 				mx: "auto"
 			}}>
 				<PageHeader
+					centered
 					title="Mina spel"
 					description="Lägg till spelen du spelar, så visar vi event du kan delta i."
 				/>
 					{/* Left column: Game search */}
 					<Grid container spacing={4}>
-						<Grid size={{ xs: 12, md: 5 }}>
+						<Grid size={{ xs: 12, md: 6 }}>
 							<Typography
 								component="h2"
 								sx={{
@@ -49,7 +50,7 @@ export default function GamesPage() {
 						</Grid>
 
 						{/* Right column: User games */}
-						<Grid size={{ xs: 12, md: 7 }}>
+						<Grid size={{ xs: 12, md: 6 }}>
 							{isLoading ? (
 								<Skeleton variant="rounded" height={240} />
 							) : (
