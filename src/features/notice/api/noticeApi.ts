@@ -1,4 +1,4 @@
-import type { NoticeResponse } from "../types/Notice";
+import type { NoticeResponse } from "../types/notice.types";
 import { apiClient } from "@/shared/api/axiosClient";
 
 export async function getNotices(unreadOnly = false): Promise<NoticeResponse[]>{

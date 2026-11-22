@@ -22,7 +22,7 @@ import{
     markAllNoticesAsViewed,
     markNoticeAsViewed,
 }from "../api/noticeApi"
-import type { NoticeResponse } from "../types/Notice";
+import type { NoticeResponse } from "../types/notice.types";
 
 
 const POLL_INTERVAL_MS = 60_000;
