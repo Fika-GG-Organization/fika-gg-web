@@ -59,9 +59,9 @@ export default function UserPage() {
             name={me.displayName}
             avatarUrl={me.avatarUrl}
             stats={[
-              { label: "Spel", value: me.ownedGames.length },
-              { label: "Värd för", value: me.hostedEvents.length },
-              { label: "Deltagare i", value: me.userEvents.length - me.hostedEvents.length },
+              { label: "spel", value: me.ownedGames.length },
+              { label: "som värd", value: me.hostedEvents.length },
+              { label: "som deltagare", value: me.userEvents.length - me.hostedEvents.length },
             ]}
           />
 
