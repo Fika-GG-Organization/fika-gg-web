@@ -24,8 +24,10 @@ export function formatCalendarItems(data: EventCalendarResponse): CalendarItem[]
       href: formatEventLink(v.id),
       start: v.startTime,
       title: v.title,
+			ariaLabel: v.title,
       look: look,
       timeLabel: formatLocaleTime(v.startTime),
+			detail: `${v.game?.name} · ${v.participantCount ?? "?"}/${v.maxPlayers ?? "?"}`,
     };
   });
 }
