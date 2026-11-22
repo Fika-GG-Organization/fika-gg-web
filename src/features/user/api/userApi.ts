@@ -14,7 +14,6 @@ export async function getUserData(): Promise<UserResponse> {
 
 export async function addGameToUser(gameId: number): Promise<void> {
   await apiClient.post(`/user/add/game/${gameId}`);
-  console.log(`Game with ID ${gameId} added to user.`);
 }
 
 export async function getUserTheme(): Promise<SiteTheme> {

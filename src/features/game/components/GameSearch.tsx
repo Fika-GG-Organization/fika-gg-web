@@ -3,12 +3,19 @@ import { Autocomplete, Avatar, Box, Button, Link, TextField, Typography } from "
 import { searchGames } from "../api/gameApi";
 import type { GameSearchResult } from "../game.types";
 import { addGameToUser } from "@/features/user/api/userApi";
+import { useToast } from "@/app/toast";
 
-export const GameSearch = () => {
+type GameSearchProps = {
+    onAdded?: () => void;
+    ownedRawgIds?: number[];
+};
+
+export const GameSearch = ({ onAdded, ownedRawgIds = [] }: GameSearchProps) => {
     const [input, setInput] = useState("");
     const [options, setOptions] = useState<GameSearchResult[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [selected, setSelected] = useState<GameSearchResult | null>(null);
+    const toast = useToast();
 
     useEffect(() => {
         if (input.trim().length < 2) {
@@ -52,9 +59,10 @@ export const GameSearch = () => {
                 isOptionEqualToValue={(a, b) => a.rawgId === b.rawgId}
                 filterOptions={(x) => x}
                 loading={isLoading}
-                noOptionsText={isTooShort ? "Type at least 2 characters" : "No games found"}
+                noOptionsText={isTooShort ? "Skriv minst 2 tecken" : "Inga spel hittades"}
                 renderOption={(props, game) => {
                     const { key, ...optionProps } = props;
+                    const isOwned = ownedRawgIds.includes(game.rawgId);
                     return (
                         <Box
                             component="li"
@@ -68,18 +76,25 @@ export const GameSearch = () => {
                                 variant="outlined"
                                 color="primary"
                                 size="small"
+                                disabled={isOwned}
                                 sx={{ minHeight: 32, px: 1.5 }}
-                                onClick={(event) => {
+                                onClick={async (event) => {
                                     event.stopPropagation();
-                                    void addGameToUser(game.rawgId);
+                                    try {
+                                      await addGameToUser(game.rawgId);
+                                      toast(`${game.name} har lagts till`, { variant: "success" });
+                                      onAdded?.();
+                                    } catch {
+                                      toast(`Kunde inte lägga till ${game.name}`, { variant: "error" });
+                                    }
                                 }}
                             >
-                                Lägg till
+                                {isOwned ? "Tillagd" : "Lägg till"}
                             </Button>
                         </Box>
                     );
                 }}
-                renderInput={(params) => <TextField {...params} label="Search games" />}
+                renderInput={(params) => <TextField {...params} label="Sök spel" />}
             />
             <Typography variant="caption" color="text.secondary">
                 Game data from{" "}
