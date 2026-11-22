@@ -1,5 +1,5 @@
 import { useState, type SubmitEvent } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Box } from '@mui/material';
 import { useToast } from '@/app/toast';
 import { removeGameFromUserAsync, updateGamerTagAsync } from '../api/userApi';
 import type { OwnedGame } from '../types/UserResponse';
@@ -66,14 +66,30 @@ export default function EditGameDialog({ game, onClose, onSaved }: EditGameDialo
                         slotProps={{ htmlInput: { maxLength: 50 } }}
                     />
                 </DialogContent>
-                <DialogActions sx={{ justifyContent: 'space-between', px: 3, pb: 2 }}>
+                <DialogActions
+                  sx={{
+                    justifyContent: 'space-between',
+                    px: 3,
+                    pb: 2,
+                    gap: 1,
+                    flexDirection: { xs: 'column', sm: 'row' },
+                    alignItems: { xs: 'stretch', sm: 'center' },
+                    '& .MuiButton-root': { whiteSpace: 'nowrap' },
+                  }}
+                >
                     <Button color="error" onClick={handleRemove} disabled={isSaving}>
                         Ta bort spel
                     </Button>
-                    <div>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        gap: 1,
+                        flexDirection: { xs: 'column-reverse', sm: 'row' }
+                      }}
+                    >
                         <Button onClick={onClose} disabled={isSaving}>Avbryt</Button>
                         <Button type="submit" variant="contained" disabled={isSaving}>Spara</Button>
-                    </div>
+                    </Box>
                 </DialogActions>
             </form>
         </Dialog>
