@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { getEventsAsync } from "../api";
 import type { EventCalendarResponse } from "../models";
+import { formatCalendarItems } from "../utils/formatCalendarItems";
 import Box from "@mui/material/Box";
 import CalendarToolbar, { type CalendarView } from "@/shared/components/ui/CalendarToolbar";
 import CalendarLegend from "@/shared/components/ui/CalendarLegend";
@@ -16,8 +17,6 @@ import {
 	startOfWeek,
 	weekColumns,
 } from "@/shared/utils/dates";
-import type { CalendarItem } from "@/shared/components/ui/CalendarEvent";
-import { formatEventLink } from "@/shared/utils/formatEventLink";
 
 const EventCalendar = () => {
 	// to do: add a loading state to the calendar, there was an unused isLoading here before
@@ -82,32 +81,14 @@ const EventCalendar = () => {
 				<WeekView
 					weekStart={startOfWeek(addDays(today, step * 7))}
 					today={today}
-					items={data.map((v): CalendarItem => {
-						return {
-							id: v.id,
-							href: formatEventLink(v.id),
-							start: v.startTime,
-							title: v.title,
-							timeLabel: "",
-							look: v.participantCount! >= v.maxPlayers! ? "full" : "open",
-						};
-					})}
+					items={formatCalendarItems(data)}
 				/>
 			)}
 			{calendarView === "month" && (
 				<MonthView
 					month={startOfMonth(addMonths(today, step))}
 					today={today}
-					items={data.map((v): CalendarItem => {
-						return {
-							id: v.id,
-							href: formatEventLink(v.id),
-							start: v.startTime,
-							title: v.title,
-							timeLabel: "",
-							look: v.participantCount! >= v.maxPlayers! ? "full" : "open",
-						};
-					})}
+					items={formatCalendarItems(data)}
 				/>
 			)}
 			<CalendarLegend />
