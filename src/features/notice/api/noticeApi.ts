@@ -5,7 +5,6 @@ export async function getNotices(unreadOnly = false): Promise<NoticeResponse[]>{
     const response = await apiClient.get<NoticeResponse[]>("/notices", {
         params: {unreadOnly}
     });
-    console.log(response.status, response.headers["content-type"], response.data)
     return response.data;
 }
 
