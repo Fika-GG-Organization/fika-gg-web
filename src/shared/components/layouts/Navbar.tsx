@@ -17,6 +17,7 @@ import AddIcon from '@mui/icons-material/Add';
 import PersonIcon from '@mui/icons-material/Person';
 import { useAuth } from '@/app/auth/useAuth';
 import ThemeModeSwitch from '@/app/theme/ThemeModeSwitch';
+import NoticeMenu from '@/features/notice/components/NotiseMenu';
 
 // the links in the middle, authOnly true means when ure logged in
 const navLinks = [
@@ -187,6 +188,7 @@ export default function Navbar() {
 
                 {isAuthenticated && (
                     <>
+                        <NoticeMenu/>
                         <IconButton
                             aria-label="Konto"
                             aria-haspopup="menu"
