@@ -29,7 +29,6 @@ const EventCalendar = () => {
 
 	const onViewChange = useCallback(
 		(value: CalendarView) => {
-			console.debug("Calendar view set to:", value);
 			setCalendarView(value);
 		},
 		[],
@@ -63,7 +62,6 @@ const EventCalendar = () => {
 				(response) => response,
 				(): EventCalendarResponse => [],
 			);
-			console.debug(`Data is:`, res);
 			setData(res);
 		}
 		const d = calendarDates();

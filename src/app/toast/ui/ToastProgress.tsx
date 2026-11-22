@@ -22,7 +22,6 @@ export default function ToastProgress(props: ToastProgress) {
 			if (document.hasFocus()) {
 				setProgress((prev) => prev + 100);
 			}
-			console.log(timerRef.current);
 		}, 100);
 		return (() => {
 			clearInterval(timerRef.current);
