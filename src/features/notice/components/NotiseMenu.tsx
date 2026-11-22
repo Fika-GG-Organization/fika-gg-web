@@ -38,18 +38,38 @@ export default function NoticeMenu(){
         try
         {
             setNotices(await getNotices());
-        } 
-        catch 
+        }
+        catch
         {
             // Displays old data until next poll attempt.
         }
     }, []);
 
     useEffect(() => {
-        load();
-        const timer = setInterval(load, POLL_INTERVAL_MS);
-        return() => clearInterval(timer); 
-    },[load]);
+        let ignore = false;
+        const fetchNotices = () => {
+        // Avoids API calls to save Azure resources when the user is not looking at the page.
+        if (document.visibilityState === "hidden")
+        {
+            return;
+        }
+        getNotices()
+            .then((data) => {
+                if (!ignore)
+                {
+                    setNotices(data);
+                }
+            })
+            .catch(() => {
+                // Displays old data until next poll attempt.
+            });
+        }
+        const timer = setInterval(fetchNotices, POLL_INTERVAL_MS);
+        return() => {
+          	ignore = true;
+          	clearInterval(timer);
+		};
+    },[]);
 
     const handleOpen = (event: MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -67,14 +87,14 @@ export default function NoticeMenu(){
 
         //When expanding a selected undread notice, it will be marked as viewed.
         if(opening && !notice.viewed){
-            setNotices((prev) => 
+            setNotices((prev) =>
             prev.map((n) => (n.id === notice.id ? {...n, viewed: true} : n)));
 
             try
             {
                 await markNoticeAsViewed(notice.id)
-            } 
-            catch 
+            }
+            catch
             {
                 load();
             }
@@ -86,8 +106,8 @@ export default function NoticeMenu(){
         try
         {
             await markAllNoticesAsViewed();
-        } 
-        catch 
+        }
+        catch
         {
             load();
         }
@@ -123,7 +143,7 @@ export default function NoticeMenu(){
             onClose={handleClose}
             anchorOrigin={{vertical: "bottom", horizontal:"right"}}
             transformOrigin={{vertical:"top", horizontal:"right"}}
-            slotProps={{paper:{sx:{width: 360, maxWidth:"95vw", maxHeight:440}}}}    
+            slotProps={{paper:{sx:{width: 360, maxWidth:"95vw", maxHeight:440}}}}
         >
             {notices.length === 0 ? (
                 <Typography sx={{p: 3}} color="textSecondary" align="center">
@@ -147,11 +167,11 @@ export default function NoticeMenu(){
                         }}
                     >
                         <Typography variant="subtitle2">Notiser</Typography>
-                        <Button 
+                        <Button
                             size="small"
                             startIcon={<DoneAll/>}
                             onClick={handleMarkAllAsViewed}
-                            disabled={unreadCount === 0} 
+                            disabled={unreadCount === 0}
                         >
                             Markera alla notiser som lästa.
                         </Button>
@@ -195,7 +215,7 @@ export default function NoticeMenu(){
                             </Box>
                         ))}
                     </List>
-                
+
                 </>
             )}
 

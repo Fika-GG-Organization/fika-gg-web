@@ -73,7 +73,7 @@ export default function HeroSection() {
 						<Button
 							variant="outlined"
 							component={RouterLink}
-							to="/calandar"
+							to="/calendar"
 						>
 							Kolla in events
 						</Button>

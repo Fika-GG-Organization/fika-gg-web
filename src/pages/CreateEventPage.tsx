@@ -28,8 +28,12 @@ export default function CreateEventPage() {
     const [game, setGame] = useState<GameSearchResult | null>(null);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [startTime, setStartTime] = useState('');
-    const [endTime, setEndTime] = useState('');
+    const [startTime, setStartTime] = useState(() => toDateTimeLocalInput(nextTenMinutes()));
+    const [endTime, setEndTime] = useState(() => {
+      const end = nextTenMinutes();
+      end.setHours(end.getHours() + 2);
+      return toDateTimeLocalInput(end);
+    });
     const [maxPlayers, setMaxPlayers] = useState(5);
     const [error, setError] = useState('');
     const [isSaving, setIsSaving] = useState(false);
@@ -252,9 +256,21 @@ export default function CreateEventPage() {
                                 label="Startar"
                                 type="datetime-local"
                                 value={startTime}
-                                onChange={(e) => setStartTime(e.target.value)}
+                                onChange={(e) => {
+                                  const newStart = e.target.value;
+                                  setStartTime(newStart);
+                                  if (endTime && new Date(endTime) <= new Date(newStart)) {
+                                    const end = new Date(newStart);
+                                    end.setHours(end.getHours() + 2);
+                                    setEndTime(toDateTimeLocalInput(end));
+                                  }
+                                }}
                                 required
-                                slotProps={{ inputLabel: { shrink: true } }}
+                                slotProps={{
+                                  inputLabel: { shrink: true },
+                                  // 600 is 10 minutes, 900 is 15 minutes
+                                  htmlInput: { step: 600, min: toDateTimeLocalInput(nextTenMinutes()) }
+                              }}
                             />
                             <TextField
                                 label="Slutar"
@@ -262,7 +278,11 @@ export default function CreateEventPage() {
                                 value={endTime}
                                 onChange={(e) => setEndTime(e.target.value)}
                                 required
-                                slotProps={{ inputLabel: { shrink: true } }}
+                                slotProps={{
+                                  inputLabel: { shrink: true },
+                                  // 600 is 10 minutes, 900 is 15 minutes
+                                  htmlInput: { step: 600 }
+                              }}
                             />
                         </Box>
                         <NumberStepper
@@ -319,4 +339,11 @@ function toDateTimeLocalInput(value: Date | string): string {
         return '';
     }
     return new Date(date.getTime() - date.getTimezoneOffset() * 60_000).toISOString().slice(0, 16);
+}
+
+function nextTenMinutes(): Date {
+    const date = new Date();
+    date.setSeconds(0, 0);
+    date.setMinutes(Math.ceil((date.getMinutes() +1 ) / 10) * 10);
+    return date;
 }
