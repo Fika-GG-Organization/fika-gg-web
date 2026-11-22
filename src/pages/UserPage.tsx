@@ -10,6 +10,7 @@ import { formatEventTime } from "@/shared/utils/formatEventTime";
 import { formatEventLink } from "@/shared/utils/formatEventLink";
 import EmptyState from "@/shared/components/ui/EmptyState";
 import FilterChips from "@/shared/components/ui/FilterChips";
+import { useNavigate } from "react-router-dom";
 
 export default function UserPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -17,6 +18,7 @@ export default function UserPage() {
   const [editingGame, setEditingGame] = useState<OwnedGame | null>(null);
   const [reloadKey, setReloadKey] = useState(0); // bump this to refetch the profile after editing a game
   const [eventFilter, setEventFilter] = useState<"all" | "hosting" | "joined">("all");
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchMe() {
@@ -74,7 +76,7 @@ export default function UserPage() {
                   coverUrl: g.coverUrl,
                   gamerTag: g.gamerTag,
                 }))}
-                onAdd={() => {}}
+                onAdd={() => {navigate("/games")}}
                 onEdit={(id) => setEditingGame(me.ownedGames.find((g) => g.gameId === id) ?? null)}
               />
             </Grid>
