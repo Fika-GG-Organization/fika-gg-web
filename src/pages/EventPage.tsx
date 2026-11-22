@@ -91,13 +91,15 @@ export default function EventPage() {
 
   const joinActions: React.ReactNode = isAuthenticated ? (
     <>
-      <JoinButton
-        isParticipant={data?.players.find((v) => v.userId == user?.id) ? true : false}
-        loading={joinLoading}
-				onJoin={handleJoin}
-				onLeave={handleLeave}
-				isFull={data ? (data.participantCount! >= data.maxPlayers! ? true : false) : false}
-      />
+      {data?.host.id !== user?.id && (
+        <JoinButton
+          isParticipant={data?.players.find((v) => v.userId == user?.id) ? true : false}
+          loading={joinLoading}
+          onJoin={handleJoin}
+          onLeave={handleLeave}
+          isFull={data ? (data.participantCount! >= data.maxPlayers! ? true : false) : false}
+        />
+      )}
       {data?.host.id === user?.id && (
         <>
           <Button
