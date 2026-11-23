@@ -1,4 +1,4 @@
-import type { LoginRequest, User } from './auth.types';
+import type { LoginRequest, User, UserProfileEdit } from './auth.types';
 
 export interface AuthContextType {
 	user: User | null;
@@ -7,5 +7,7 @@ export interface AuthContextType {
 	logout: () => Promise<void>;
 	refreshUser: () => Promise<void>;
 	updateUser: (changes: Partial<User>) => void;
+	deleteCurrentUser: () => Promise<void>;
+	updateUserProfile: (request: UserProfileEdit) => Promise<void>;
 	isAuthenticated: boolean;
 }

@@ -12,16 +12,19 @@ import {
     Toolbar,
     Typography,
 } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 import AddIcon from '@mui/icons-material/Add';
 import PersonIcon from '@mui/icons-material/Person';
 import { useAuth } from '@/app/auth/useAuth';
 import ThemeModeSwitch from '@/app/theme/ThemeModeSwitch';
+import NoticeMenu from '@/features/notice/components/NotiseMenu';
 
 // the links in the middle, authOnly true means when ure logged in
 const navLinks = [
     { to: '/discover', label: 'Upptäck', authOnly: false },
     { to: '/calendar', label: 'Kalender', authOnly: false },
-    { to: '/my-events', label: 'Mina event', authOnly: true },
+    // TODO: Add in future?
+    // { to: '/my-events', label: 'Mina event', authOnly: true },
 ];
 
 /**
@@ -36,7 +39,7 @@ export default function Navbar() {
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
 	const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
-
+  const [mobileMenuAnchor, setMobileMenuAnchor] = useState<HTMLElement | null>(null);
 	const isLoginPage = pathname === '/login';
 	const isRegisterPage = pathname === '/register';
 	const homePath = isAuthenticated ? '/home' : '/';
@@ -114,9 +117,10 @@ export default function Navbar() {
                         </Link>
                     </Typography>
                 )}
-
                 {!isAuthenticated && !isLoginPage && !isRegisterPage && (
-                    <Box sx={{ display: 'flex', gap: 1 }}>
+                  <>
+                    {/* desktop menu */}
+                    <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
                         <Button
                             component={RouterLink}
                             to="/login"
@@ -129,6 +133,43 @@ export default function Navbar() {
                             Skapa konto
                         </Button>
                     </Box>
+                    {/* mobile menu */}
+                    <IconButton
+                        aria-label="Meny"
+                        aria-haspopup="menu"
+                        aria-expanded={Boolean(mobileMenuAnchor)}
+                        onClick={(e) => setMobileMenuAnchor(e.currentTarget)}
+                        sx={{ display: { xs: 'inline-flex', md: 'none' } }}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Menu
+                        anchorEl={mobileMenuAnchor}
+                        open={Boolean(mobileMenuAnchor)}
+                        onClose={() => setMobileMenuAnchor(null)}
+                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                        >
+                        {navLinks
+                            .filter((link) => !link.authOnly)
+                            .map((link) => (
+                              <MenuItem
+                                key={link.to}
+                                component={RouterLink}
+                                to={link.to}
+                                onClick={() => setMobileMenuAnchor(null)}
+                              >
+                                {link.label}
+                              </MenuItem>
+                            ))}
+                        <MenuItem component={RouterLink} to="/login" onClick={() => setMobileMenuAnchor(null)}>
+                          Logga in
+                        </MenuItem>
+                        <MenuItem component={RouterLink} to="/register" onClick={() => setMobileMenuAnchor(null)}>
+                          Skapa konto
+                        </MenuItem>
+                    </Menu>
+                  </>
                 )}
 
                 {isAuthenticated && pathname !== '/events/new' && (
@@ -147,6 +188,7 @@ export default function Navbar() {
 
                 {isAuthenticated && (
                     <>
+                        <NoticeMenu/>
                         <IconButton
                             aria-label="Konto"
                             aria-haspopup="menu"

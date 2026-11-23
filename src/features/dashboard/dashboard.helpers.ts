@@ -5,12 +5,13 @@ export function toDashboardEvent(u: EventCalendarResponseItem): DashboardEvent {
   return {
     id: u.id,
     title: u.title,
-    startTime: u.startTime.toISOString(),
-    endTime: u.endTime.toISOString(),
+    startTime: new Date(u.startTime).toISOString(),
+    endTime: new Date (u.endTime).toISOString(),
     gameName: u.game?.name ?? 'Okänt spel',
+    coverUrl: u.game?.coverUrl ?? null,
     participantCount: u.participantCount ?? 0,
     maxParticipants: u.maxPlayers ?? 0,
-    hostName: '', // This will be set later based on user data
+    hostName: u.host?.displayName ?? 'Okänd värd'
   };
 }
 

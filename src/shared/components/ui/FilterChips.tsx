@@ -37,7 +37,8 @@ export default function FilterChips({ label, options, selected, onChange, scroll
                 display: 'flex',
                 gap: 1,
                 flexWrap: scroll ? 'nowrap' : 'wrap',
-                overFlowX: scroll ? 'auto' : 'visible',
+                overflowX: scroll ? 'auto' : 'visible',
+                minWidth: 0,
                 py: scroll ? 0.5 : 0,
             }}
         >

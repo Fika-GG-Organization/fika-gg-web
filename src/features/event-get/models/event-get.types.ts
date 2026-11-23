@@ -3,7 +3,7 @@
  */
 export interface EventGetResponse {
 	id: number;
-	hostId: string;
+	host: EventGetHost;
 	title: string;
 	description?: string;
 	game?: EventGetGame;
@@ -25,6 +25,13 @@ export interface EventGetGame {
 	coverUrl?: string;
 }
 
+/** Represents the event's host. */
+export interface EventGetHost {
+	id: string;
+	displayName: string;
+	avatarUrl?: string | undefined;
+}
+
 /**
  * Represents a participant in the event participants list.
  */
@@ -34,7 +41,7 @@ export interface EventGetParticipant {
 	displayName: string;
 	avatarUrl: string | null;
 	gamerTag: string | null;
-	participantStatus: ParticipantStatus;
+	status: ParticipantStatus;
 	joinedAt: Date;
 }
 
@@ -44,6 +51,8 @@ export interface EventGetParticipant {
 export interface EventLayoutProps {
 	isLoading: boolean;
 	data: EventGetResponse | undefined;
+	/** Represents event interaction buttons. */
+	actions?: React.ReactNode;
 }
 
 /**
@@ -51,4 +60,4 @@ export interface EventLayoutProps {
  * - 0 = Joined: User has joined.
  * - 1 = Backup: User has joined and is above max player limit.
  */
-export type ParticipantStatus = "0" | "1";
+export type ParticipantStatus = 0 | 1;

@@ -1,6 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { getEventsAsync } from "../api";
+import { LABEL_FILTER, VALUE_ALL } from "../config/constants";
 import type { EventCalendarResponse } from "../models";
+import { formatCalendarItems } from "../utils/formatCalendarItems";
+import { useAuth } from "@/app/auth/useAuth";
 import Box from "@mui/material/Box";
 import CalendarToolbar, { type CalendarView } from "@/shared/components/ui/CalendarToolbar";
 import CalendarLegend from "@/shared/components/ui/CalendarLegend";
@@ -16,20 +19,28 @@ import {
 	startOfWeek,
 	weekColumns,
 } from "@/shared/utils/dates";
-import type { CalendarItem } from "@/shared/components/ui/CalendarEvent";
-import { formatEventLink } from "@/shared/utils/formatEventLink";
+import Stack from "@mui/material/Stack";
+import FilterChips from "@/shared/components/ui/FilterChips";
+import { removeDuplicatesBy } from "@/shared/utils/removeDuplicatesBy";
+import { useToast } from "@/app/toast";
 
 const EventCalendar = () => {
 	// to do: add a loading state to the calendar, there was an unused isLoading here before
 	// const [_isLoading, setIsLoading] = useState<boolean>(true);
+	const { user } = useAuth();
 	const [data, setData] = useState<EventCalendarResponse>([]);
+	const [selectedFilter, setSelectedFilter] = useState<string>(VALUE_ALL);
 	const [calendarView, setCalendarView] = useState<CalendarView>("week");
 	const [today] = useState<Date>(new Date());
 	const [step, setStep] = useState<number>(0);
+	const toast = useToast();
+	const selectedFilterRef = useRef(selectedFilter);
+	useEffect(() => {
+		selectedFilterRef.current = selectedFilter;
+	}, [selectedFilter]);
 
 	const onViewChange = useCallback(
 		(value: CalendarView) => {
-			console.debug("Calendar view set to:", value);
 			setCalendarView(value);
 		},
 		[],
@@ -41,9 +52,19 @@ const EventCalendar = () => {
 		setStep(step - 1);
 	}, [step]);
 	const onToday = useCallback(() => {
-
 		setStep(0);
 	}, []);
+
+	/** Set filter chips options */
+	const options = useCallback(() => {
+		const options = data.flatMap((v) => {
+			return v.game ? { value: v.game.name, label: v.game.name } : []
+		});
+		return [
+			{ value: VALUE_ALL, label: "Alla spel" },
+			...removeDuplicatesBy(options, d => d.label),
+		];
+	}, [data])
 
 	const calendarDates = useCallback((): Date[] => {
 		switch (calendarView) {
@@ -63,53 +84,50 @@ const EventCalendar = () => {
 				(response) => response,
 				(): EventCalendarResponse => [],
 			);
-			console.debug(`Data is:`, res);
 			setData(res);
+
+			const current = selectedFilterRef.current;
+			if (current !== VALUE_ALL && !res.some((e) => e.game?.name === current))
+			{
+				setSelectedFilter(VALUE_ALL);
+				toast(`Inga ${current} events hittades, visar alla spel.`, { variant: "warning" });
+			}
 		}
 		const d = calendarDates();
 		fetch(startOfDay(d[0]), endOfDay(d[d.length - 1]));
-	}, [calendarDates]);
+	}, [calendarDates, toast]);
 
 	return (
 		<Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-			<CalendarToolbar
-				label={`${calendarDates().at(0)?.toLocaleDateString()} - ${calendarDates().at(-1)?.toLocaleDateString()}`}
-				view={calendarView}
-				onViewChange={onViewChange}
-				onNext={onNext}
-				onPrev={onPrev}
-				onToday={onToday}
-			/>
+			<Stack spacing={2}>
+				<CalendarToolbar
+					label={`${calendarDates().at(0)?.toLocaleDateString()} - ${calendarDates().at(-1)?.toLocaleDateString()}`}
+					view={calendarView}
+					onViewChange={onViewChange}
+					onNext={onNext}
+					onPrev={onPrev}
+					onToday={onToday}
+				/>
+				<FilterChips
+					label={LABEL_FILTER}
+					options={options()}
+					selected={selectedFilter}
+					onChange={(value) => { setSelectedFilter(value); }}
+					scroll={false}
+				/>
+			</Stack>
 			{calendarView === "week" && (
 				<WeekView
 					weekStart={startOfWeek(addDays(today, step * 7))}
 					today={today}
-					items={data.map((v): CalendarItem => {
-						return {
-							id: v.id,
-							href: formatEventLink(v.id),
-							start: v.startTime,
-							title: v.title,
-							timeLabel: "",
-							look: v.participantCount! >= v.maxPlayers! ? "full" : "open",
-						};
-					})}
+					items={formatCalendarItems(data, user?.id, selectedFilter)}
 				/>
 			)}
 			{calendarView === "month" && (
 				<MonthView
 					month={startOfMonth(addMonths(today, step))}
 					today={today}
-					items={data.map((v): CalendarItem => {
-						return {
-							id: v.id,
-							href: formatEventLink(v.id),
-							start: v.startTime,
-							title: v.title,
-							timeLabel: "",
-							look: v.participantCount! >= v.maxPlayers! ? "full" : "open",
-						};
-					})}
+					items={formatCalendarItems(data, user?.id, selectedFilter)}
 				/>
 			)}
 			<CalendarLegend />

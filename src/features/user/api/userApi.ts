@@ -1,4 +1,4 @@
-import type { UserResponse } from "../types/UserResponse";
+import type { SiteTheme, UserResponse } from "../types/UserResponse";
 import { apiClient } from "@/shared/api/axiosClient";
 
 export async function getUserbyId(id: string): Promise<UserResponse> {
@@ -14,7 +14,23 @@ export async function getUserData(): Promise<UserResponse> {
 
 export async function addGameToUser(gameId: number): Promise<void> {
   await apiClient.post(`/user/add/game/${gameId}`);
-  console.log(`Game with ID ${gameId} added to user.`);
+}
+
+export async function getUserTheme(): Promise<SiteTheme> {
+    const response = await apiClient.get<SiteTheme>(
+        "/api/users/me/preferences"
+    );
+
+    return response.data;
+}
+
+export async function themeSelect(
+    theme: SiteTheme["themePreference"]
+): Promise<void> {
+    await apiClient.put(
+        "/api/users/me/preferences/theme",
+        { themePreference: theme }
+    );
 }
 
 // sets the gamertag on one of ur games, empty string removes it

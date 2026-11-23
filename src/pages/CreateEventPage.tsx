@@ -1,6 +1,6 @@
 import { useEffect, useState, type SubmitEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Alert, Box, Button, TextField, Typography } from '@mui/material';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Alert, Box, Button, CircularProgress, TextField, Typography } from '@mui/material';
 import { formatEventTime } from '@/shared/utils/formatEventTime';
 import { searchGames } from '@/features/game/api/gameApi';
 import type { GameSearchResult } from '@/features/game/game.types';
@@ -10,7 +10,9 @@ import NumberStepper from '@/shared/components/ui/NumberStepper';
 import GamePickerList from '@/shared/components/ui/GamePickerList';
 import EventCard from '@/shared/components/ui/EventCard';
 import { useToast } from '@/app/toast';
-import { createEventAsync } from '@/features/event-create';
+import { createEventAsync, updateEventAsync } from '@/features/event-create';
+import { getEventByIdAsync } from '@/features/event-get';
+import { useAuth } from '@/app/auth/useAuth';
 import { getUserData } from '@/features/user/api/userApi';
 import type { UserResponse } from '@/features/user/types/UserResponse';
 import { formatEventLink } from '@/shared/utils/formatEventLink';
@@ -18,16 +20,25 @@ import { formatEventLink } from '@/shared/utils/formatEventLink';
 export default function CreateEventPage() {
     const navigate = useNavigate();
     const toast = useToast();
+    const { user: currentUser } = useAuth();
+    const { eventId } = useParams<{ eventId?: string }>();
+    const isEditing = Boolean(eventId);
     const [search, setSearch] = useState('');
     const [results, setResults] = useState<GameSearchResult[]>([]);
     const [game, setGame] = useState<GameSearchResult | null>(null);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [startTime, setStartTime] = useState('');
-    const [endTime, setEndTime] = useState('');
+    const [startTime, setStartTime] = useState(() => toDateTimeLocalInput(nextTenMinutes()));
+    const [endTime, setEndTime] = useState(() => {
+      const end = nextTenMinutes();
+      end.setHours(end.getHours() + 2);
+      return toDateTimeLocalInput(end);
+    });
     const [maxPlayers, setMaxPlayers] = useState(5);
     const [error, setError] = useState('');
     const [isSaving, setIsSaving] = useState(false);
+    const [isLoadingEvent, setIsLoadingEvent] = useState(isEditing);
+    const [createdAt, setCreatedAt] = useState('');
     const [user, setUser] = useState<UserResponse | null>(null);
 
     const canSearch = search.trim().length >= 2;
@@ -76,6 +87,56 @@ export default function CreateEventPage() {
         }
     }, []);
 
+    useEffect(() => {
+        if (!eventId) {
+            return;
+        }
+
+        let ignore = false;
+        getEventByIdAsync(eventId)
+            .then((event) => {
+                if (ignore) {
+                    return;
+                }
+                if (!currentUser || event.host.id !== currentUser.id) {
+                    toast('Du kan bara redigera dina egna event.', { variant: 'error' });
+                    navigate(`/event/${eventId}`, { replace: true });
+                    return;
+                }
+
+                setTitle(event.title);
+                setDescription(event.description ?? '');
+                setStartTime(toDateTimeLocalInput(event.startTime));
+                setEndTime(toDateTimeLocalInput(event.endTime));
+                setMaxPlayers(event.maxPlayers ?? 5);
+                setCreatedAt(new Date(event.createdAt).toISOString());
+                if (event.game?.rawgId != null) {
+                    const selectedGame = {
+                        rawgId: event.game.rawgId,
+                        name: event.game.name,
+                        coverUrl: event.game.coverUrl ?? null,
+                    };
+                    setGame(selectedGame);
+                    setSearch(selectedGame.name);
+                    setResults([selectedGame]);
+                }
+            })
+            .catch(() => {
+                if (!ignore) {
+                    setError('Kunde inte hämta eventet. Försök igen.');
+                }
+            })
+            .finally(() => {
+                if (!ignore) {
+                    setIsLoadingEvent(false);
+                }
+            });
+
+        return () => {
+            ignore = true;
+        };
+    }, [currentUser, eventId, navigate, toast]);
+
     const handleSubmit = async (e: SubmitEvent) => {
         e.preventDefault();
         setError('');
@@ -103,29 +164,43 @@ export default function CreateEventPage() {
 
         setIsSaving(true);
         try {
-            const created = await createEventAsync({
+            const eventRequest = {
                 title: title.trim(),
                 description: description.trim() || null,
                 startTime: start.toISOString(),
                 endTime: end.toISOString(),
                 maxPlayers,
-                createdAt: now.toISOString(),
+                createdAt: isEditing ? createdAt : now.toISOString(),
                 eventGame: { rawgId: game.rawgId, name: game.name, coverUrl: game.coverUrl },
-            });
+            };
+            const saved = eventId
+                ? await updateEventAsync(eventId, eventRequest)
+                : await createEventAsync(eventRequest);
 
-            toast('Eventet är publicerat!', { variant: 'success' });
-						navigate(formatEventLink(created.id));
+            toast(isEditing ? 'Eventet har uppdaterats!' : 'Eventet är publicerat!', { variant: 'success' });
+            navigate(formatEventLink(saved.id));
         } catch {
-            setError('Kunde inte skapa eventet. Försök igen.');
+            setError(isEditing ? 'Kunde inte uppdatera eventet. Försök igen.' : 'Kunde inte skapa eventet. Försök igen.');
         } finally {
             setIsSaving(false);
         }
     };
 
+    if (isLoadingEvent) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
+                <CircularProgress aria-label="Hämtar event" />
+            </Box>
+        );
+    }
+
     const spotsLeft = maxPlayers - 1;
     return (
         <Box>
-            <PageHeader title="Skapa ett event" description="Välj spel, tid och hur många ni ska vara." />
+            <PageHeader
+                title={isEditing ? 'Redigera evenemang' : 'Skapa ett event'}
+                description={isEditing ? 'Uppdatera informationen om ditt event.' : 'Välj spel, tid och hur många ni ska vara.'}
+            />
 
             <Box
                 sx={{
@@ -181,9 +256,21 @@ export default function CreateEventPage() {
                                 label="Startar"
                                 type="datetime-local"
                                 value={startTime}
-                                onChange={(e) => setStartTime(e.target.value)}
+                                onChange={(e) => {
+                                  const newStart = e.target.value;
+                                  setStartTime(newStart);
+                                  if (endTime && new Date(endTime) <= new Date(newStart)) {
+                                    const end = new Date(newStart);
+                                    end.setHours(end.getHours() + 2);
+                                    setEndTime(toDateTimeLocalInput(end));
+                                  }
+                                }}
                                 required
-                                slotProps={{ inputLabel: { shrink: true } }}
+                                slotProps={{
+                                  inputLabel: { shrink: true },
+                                  // 600 is 10 minutes, 900 is 15 minutes
+                                  htmlInput: { step: 600, min: toDateTimeLocalInput(nextTenMinutes()) }
+                              }}
                             />
                             <TextField
                                 label="Slutar"
@@ -191,7 +278,11 @@ export default function CreateEventPage() {
                                 value={endTime}
                                 onChange={(e) => setEndTime(e.target.value)}
                                 required
-                                slotProps={{ inputLabel: { shrink: true } }}
+                                slotProps={{
+                                  inputLabel: { shrink: true },
+                                  // 600 is 10 minutes, 900 is 15 minutes
+                                  htmlInput: { step: 600 }
+                              }}
                             />
                         </Box>
                         <NumberStepper
@@ -213,7 +304,7 @@ export default function CreateEventPage() {
                             Avbryt
                         </Button>
                         <Button type="submit" variant="contained" disabled={isSaving}>
-                            {isSaving ? 'Publicerar...' : 'Publicera'}
+                            {isSaving ? (isEditing ? 'Sparar...' : 'Publicerar...') : (isEditing ? 'Spara ändringar' : 'Publicera')}
                         </Button>
                     </Box>
                 </Box>
@@ -240,4 +331,19 @@ export default function CreateEventPage() {
             </Box>
         </Box>
     );
+}
+
+function toDateTimeLocalInput(value: Date | string): string {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+        return '';
+    }
+    return new Date(date.getTime() - date.getTimezoneOffset() * 60_000).toISOString().slice(0, 16);
+}
+
+function nextTenMinutes(): Date {
+    const date = new Date();
+    date.setSeconds(0, 0);
+    date.setMinutes(Math.ceil((date.getMinutes() +1 ) / 10) * 10);
+    return date;
 }

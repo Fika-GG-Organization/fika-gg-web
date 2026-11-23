@@ -3,21 +3,21 @@ import { Link as RouterLink } from 'react-router-dom';
 
 export default function HeroSection() {
   return (
-  	<Box 
-			component="section" 
+  	<Box
+			component="section"
 			sx={{
 				borderBottom: 1,
 				borderColor: 'text.Primary',
 			}}
 		>
-			<Container 
-				maxWidth="lg" 
-				sx={{ 
+			<Container
+				maxWidth="lg"
+				sx={{
 					py: {xs: 6, md: 8 },
 					display: 'grid',
 					gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
 					gap: 4,
-					alignItems: 'center', 
+					alignItems: 'center',
 				}}
 			>
 				<Box
@@ -27,10 +27,10 @@ export default function HeroSection() {
 						gap: 2
 					}}
 				>
-					<Typography 
-						variant="caption" 
-						sx={{ 
-							color: 'text.Secondary', 
+					<Typography
+						variant="caption"
+						sx={{
+							color: 'text.Secondary',
 							textTransform: 'uppercase',
 							letterSpacing: 1
 						}}
@@ -57,9 +57,9 @@ export default function HeroSection() {
 						Skapa en spelkväll, välj hur många som får vara med och låt folk joina.
 						Blir det fullt hamnar resten på reservlistan.
 					</Typography>
-					<Box sx={{ 
+					<Box sx={{
 						display: 'flex',
-						gap: 1.5, 
+						gap: 1.5,
 						flexWrap: 'wrap',
 						mt: 1
 					}}>
@@ -73,35 +73,24 @@ export default function HeroSection() {
 						<Button
 							variant="outlined"
 							component={RouterLink}
-							to="/events"
+							to="/calendar"
 						>
-							Kolla in event
+							Kolla in events
 						</Button>
 					</Box>
 				</Box>
 				<Box
+					component="img"
+					src="/fikagghero.webp"
+					alt="Kaffe i en orange kopp framför ett tangentbord"
 					sx={{
 						aspectRatio: '4 / 3',
-						border: 1,
-						borderStyle: 'dashed',
-						borderColor: 'text.Secondary',
+						width: '100%',
+						objectFit: 'cover',
 						borderRadius: 2,
-						bgcolor: 'action.hover',
-						display: 'flex',
-						alignItems: 'center',
-						justifyContent: 'center'
+						dipsplay: 'block'
 					}}
-				>
-					<Typography
-						variant="caption"
-						sx={{
-							color: 'text.Secondary',
-							letterSpacing: 1,
-						}}
-					>
-						PLACEHOLDER TEXT HÄR, ERSÄTT MED BILD
-					</Typography>
-				</Box>
+				/>
 			</Container>
 		</Box>
 	);

@@ -1,55 +1,28 @@
-import { useMemo, useState } from "react";
-import { Box, Typography } from "@mui/material";
-import DiscoverSearchbar, { type DiscoverTimeFilter } from "@/components/discover/DiscoverSearchbar";
+import { useEffect, useMemo, useState } from "react";
+import { Box, Typography, Button } from "@mui/material";
+import DiscoverSearchbar, { type DiscoverTimeFilter } from "@/shared/components/ui/DiscoverSearchbar";
 import EmptyState from "@/shared/components/ui/EmptyState";
 import EventCard from "@/shared/components/ui/EventCard";
 import FilterChips from "@/shared/components/ui/FilterChips";
 import { formatEventTime } from "@/shared/utils/formatEventTime";
 import { formatEventLink } from '@/shared/utils/formatEventLink';
+import { getEventsAsync } from "@/features/event-calendar/api";
+import { addDays } from "@/shared/utils/dates";
 
-const games = ["Valorant", "League of Legends", "Counter-Strike 2", "Minecraft"];
-
-function daysFromToday(days: number, hour: number) {
-    const date = new Date();
-    date.setHours(hour, 0, 0, 0);
-    date.setDate(date.getDate() + days);
-    return date;
-}
-
-function nextWeekday(weekdayOffset: number, hour: number) {
-    const date = new Date();
-    date.setHours(0, 0, 0, 0);
-    date.setDate(date.getDate() - ((date.getDay() + 6) % 7) + 7 + weekdayOffset);
-    date.setHours(hour);
-    return date;
-}
-
-const events = [
-    {
-        id: 1,
-        title: "Lördags-rankat",
-        gameName: "Valorant",
-        startsAt: daysFromToday(2, 18),
-        endsAt: daysFromToday(2, 21),
-        hostName: "Alex",
-        joined: 3,
-        max: 5,
-        status: "open" as const,
-        statusLabel: "2 platser kvar",
-    },
-    {
-        id: 2,
-        title: "Fredagsmys med gänget",
-        gameName: "Counter-Strike 2",
-        startsAt: nextWeekday(2, 19),
-        endsAt: nextWeekday(2, 22),
-        hostName: "Sam",
-        joined: 5,
-        max: 5,
-        status: "full" as const,
-        statusLabel: "Fullt",
-    },
-];
+type DiscoverEvent = {
+    id: number;
+    title: string;
+    gameName: string;
+    coverUrl?: string | null;
+    startsAt: Date;
+    endsAt: Date;
+    hostName: string;
+    hostAvatarUrl?: string | null;
+    joined: number;
+    max: number;
+    status: "open" | "full";
+    statusLabel: string;
+};
 
 function getDateRange(filter: DiscoverTimeFilter, today: Date): [Date, Date] | null {
     const start = new Date(today);
@@ -76,11 +49,49 @@ function getDateRange(filter: DiscoverTimeFilter, today: Date): [Date, Date] | n
     return [start, end];
 }
 
+  const PAGE_SIZE = 10;
+
 export default function DiscoverPage() {
     const [search, setSearch] = useState("");
     const [when, setWhen] = useState<DiscoverTimeFilter>("all");
     const [onlyAvailable, setOnlyAvailable] = useState(false);
     const [selectedGame, setSelectedGame] = useState("all");
+    const [events, setEvents] = useState<DiscoverEvent[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+    const resetPaging = () => setVisibleCount(PAGE_SIZE);
+
+    useEffect(() => {
+      const now = new Date();
+      getEventsAsync({"start-time": now, "end-time": addDays(now, 60)})
+        .then((data) =>
+          setEvents(
+            data.map((e) => {
+              const joined = e.participantCount ?? 0;
+              const max = e.maxPlayers ?? 0;
+              const spotsLeft = max - joined;
+              return {
+                id: e.id,
+                title: e.title,
+                gameName: e.game?.name ?? "Okänt spel",
+                coverUrl: e.game?.coverUrl,
+                startsAt: new Date(e.startTime),
+                endsAt: new Date(e.endTime),
+                hostName: e.host?.displayName ?? "",
+                hostAvatarUrl: e.host?.avatarUrl,
+                joined,
+                max,
+                status: spotsLeft > 0 ? ("open" as const) : ("full" as const),
+                statusLabel: spotsLeft > 0 ? `${spotsLeft} ${spotsLeft === 1 ? "plats" : "platser"} kvar` : "Fullt",
+              };
+            })
+          )
+        )
+        .catch(() => { setEvents([]) })
+        .finally(() => { setIsLoading(false) });
+    }, []);
+
+    const games = [...new Set(events.map((e) => e.gameName))];
 
     const filteredEvents = useMemo(() => {
         const query = search.trim().toLocaleLowerCase();
@@ -96,7 +107,7 @@ export default function DiscoverPage() {
 
             return matchesSearch && matchesGame && matchesAvailability && matchesDate;
         });
-    }, [search, when, onlyAvailable, selectedGame]);
+    }, [events, search, when, onlyAvailable, selectedGame]);
 
     const gameOptions = [
         { value: "all", label: "Alla spel" },
@@ -116,11 +127,11 @@ export default function DiscoverPage() {
 
             <DiscoverSearchbar
                 search={search}
-                onSearchChange={setSearch}
+                onSearchChange={value => { setSearch(value); resetPaging(); }}
                 when={when}
-                onWhenChange={setWhen}
+                onWhenChange={value => { setWhen(value); resetPaging(); }}
                 onlyAvailable={onlyAvailable}
-                onOnlyAvailableChange={setOnlyAvailable}
+                onOnlyAvailableChange={value => { setOnlyAvailable(value); resetPaging(); }}
             />
 
             <Box sx={{ mt: 3, mb: 4 }}>
@@ -131,7 +142,7 @@ export default function DiscoverPage() {
                     label="Filtrera event på spel"
                     options={gameOptions}
                     selected={selectedGame}
-                    onChange={setSelectedGame}
+                    onChange={(value) => { setSelectedGame(value); resetPaging(); }}
                     scroll
                 />
             </Box>
@@ -145,21 +156,23 @@ export default function DiscoverPage() {
                 </Typography>
             </Box>
 
-            {filteredEvents.length === 0 ? (
+            {isLoading ? null : filteredEvents.length === 0 ? (
                 <EmptyState
                     title="Inga event matchar filtren"
                     description="Prova att ändra sökningen eller välja andra filter."
                 />
             ) : (
                 <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "repeat(2, minmax(0, 1fr))" }, gap: 2 }}>
-                    {filteredEvents.map((event) => (
+                    {filteredEvents.slice(0, visibleCount).map((event) => (
                         <EventCard
                             key={event.id}
 														href={formatEventLink(event.id)}
                             title={event.title}
                             gameName={event.gameName}
+                            coverUrl={event.coverUrl}
                             timeLabel={formatEventTime(event.startsAt.toISOString(), event.endsAt.toISOString())}
                             hostName={event.hostName}
+                            hostAvatarUrl={event.hostAvatarUrl}
                             joined={event.joined}
                             max={event.max}
                             status={event.status}
@@ -167,6 +180,20 @@ export default function DiscoverPage() {
                         />
                     ))}
                 </Box>
+            )}
+            {visibleCount < filteredEvents.length && (
+              <Box sx={{
+                display: "flex",
+                justifyContent: "center",
+                mt: 3,
+              }}>
+                <Button
+                  variant="outlined"
+                  onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
+                >
+                  Visa fler {filteredEvents.length - visibleCount} events
+                </Button>
+              </Box>
             )}
         </Box>
     );

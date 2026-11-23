@@ -9,3 +9,11 @@ export async function createEventAsync(event: EventCreateRequest): Promise<Event
     const response = await apiClient.post<EventGetResponse>(ROUTE_PATH, event);
     return response.data;
 }
+
+export async function updateEventAsync(
+    eventId: string,
+    event: EventCreateRequest,
+): Promise<EventGetResponse> {
+    const response = await apiClient.put<EventGetResponse>(`events/updateEvent/${eventId}`, event);
+    return response.data;
+}
