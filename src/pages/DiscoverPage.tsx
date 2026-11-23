@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
-import DiscoverSearchbar, { type DiscoverTimeFilter } from "@/components/discover/DiscoverSearchbar";
+import DiscoverSearchbar, { type DiscoverTimeFilter } from "@/shared/components/ui/DiscoverSearchbar";
 import EmptyState from "@/shared/components/ui/EmptyState";
 import EventCard from "@/shared/components/ui/EventCard";
 import FilterChips from "@/shared/components/ui/FilterChips";
