@@ -1,4 +1,3 @@
-import { useAuth } from "@/app/auth/useAuth";
 import type { EventCalendarResponse } from "../models";
 import { VALUE_ALL } from "../config/constants";
 import type { CalendarItem, CalendarEventLook } from "@/shared/components/ui/CalendarEvent";
@@ -10,10 +9,9 @@ import { formatLocaleTime } from "@/shared/utils/formatEventTime";
  */
 export function formatCalendarItems(
   data: EventCalendarResponse,
+	userId: string | undefined,
   filter?: string | undefined,
 ): CalendarItem[] {
-  const { user } = useAuth();
-
   return data
     .filter((v) => {
 			// If there's no filter or if filter is set to all, all calendar items will be returned.
@@ -25,7 +23,7 @@ export function formatCalendarItems(
     })
     .map((v): CalendarItem => {
       let look: CalendarEventLook = "open";
-      if (user != null && v.host?.id === user.id) {
+      if (userId !== undefined && userId !== null && v.host?.id === userId) {
         look = "mine";
       } else if (v.participantCount! >= v.maxPlayers!) {
         look = "full";

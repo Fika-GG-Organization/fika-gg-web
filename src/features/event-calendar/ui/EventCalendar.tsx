@@ -3,6 +3,7 @@ import { getEventsAsync } from "../api";
 import { LABEL_FILTER, VALUE_ALL } from "../config/constants";
 import type { EventCalendarResponse } from "../models";
 import { formatCalendarItems } from "../utils/formatCalendarItems";
+import { useAuth } from "@/app/auth/useAuth";
 import Box from "@mui/material/Box";
 import CalendarToolbar, { type CalendarView } from "@/shared/components/ui/CalendarToolbar";
 import CalendarLegend from "@/shared/components/ui/CalendarLegend";
@@ -25,6 +26,7 @@ import { removeDuplicatesBy } from "@/shared/utils/removeDuplicatesBy";
 const EventCalendar = () => {
 	// to do: add a loading state to the calendar, there was an unused isLoading here before
 	// const [_isLoading, setIsLoading] = useState<boolean>(true);
+	const { user } = useAuth();
 	const [data, setData] = useState<EventCalendarResponse>([]);
 	const [selectedFilter, setSelectedFilter] = useState<string>(VALUE_ALL);
 	const [calendarView, setCalendarView] = useState<CalendarView>("week");
@@ -109,14 +111,14 @@ const EventCalendar = () => {
 				<WeekView
 					weekStart={startOfWeek(addDays(today, step * 7))}
 					today={today}
-					items={formatCalendarItems(data, selectedFilter)}
+					items={formatCalendarItems(data, user?.id, selectedFilter)}
 				/>
 			)}
 			{calendarView === "month" && (
 				<MonthView
 					month={startOfMonth(addMonths(today, step))}
 					today={today}
-					items={formatCalendarItems(data, selectedFilter)}
+					items={formatCalendarItems(data, user?.id, selectedFilter)}
 				/>
 			)}
 			<CalendarLegend />
