@@ -9,13 +9,12 @@ This repository houses the web client application for ***FIKA GG***, an online g
 
 ## Table of Contents
 
-- [Background](#Background)
-	- [See also](#See_also)
-- [Development](#Development)
-	- [Dependencies](#Dependencies)
-	- [CLI](#CLI)
-- [Contributing](#Contributing)
-- [License](#License)
+- [Background](#background)
+	- [See also](#see-also)
+- [Development](#development)
+- [Dependencies](#dependencies)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Background
 
