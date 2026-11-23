@@ -52,11 +52,12 @@ const EventCalendar = () => {
 
 	/** Set filter chips options */
 	const options = useCallback(() => {
+		const options = data.flatMap((v) => {
+			return v.game ? { value: v.game.name, label: v.game.name } : []
+		});
 		return [
 			{ value: VALUE_ALL, label: "Alla spel" },
-			...removeDuplicatesBy(data, d => d.game!.name).flatMap(v => {
-				return v.game ? { value: v.game.name, label: v.game.name } : []
-			}),
+			...removeDuplicatesBy(options, d => d.label),
 		];
 	}, [data])
 
