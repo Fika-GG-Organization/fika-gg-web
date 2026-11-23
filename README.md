@@ -1,18 +1,20 @@
 # Fika GG web
 
-![Place any banner here]()
+![FIKA.GG logo. It depicts a minimalistic white tea or coffee cup on a dark background. There's controller pads and two circular buttons printed on the cup.](https://raw.githubusercontent.com/Fika-GG-Organization/fika-gg-web/refs/heads/main/public/fikaggbg.png)
+
+[![React Frontend CI](https://github.com/Fika-GG-Organization/fika-gg-web/actions/workflows/node.js.yml/badge.svg)](https://github.com/Fika-GG-Organization/fika-gg-web/actions/workflows/node.js.yml)
+[![Build and deploy Node.js app to Azure Web App - fika-gg-web](https://github.com/Fika-GG-Organization/fika-gg-web/actions/workflows/main_fika-gg-web.yml/badge.svg)](https://github.com/Fika-GG-Organization/fika-gg-web/actions/workflows/main_fika-gg-web.yml)
 
 This repository houses the web client application for ***FIKA GG***, an online gaming hub focused on connecting gamers together. 
 
 ## Table of Contents
 
-- [Background](#Background)
-	- [See also](#See_also)
-- [Development](#Development)
-	- [Dependencies](#Dependencies)
-	- [CLI](#CLI)
-- [Contributing](#Contributing)
-- [License](#License)
+- [Background](#background)
+	- [See also](#see-also)
+- [Development](#development)
+- [Dependencies](#dependencies)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Background
 
@@ -26,14 +28,9 @@ Our main target demographic are Swedish students and young adults with an intere
 
 ## Development
 
-File structure
- 
-- `src/app/` routing, providers, auth
-- `src/pages/` web pages
-- `src/features/` similar to backend, grouped by features
-- `src/shared/` reusable utilities
+See [docs](./docs/README.md) for project structure, development, and more.
 
-### Dependencies
+## Dependencies
 
 The repository uses the following 3rd party dependencies.
 
@@ -44,10 +41,6 @@ The repository uses the following 3rd party dependencies.
 - [@mui/material](https://www.npmjs.com/package/@mui/material)
 - [react-router](https://www.npmjs.com/package/react-router)
 - [axios](https://www.npmjs.com/package/axios)
-
-### CLI
-
-DevOps info here
 
 ## Contributing
 
