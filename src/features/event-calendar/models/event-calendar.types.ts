@@ -23,17 +23,19 @@ export interface EventCalendarResponseItem {
 	} | null;
 	title: string;
 	description: string | null;
-	game: {
-		id: number;
-		rawgId: number | null;
-		name: string;
-		coverUrl: string | null;
-	} | null;
+	game: Game | null;
 	startTime: Date;
 	endTime: Date;
 	participantCount: number | null;
 	maxPlayers: number | null;
 	createdAt: Date;
+}
+
+export type Game = {
+	id: number;
+	rawgId: number | undefined;
+	name: string;
+	coverUrl: string | undefined;
 }
 
 /**

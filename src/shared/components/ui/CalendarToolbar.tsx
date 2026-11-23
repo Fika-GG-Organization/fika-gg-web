@@ -21,11 +21,11 @@ type CalendarToolbarProps = {
  */
 export default function CalendarToolbar({ label, view, onViewChange, onPrev, onNext, onToday }: CalendarToolbarProps) {
     return (
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 1.5 }}>
+        <Box sx={{ display: 'flex', flexWrap: { xs: 'wrap', md: 'nowrap' }, alignItems: 'center', gap: 1.5 }}>
             <Button onClick={onToday} variant="outlined" sx={{ color: 'text.primary' }}>Idag</Button>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <IconButton aria-label="Föregående" onClick={onPrev}><ChevronLeftIcon /></IconButton>
-                <Typography aria-live="polite" sx={{ minWidth: 160, textAlign: 'center', fontWeight: 600 }}>{label}</Typography>
+                <Typography aria-live="polite" sx={{ width: "max-content", minWidth: 160, textAlign: 'center', fontWeight: 600 }}>{label}</Typography>
                 <IconButton aria-label="Nästa" onClick={onNext}><ChevronRightIcon /></IconButton>
             </Box>
             <ToggleButtonGroup
