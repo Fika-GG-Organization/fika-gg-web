@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { getEventsAsync } from "../api";
 import { LABEL_FILTER, VALUE_ALL } from "../config/constants";
 import type { EventCalendarResponse } from "../models";
@@ -22,6 +22,7 @@ import {
 import Stack from "@mui/material/Stack";
 import FilterChips from "@/shared/components/ui/FilterChips";
 import { removeDuplicatesBy } from "@/shared/utils/removeDuplicatesBy";
+import { useToast } from "@/app/toast";
 
 const EventCalendar = () => {
 	// to do: add a loading state to the calendar, there was an unused isLoading here before
@@ -32,6 +33,11 @@ const EventCalendar = () => {
 	const [calendarView, setCalendarView] = useState<CalendarView>("week");
 	const [today] = useState<Date>(new Date());
 	const [step, setStep] = useState<number>(0);
+	const toast = useToast();
+	const selectedFilterRef = useRef(selectedFilter);
+	useEffect(() => {
+		selectedFilterRef.current = selectedFilter;
+	}, [selectedFilter]);
 
 	const onViewChange = useCallback(
 		(value: CalendarView) => {
@@ -46,7 +52,6 @@ const EventCalendar = () => {
 		setStep(step - 1);
 	}, [step]);
 	const onToday = useCallback(() => {
-
 		setStep(0);
 	}, []);
 
@@ -80,25 +85,21 @@ const EventCalendar = () => {
 				(): EventCalendarResponse => [],
 			);
 			setData(res);
+
+			const current = selectedFilterRef.current;
+			if (current !== VALUE_ALL && !res.some((e) => e.game?.name === current))
+			{
+				setSelectedFilter(VALUE_ALL);
+				toast(`Inga ${current} events hittades, visar alla spel.`, { variant: "warning" });
+			}
 		}
 		const d = calendarDates();
 		fetch(startOfDay(d[0]), endOfDay(d[d.length - 1]));
-	}, [calendarDates]);
+	}, [calendarDates, toast]);
 
 	return (
 		<Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-			<Stack
-				direction={{ xs: "column", md: "row" }}
-				spacing={{ xs: 2, md: 2 }}
-				sx={{ justifyContent: "space-between" }}
-			>
-				<FilterChips
-					label={LABEL_FILTER}
-					options={options()}
-					selected={selectedFilter}
-					onChange={(value) => { setSelectedFilter(value); }}
-					scroll
-				/>
+			<Stack spacing={2}>
 				<CalendarToolbar
 					label={`${calendarDates().at(0)?.toLocaleDateString()} - ${calendarDates().at(-1)?.toLocaleDateString()}`}
 					view={calendarView}
@@ -106,6 +107,13 @@ const EventCalendar = () => {
 					onNext={onNext}
 					onPrev={onPrev}
 					onToday={onToday}
+				/>
+				<FilterChips
+					label={LABEL_FILTER}
+					options={options()}
+					selected={selectedFilter}
+					onChange={(value) => { setSelectedFilter(value); }}
+					scroll={false}
 				/>
 			</Stack>
 			{calendarView === "week" && (
