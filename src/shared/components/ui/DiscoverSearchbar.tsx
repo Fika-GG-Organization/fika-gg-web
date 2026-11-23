@@ -1,3 +1,4 @@
+import { theme } from "@/app/theme/theme";
 import { Box, Checkbox, FormControlLabel, MenuItem, TextField } from "@mui/material";
 
 export type DiscoverTimeFilter = "all" | "today" | "week" | "next-week" | "month";
@@ -21,7 +22,7 @@ export default function DiscoverSearchbar({
 }: DiscoverSearchbarProps) {
     return (
         <Box
-            sx={(theme) => ({
+            sx={{
                 display: "grid",
                 gridTemplateColumns: { xs: "1fr", sm: "minmax(0, 1fr) 190px auto" },
                 alignItems: "center",
@@ -30,7 +31,7 @@ export default function DiscoverSearchbar({
                 border: `1.5px solid ${theme.palette.fika.line}`,
                 borderRadius: 3,
                 bgcolor: "background.paper",
-            })}
+            }}
         >
             <TextField
                 label="Sök event"
