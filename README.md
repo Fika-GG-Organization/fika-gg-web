@@ -1,6 +1,9 @@
 # Fika GG web
 
-![Place any banner here]()
+![FIKA.GG logo. It depicts a minimalistic white tea or coffee cup on a dark background. There's controller pads and two circular buttons printed on the cup.](https://raw.githubusercontent.com/Fika-GG-Organization/fika-gg-web/refs/heads/main/public/fikaggbg.png)
+
+[![React Frontend CI](https://github.com/Fika-GG-Organization/fika-gg-web/actions/workflows/node.js.yml/badge.svg)](https://github.com/Fika-GG-Organization/fika-gg-web/actions/workflows/node.js.yml)
+[![Build and deploy Node.js app to Azure Web App - fika-gg-web](https://github.com/Fika-GG-Organization/fika-gg-web/actions/workflows/main_fika-gg-web.yml/badge.svg)](https://github.com/Fika-GG-Organization/fika-gg-web/actions/workflows/main_fika-gg-web.yml)
 
 This repository houses the web client application for ***FIKA GG***, an online gaming hub focused on connecting gamers together. 
 
