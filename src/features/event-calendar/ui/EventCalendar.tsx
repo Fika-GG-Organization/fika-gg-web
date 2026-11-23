@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useState, useMemo, useRef } from "react";
 import { getEventsAsync } from "../api";
 import { LABEL_FILTER, VALUE_ALL } from "../config/constants";
 import type { EventCalendarResponse } from "../models";
@@ -55,16 +55,24 @@ const EventCalendar = () => {
 		setStep(0);
 	}, []);
 
-	/** Set filter chips options */
-	const options = useCallback(() => {
-		const options = data.flatMap((v) => {
-			return v.game ? { value: v.game.name, label: v.game.name } : []
-		});
-		return [
-			{ value: VALUE_ALL, label: "Alla spel" },
-			...removeDuplicatesBy(options, d => d.label),
-		];
-	}, [data])
+	/** Set filter chips options 
+	 * the chips come from the loaded events, 
+	 * so keep the picked game in the list even if this week doesnt haVe it, 
+	 * otherwise the filter gets stuck with an empty calender and nothing selected.
+	*/
+	const options = useMemo(() => {
+		const games = data.flatMap((v) => (v.game ? [{ value: v.game.name, label: v.game.name }] : []));
+		
+		if (selectedFilter !== VALUE_ALL) {
+			games.push({ value: selectedFilter, label: selectedFilter});
+		}
+	
+		// sorted so the chips dont jump around every time u change week
+		const unique = removeDuplicatesBy(games, (g) => g.value)
+			.sort((a, b) => a.label.localeCompare(b.label, 'sv'));
+
+		return [{ value: VALUE_ALL, label: "Alla spel" }, ...unique];
+	}, [data, selectedFilter])
 
 	const calendarDates = useCallback((): Date[] => {
 		switch (calendarView) {
@@ -110,7 +118,7 @@ const EventCalendar = () => {
 				/>
 				<FilterChips
 					label={LABEL_FILTER}
-					options={options()}
+					options={options}
 					selected={selectedFilter}
 					onChange={(value) => { setSelectedFilter(value); }}
 					scroll={false}
