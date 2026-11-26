@@ -25,6 +25,7 @@ Our main target demographic are Swedish students and young adults with an intere
 ### See also
 
 - [fika-gg-api](https://github.com/Fika-GG-Organization/fika-gg-api): The server infrastructure (api, aspire, database).
+- [docs/README](docs/README.md): For more info about development, project structure, tutorials, references, etc.
 
 ## Install
 
@@ -73,10 +74,6 @@ These dependencies are required to be manually installed or configured.
 - **Node.js‍️**
 
     Required for developing the web client repository. Download at [nodejs.org🔗‍️](https://nodejs.org/en/download).
-
-## Development
-
-See [docs](./docs/README.md) for project structure, development, and more.
 
 ## Dependencies
 
