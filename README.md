@@ -45,7 +45,7 @@ If you want to fork these repositories, follow this [guide🔗‍️](https://do
 
 ### Dependencies
 
-These dependencies are required to be manually installed or configured.
+These dependencies are required to be manually installed or configured. See other dependencies that are automatically included at [dependencies](docs/development/dependencies.md).
 
 - **Cloudinary**
 
@@ -74,18 +74,6 @@ These dependencies are required to be manually installed or configured.
 - **Node.js‍️**
 
     Required for developing the web client repository. Download at [nodejs.org🔗‍️](https://nodejs.org/en/download).
-
-## Dependencies
-
-The repository uses the following 3rd party dependencies.
-
-- [react](https://www.npmjs.com/package/react)
-- [Vite](https://www.npmjs.com/package/vite)
-- [ESlint](https://www.npmjs.com/package/eslint)
-- [@mui/icons-material](https://www.npmjs.com/package/@mui/icons-material)
-- [@mui/material](https://www.npmjs.com/package/@mui/material)
-- [react-router](https://www.npmjs.com/package/react-router)
-- [axios](https://www.npmjs.com/package/axios)
 
 ## Contributing
 
