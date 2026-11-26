@@ -8,6 +8,8 @@
 
 ## Troubleshooting
 
+- [Starting server with Aspire🔗‍️](https://github.com/Fika-GG-Organization/fika-gg-api/blob/main/docs/troubleshooting/server-startup.md) — Guide on how to start up server for testing (opens to `fika-gg-api` repository documentations).
+
 ## Development
 
 - [Endpoint reference](development/endpoint-reference.md) — List of endpoints and models/DTO to sent over HTTP
