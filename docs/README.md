@@ -12,6 +12,5 @@
 
 ## Development
 
-- [Endpoint reference](development/endpoint-reference.md) — List of endpoints and models/DTO to sent over HTTP
 - [Import shortcuts](development/importing.md) — Guide on using shortcut paths to minimise import bloat.
 - [Project dependencies](development/dependencies.md) — Non-extensive list of major 3rd-party dependencies referenced in this project.
